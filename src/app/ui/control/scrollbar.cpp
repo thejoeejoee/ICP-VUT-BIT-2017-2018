@@ -53,29 +53,15 @@ void ScrollBar::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 
 void ScrollBar::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
 {
-    QPointF newPos = m_handleOriginPos + e->pos() - m_pressPoint;
-    const QSizeF handleSize = m_handle->size();
-    // new position of point of handle on the other side
-    const QPointF newHandleOtherPos = newPos + QPointF(handleSize.width(), handleSize.height());
+    if(m_orientation == Qt::Vertical)
+        this->move(m_handleOriginPos, (e->pos() - m_pressPoint).y());
+    else
+        this->move(m_handleOriginPos, (e->pos() - m_pressPoint).x());
+}
 
-    if(m_orientation == Qt::Vertical) {
-        newPos.rx() = m_handleOriginPos.x();    // allow only movement in vertical axis
-        if(newHandleOtherPos.y() > m_handle->slideArea().height())
-            newPos.ry() = m_handle->slideArea().height() - handleSize.height();
-        if(newPos.y() < 0)
-            newPos.ry() = 0;
-    }
-
-
-    else {
-        newPos.ry() = m_handleOriginPos.ry();   // allow only movement in horizontal axis
-        if(newHandleOtherPos.x() > m_handle->slideArea().width())
-            newPos.rx() = m_handle->slideArea().width() - handleSize.width();
-        else if(newPos.x() < 0)
-            newPos.rx() = 0;
-    }
-
-    m_handle->setPos(newPos);
+void ScrollBar::wheelEvent(QGraphicsSceneWheelEvent* e)
+{
+    this->artificialScroll((e->delta() < 0) ?1 :-1);
 }
 
 void ScrollBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -119,6 +105,42 @@ void ScrollBar::resizeHandle()
 
     else if(m_orientation == Qt::Horizontal)
         m_handle->setPreferredWidth(m_sizeRatio * this->size().width());
+}
+
+void ScrollBar::artificialScroll(qreal delta)
+{
+    const qreal speed = 25.;
+    if(m_orientation == Qt::Vertical)
+        this->move(m_handle->pos(), delta * m_handle->slideArea().height() / speed);
+    else
+        this->move(m_handle->pos(), delta * m_handle->slideArea().width() / speed);
+}
+
+void ScrollBar::move(QPointF handleOriginPos, qreal delta)
+{
+    QPointF newPos = handleOriginPos + QPointF(delta, delta);
+    const QSizeF handleSize = m_handle->size();
+    // new position of point of handle on the other side
+    const QPointF newHandleOtherPos = newPos + QPointF(handleSize.width(), handleSize.height());
+
+    if(m_orientation == Qt::Vertical) {
+        newPos.rx() = handleOriginPos.x();    // allow only movement in vertical axis
+        if(newHandleOtherPos.y() > m_handle->slideArea().height())
+            newPos.ry() = m_handle->slideArea().height() - handleSize.height();
+        if(newPos.y() < 0)
+            newPos.ry() = 0;
+    }
+
+
+    else {
+        newPos.ry() = handleOriginPos.ry();   // allow only movement in horizontal axis
+        if(newHandleOtherPos.x() > m_handle->slideArea().width())
+            newPos.rx() = m_handle->slideArea().width() - handleSize.width();
+        else if(newPos.x() < 0)
+            newPos.rx() = 0;
+    }
+
+    m_handle->setPos(newPos);
 }
 
 int ScrollBar::thickness() const

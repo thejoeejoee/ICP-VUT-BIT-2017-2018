@@ -64,6 +64,7 @@ class ScrollBar: public QGraphicsWidget
         void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
         void mouseReleaseEvent(QGraphicsSceneMouseEvent* e) override;
         void mouseMoveEvent(QGraphicsSceneMouseEvent* e) override;
+        void wheelEvent(QGraphicsSceneWheelEvent* e) override;
 
     public:
         void paint(QPainter *painter,
@@ -77,11 +78,15 @@ class ScrollBar: public QGraphicsWidget
         qreal sizeRatio() const;
 
     private slots:
+        void move(QPointF handleOriginPos, qreal delta);
+
         void resizeThickeness();
         void setSlideArea();
         void resizeHandle();
 
     public slots:
+        void artificialScroll(qreal delta);
+
         void setThickness(int thickness);
         void setColor(const QColor& color);
         void setHandleColor(const QColor& handleColor);

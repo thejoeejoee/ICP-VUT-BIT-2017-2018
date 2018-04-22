@@ -6,6 +6,7 @@
 class BlockPort
 {
     public:
+        virtual ~BlockPort() {}
         virtual QStringList labels() const = 0;
 };
 

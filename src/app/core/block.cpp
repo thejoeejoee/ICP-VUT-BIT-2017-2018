@@ -6,6 +6,12 @@ Block::Block(QGraphicsWidget* parent): Identified(), Factoriable(), FactoryBase<
     m_view = new BlockView(parent);
 }
 
+Block::~Block()
+{
+    for(int i = 0; i < m_ports.length(); i++)
+        delete m_ports[i];
+}
+
 QList<BlockPort*> Block::ports() const
 {
     return m_ports;

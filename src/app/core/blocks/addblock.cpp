@@ -13,6 +13,6 @@ MappedDataValues AddBlock::evaluate(const QList<MappedDataValues>& inputData)
     DataValue result = 0;
     for(const MappedDataValues& port: inputData)
         result += port["value"];
-    return {{"value", result}, };
+    return {{ "value", result }};
 }
 

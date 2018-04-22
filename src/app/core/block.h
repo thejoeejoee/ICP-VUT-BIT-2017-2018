@@ -19,7 +19,7 @@ class Block : public Identified, public Factoriable, public FactoryBase<Block> {
 
     public:
         Block(QGraphicsWidget* parent = nullptr);
-        virtual ~Block() {}
+        virtual ~Block();
 
         virtual MappedDataValues evaluate(const QList<MappedDataValues>& inputData) = 0;
         virtual QList<BlockPort*> ports() const;

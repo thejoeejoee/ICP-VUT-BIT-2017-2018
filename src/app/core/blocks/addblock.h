@@ -1,7 +1,7 @@
 #ifndef ADDBLOCK_H
 #define ADDBLOCK_H
 
-#include "../block.h"
+#include <app/core/block.h>
 #include "blockportvalue.h"
 
 class AddBlock: public Block

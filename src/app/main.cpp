@@ -2,20 +2,21 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include "core/blocks/addblock.h"
 #include "ui/window/graphicsview.h"
+#include <app/core/blocks/addblock.h>s
+#include <app/core/blocks/cosblock.h>
+#include <app/core/blocks/mulblock.h>
+#include <app/core/blocks/sinblock.h>
+#include <app/core/blocks/subblock.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     Block::registerItem<AddBlock>();
-    // TODO remove
-    /*Block* b = Block::createNew("add_block", &w);
-    qDebug() << b->classId() << b->evaluate(QList<MappedDataValues>{
-                                                MappedDataValues{{"value", 33}},
-                                                MappedDataValues{{"value", 45}}});
-
-    */
+    Block::registerItem<SubBlock>();
+    Block::registerItem<MulBlock>();
+    Block::registerItem<CosBlock>();
+    Block::registerItem<SinBlock>();
 
     auto scene = new QGraphicsScene;
 

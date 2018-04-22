@@ -24,8 +24,6 @@ class BlockManager {
 
         Join *join(Identifier id);
 
-        Block * addBlock(const TypeBlock &type);
-
 
 };
 

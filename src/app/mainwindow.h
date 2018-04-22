@@ -1,18 +1,41 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QGraphicsWidget>
 #include <QMainWindow>
+#include <app/ui/container/blocksselection.h>
+#include "ui/portregister.h"
 
-class MainWindow : public QMainWindow
+//class MainWindow : public QWidget
+//{
+//        Q_OBJECT
+
+//    private:
+//        PortRegister* m_portRegister;
+//        BlocksSelection* m_blocksSelection;
+
+//    public:
+//        MainWindow(QWidget *parent = 0);
+//        ~MainWindow();
+
+//    protected:
+//        void paintEvent(QPaintEvent * event) override;
+//        void mouseMoveEvent(QMouseEvent* event) override;
+//};
+
+class AppWindow: public QGraphicsWidget
 {
-        Q_OBJECT
+    Q_OBJECT
+    private:
+        BlocksSelection* m_blockSelection;
 
     public:
-        MainWindow(QWidget *parent = 0);
-        ~MainWindow();
+        AppWindow(QGraphicsWidget* parent = nullptr);
 
-protected:
-        void paintEvent(QPaintEvent * event) override;
+    protected:
+        void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
+
+    public slots:
+        void resizeWindow(QSize size);
 };
-
 #endif // MAINWINDOW_H

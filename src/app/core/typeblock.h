@@ -23,7 +23,6 @@ class TypeBlock : public Identified {
         QList<TypeData *> m_input_ports;
         TypeData m_output_port;
         EvaluationCallback m_evaluator;
-
 };
 
 

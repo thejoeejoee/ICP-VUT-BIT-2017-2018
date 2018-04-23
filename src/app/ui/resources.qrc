@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/image/add_symbol.svg</file>
+        <file>res/image/cos_symbol.svg</file>
+        <file>res/image/mul_symbol.svg</file>
+        <file>res/image/play_icon.svg</file>
+        <file>res/image/play_iter_icon.svg</file>
+        <file>res/image/sin_symbol.svg</file>
+        <file>res/image/stop_icon.svg</file>
+        <file>res/image/sub_symbol.svg</file>
+        <file>res/font/Montserrat-Light.ttf</file>
+        <file>res/font/Montserrat-Medium.ttf</file>
+        <file>res/font/Roboto-Light.ttf</file>
+    </qresource>
+</RCC>

@@ -12,5 +12,5 @@ MappedDataValues MulBlock::evaluate(const QList<MappedDataValues>& inputData)
     DataValue result = 1;
     for(const MappedDataValues& port: inputData)
         result *= port["value"];
-    return {{"value", result}};
+    return {{ "value", result }};
 }

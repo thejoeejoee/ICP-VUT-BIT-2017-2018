@@ -3,11 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "ui/window/graphicsview.h"
-#include <app/core/blocks/addblock.h>s
-#include <app/core/blocks/cosblock.h>
-#include <app/core/blocks/mulblock.h>
-#include <app/core/blocks/sinblock.h>
-#include <app/core/blocks/subblock.h>
+#include <app/core/blocks/blocks.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

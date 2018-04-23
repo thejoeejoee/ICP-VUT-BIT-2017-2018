@@ -3,7 +3,7 @@
 Block::Block(QGraphicsWidget* parent): Identified(), Factoriable(), FactoryBase<Block>()
 {
     m_parent = parent;
-    m_view = new BlockView(parent);
+    m_view = new BlockView(this, parent);
 }
 
 Block::~Block()

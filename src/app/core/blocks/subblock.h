@@ -9,7 +9,9 @@ class SubBlock : public Block
         FACTORIABLE_ID(Block, SubBlock, "sub_block")
 
     public:
-        SubBlock();
+        SubBlock(QGraphicsWidget* parent = nullptr);
+
+        MappedDataValues evaluate(const QList<MappedDataValues>& inputData) override;
 };
 
 #endif // SUBBLOCK_H

@@ -6,7 +6,7 @@
 
 class CosBlock : public Block
 {
-        FACTORIABLE_ID(Block, CosBlock, "cos_block");
+        FACTORIABLE_ID(Block, CosBlock, "cos_block")
 
     public:
         CosBlock(QGraphicsWidget* parent = nullptr);

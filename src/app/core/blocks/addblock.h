@@ -4,6 +4,7 @@
 #include <app/core/block.h>
 #include "blockportvalue.h"
 
+
 class AddBlock: public Block
 {
         FACTORIABLE_ID(Block, AddBlock, "add_block")

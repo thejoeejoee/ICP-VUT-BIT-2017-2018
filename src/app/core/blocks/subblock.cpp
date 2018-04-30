@@ -2,7 +2,13 @@
 
 SubBlock::SubBlock(QGraphicsWidget* parent): Block(parent)
 {
-    m_ports = { new BlockPortValue, new BlockPortValue };
+    BlockView* blockView = this->view();
+    blockView->setSvgImage(":/res/image/sub_symbol.svg");
+    this->setInputPorts({ new BlockPortValue(true, blockView),
+                          new BlockPortValue(true, blockView) });
+    this->setOutputPort(new BlockPortValue(false, blockView));
+
+    blockView->initPortsViews();
 }
 
 MappedDataValues SubBlock::evaluate(const QList<MappedDataValues>& inputData)

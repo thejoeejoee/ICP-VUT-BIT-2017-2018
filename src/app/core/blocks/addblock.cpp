@@ -3,7 +3,13 @@
 
 AddBlock::AddBlock(QGraphicsWidget* parent): Block(parent)
 {
-    m_ports = { new BlockPortValue, new BlockPortValue };
+    BlockView* blockView = this->view();
+    blockView->setSvgImage(":/res/image/add_symbol.svg");
+    this->setInputPorts({ new BlockPortValue(true, blockView),
+                          new BlockPortValue(true, blockView) });
+    this->setOutputPort(new BlockPortValue(false, blockView));
+
+    blockView->initPortsViews();
 }
 
 MappedDataValues AddBlock::evaluate(const QList<MappedDataValues>& inputData)

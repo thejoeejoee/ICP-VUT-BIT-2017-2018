@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QFontDatabase>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "ui/window/graphicsview.h"
@@ -7,6 +8,11 @@
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+
+    QFontDatabase::addApplicationFont(":/res/font/Montserrat-Light.ttf");
+    QFontDatabase::addApplicationFont(":/res/font/Montserrat-Medium.ttf");
+    QFontDatabase::addApplicationFont(":/res/font/Roboto-Light.ttf");
+
 
     Block::registerItem<AddBlock>();
     Block::registerItem<SubBlock>();
@@ -25,7 +31,7 @@ int main(int argc, char *argv[]) {
     view->setScene(scene);
 
     view->setWindowTitle("Block editor");
-    view->resize(800, 500);
+    view->resize(1500, 800);
     view->show();
 
     return a.exec();

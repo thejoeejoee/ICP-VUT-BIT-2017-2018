@@ -6,31 +6,14 @@
 #include <QPainter>
 #include <QDebug>
 #include <QGraphicsAnchorLayout>
-#include "ui/portview.h"
+#include "ui/blockportview.h"
 #include "core/blocks/addblock.h"
 #include <QGraphicsScene>
+#include <app/ui/control/textedit.h>
 
 //MainWindow::MainWindow(QWidget *parent)
 //    : QWidget(parent)
 //{
-//    m_blocksSelection = new BlocksSelection(this);
-//    m_blocksSelection->setMaximumWidth(300);
-//    m_portRegister = new PortRegister(this);
-//    QHBoxLayout* layout = new QHBoxLayout(this);
-//    layout->setMargin(0);
-
-//    layout->addWidget(m_blocksSelection);
-
-//    // TODO register blocks
-//    m_blocksSelection->addItem(Block::createNew(AddBlock::staticClassId(), this)->view());
-//    m_blocksSelection->addItem(Block::createNew(AddBlock::staticClassId(), this)->view());
-//    m_blocksSelection->addSpacer();
-////    for(int i = 0; i < 4; i++) {
-////        break;
-////        QPushButton* button = new QPushButton(QString("ahoj %1").arg(i));
-////        m_blocksSelection->addItem(button);
-////    }
-
 
 //    /*PortView* portView = new PortView(this);
 //    portView->move(100, 100);
@@ -54,25 +37,23 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 {
     m_blockSelection = new BlocksSelection(this);
     m_blockSelection->setPos(50, 20);
-    m_blockSelection->setPreferredWidth(80);
+    m_blockSelection->setPreferredWidth(100);
     m_blockSelection->setPreferredHeight(120);
 
-    for(int i = 0; i < 3; i++) {
-        m_blockSelection->addItem(Block::createNew("add_block", this)->view());
-        m_blockSelection->addItem(Block::createNew("add_block", this)->view());
-    }
+    auto b = Block::createNew(AddBlock::staticClassId(), this);
+    b->view()->moveBy(300, 100);
+    /*auto t = new TextEdit(this);
+    t->setFont(QFont("Montserrat Light"));
+
+    t->setInvalidBorderColor(QColor("#d10000"));
+    t->setValidBorderColor(QColor("#666666"));
+    t->setPlainText("0");
+    t->moveBy(40, 40);
+    t->setValidator(QRegularExpression("^\\d+\\.?(\\d{1,4})?$"));*/
 
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     //layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_blockSelection, Qt::TopLeftCorner);
-}
-
-void AppWindow::mousePressEvent(QGraphicsSceneMouseEvent* e)
-{
-    Q_UNUSED(e);
-    qDebug() << m_blockSelection->geometry();
-    qDebug() << m_blockSelection->contentsRect();
-    qDebug() << m_blockSelection->layout()->geometry();
 }
 
 void AppWindow::resizeWindow(QSize size)

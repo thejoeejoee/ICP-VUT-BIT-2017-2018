@@ -5,9 +5,9 @@ PortRegister::PortRegister(QObject *parent) : QObject(parent)
 
 }
 
-PortView* PortRegister::attachedPort(QPoint pos) const
+BlockPortView* PortRegister::attachedPort(QPoint pos) const
 {
-    for(PortView* port: m_ports) {
+    for(BlockPortView* port: m_ports) {
         if(port == nullptr)
             continue;
         if(port->geometry().contains(pos))
@@ -17,12 +17,12 @@ PortView* PortRegister::attachedPort(QPoint pos) const
     return nullptr;
 }
 
-void PortRegister::registerPort(PortView* port)
+void PortRegister::registerPort(BlockPortView* port)
 {
     m_ports.append(port);
 }
 
-void PortRegister::unregisterPort(PortView* port)
+void PortRegister::unregisterPort(BlockPortView* port)
 {
     m_ports.removeAll(port);
 }

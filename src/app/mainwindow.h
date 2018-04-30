@@ -25,15 +25,12 @@
 
 class AppWindow: public QGraphicsWidget
 {
-    Q_OBJECT
+        Q_OBJECT
     private:
         BlocksSelection* m_blockSelection;
 
     public:
         AppWindow(QGraphicsWidget* parent = nullptr);
-
-    protected:
-        void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
 
     public slots:
         void resizeWindow(QSize size);

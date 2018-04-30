@@ -1,13 +1,29 @@
 #include "block.h"
 
+void Block::setOutputPort(BlockPort* p)
+{
+    m_outputPort = p;
+}
+
+void Block::setInputPorts(const QList<BlockPort*>& ports)
+{
+    m_ports = ports;
+}
+
 Block::Block(QGraphicsWidget* parent): Identified(), Factoriable(), FactoryBase<Block>()
 {
     m_parent = parent;
     m_view = new BlockView(this, parent);
+    m_outputPort = nullptr;
+
+    m_view->setBackgroundColor(QColor("#4c4c4c"));
+    m_view->setBackgroundSelectionColor(QColor("#0f81bc"));
 }
 
 Block::~Block()
 {
+    m_view->deleteLater();
+    delete m_outputPort;
     for(int i = 0; i < m_ports.length(); i++)
         delete m_ports[i];
 }
@@ -15,6 +31,11 @@ Block::~Block()
 QList<BlockPort*> Block::ports() const
 {
     return m_ports;
+}
+
+BlockPort* Block::outputPort() const
+{
+    return m_outputPort;
 }
 
 bool Block::inputMatchesPorts(const QList<MappedDataValues>& inputData) const

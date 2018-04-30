@@ -3,22 +3,22 @@
 
 #include <QObject>
 #include <QVector>
-#include "portview.h"
+#include "blockportview.h"
 
 class PortRegister : public QObject
 {
         Q_OBJECT
     private:
-        QVector<PortView*> m_ports;
+        QVector<BlockPortView*> m_ports;
 
     public:
         explicit PortRegister(QObject *parent = nullptr);
 
-        PortView* attachedPort(QPoint pos) const;
+        BlockPortView* attachedPort(QPoint pos) const;
 
     public slots:
-        void registerPort(PortView* port);
-        void unregisterPort(PortView* port);
+        void registerPort(BlockPortView* port);
+        void unregisterPort(BlockPortView* port);
 };
 
 #endif // PORTREGISTER_H

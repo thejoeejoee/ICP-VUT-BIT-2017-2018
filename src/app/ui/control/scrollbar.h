@@ -46,7 +46,7 @@ class ScrollBar: public QGraphicsWidget
         Q_PROPERTY(QColor handleColor READ handleColor WRITE setHandleColor NOTIFY handleColorChanged)
         Q_PROPERTY(qreal sizeRatio READ sizeRatio WRITE setSizeRatio NOTIFY sizeRatioChanged)
 
-    private:
+    public:
         Qt::Orientation m_orientation;
         int m_thickness;
         QColor m_color;

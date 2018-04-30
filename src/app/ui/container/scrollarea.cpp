@@ -11,15 +11,18 @@ ScrollArea::ScrollArea(QGraphicsWidget* parent) : QGraphicsWidget(parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     m_horizontalScrollBar = new ScrollBar(Qt::Horizontal, this);
-    m_verticalScrollBar=  new ScrollBar(Qt::Vertical, this);
+    m_verticalScrollBar = new ScrollBar(Qt::Vertical, this);
+    m_verticalScrollBar->setHandleColor(QColor(Qt::red));
 
     m_horizontalScrollBar->setThickness(4);
     m_horizontalScrollBar->setColor(QColor(Qt::green));
+    m_horizontalScrollBar->setHandleColor(QColor(Qt::red));
 
     m_verticalScrollBar->setThickness(4);
     m_verticalScrollBar->setColor(QColor(Qt::green));
 
-    connect(m_container, &QGraphicsWidget::geometryChanged, this, &ScrollArea::manageScrollbarsVisibility);
+    connect(m_container, &QGraphicsWidget::geometryChanged,
+            this, &ScrollArea::manageScrollbarsVisibility);
     connect(this, &QGraphicsWidget::geometryChanged, this, &ScrollArea::manageScrollbarsVisibility);
     connect(m_verticalScrollBar, &ScrollBar::relativePosChanged,
             this, &ScrollArea::repositionVerticalContent);
@@ -44,6 +47,7 @@ void ScrollArea::manageScrollbarsVisibility()
 
     if(containerSize.height() > visibleArea.height()) {
         m_verticalScrollBar->setVisible(true);
+        m_verticalScrollBar->m_handle->setVisible(true);
         m_verticalScrollBar->setSizeRatio(visibleArea.height() /
                                           static_cast<double>(containerSize.height()));
     }
@@ -56,6 +60,7 @@ void ScrollArea::manageScrollbarsVisibility()
 
     if(containerSize.width() > visibleArea.width()) {
         m_horizontalScrollBar->setVisible(true);
+        m_horizontalScrollBar->m_handle->setVisible(true);
         m_horizontalScrollBar->setSizeRatio(visibleArea.width() /
                                             static_cast<double>(containerSize.width()));
     }
@@ -77,4 +82,16 @@ void ScrollArea::repositionHorizontalContent(qreal relPos)
 {
     const qreal range = this->size().width() - m_container->size().width();
     m_container->setX(relPos * range);
+}
+
+void ScrollArea::setHandleColor(const QColor& color)
+{
+    m_verticalScrollBar->setHandleColor(color);
+    m_horizontalScrollBar->setHandleColor(color);
+}
+
+void ScrollArea::setGrooveColor(const QColor& color)
+{
+    m_verticalScrollBar->setColor(color);
+    m_horizontalScrollBar->setColor(color);
 }

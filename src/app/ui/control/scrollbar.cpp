@@ -100,11 +100,15 @@ void ScrollBar::setSlideArea()
 
 void ScrollBar::resizeHandle()
 {
-    if(m_orientation == Qt::Vertical)
-        m_handle->setPreferredHeight(m_sizeRatio * this->size().height());
+    if(m_orientation == Qt::Vertical){
+        m_handle->setMaximumHeight(m_sizeRatio * this->size().height());
+        m_handle->setMinimumHeight(m_sizeRatio * this->size().height());
+    }
 
-    else if(m_orientation == Qt::Horizontal)
-        m_handle->setPreferredWidth(m_sizeRatio * this->size().width());
+    else if(m_orientation == Qt::Horizontal) {
+        m_handle->setMaximumWidth(m_sizeRatio * this->size().width());
+        m_handle->setMinimumWidth(m_sizeRatio * this->size().width());
+    }
 }
 
 void ScrollBar::artificialScroll(qreal delta)
@@ -210,6 +214,8 @@ ScrollBarHandle::ScrollBarHandle(Qt::Orientation orientation, QGraphicsWidget* p
     m_orientation = orientation;
 
     connect(this, &ScrollBarHandle::colorChanged, [this] { this->update(); });
+    connect(this, &ScrollBarHandle::geometryChanged, [this] { this->update(); });
+    connect(this, &ScrollBarHandle::relativePosChanged, [this] { this->update(); });
     connect(this, &ScrollBarHandle::geometryChanged, this, &ScrollBarHandle::calculateRelativePos);
 }
 

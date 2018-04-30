@@ -5,6 +5,7 @@
 #include <QGraphicsWidget>
 #include "../control/scrollbar.h"
 
+
 class ScrollArea: public QGraphicsWidget
 {
     Q_OBJECT
@@ -27,6 +28,9 @@ class ScrollArea: public QGraphicsWidget
         void repositionVerticalContent(qreal relPos);
         void repositionHorizontalContent(qreal relPos);
 
+    public slots:
+        void setHandleColor(const QColor& color);
+        void setGrooveColor(const QColor& color);
 };
 
 #endif // SCROLLAREA_H

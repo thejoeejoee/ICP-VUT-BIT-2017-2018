@@ -35,25 +35,27 @@
 
 AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 {
-    m_blockSelection = new BlocksSelection(this);
-    m_blockSelection->setPos(50, 20);
-    m_blockSelection->setPreferredWidth(100);
-    m_blockSelection->setPreferredHeight(120);
+    m_blockSelection = new BlocksSelection{this};
+    m_blockSelection->setMaximumWidth(195);
+    m_blockSelection->setMinimumWidth(m_blockSelection->maximumWidth());
 
-    auto b = Block::createNew(AddBlock::staticClassId(), this);
+    m_blockCanvas = new BlockCanvas{this};
+
+    auto b = Block::createNew(AddBlock::staticClassId(), m_blockCanvas);
     b->view()->moveBy(300, 100);
-    /*auto t = new TextEdit(this);
-    t->setFont(QFont("Montserrat Light"));
 
-    t->setInvalidBorderColor(QColor("#d10000"));
-    t->setValidBorderColor(QColor("#666666"));
-    t->setPlainText("0");
-    t->moveBy(40, 40);
-    t->setValidator(QRegularExpression("^\\d+\\.?(\\d{1,4})?$"));*/
 
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    //layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_blockSelection, Qt::TopLeftCorner);
+    layout->setSpacing(0);
+    layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_blockSelection, Qt::TopLeftCorner);
+    layout->addCornerAnchors(layout, Qt::BottomLeftCorner,
+                             m_blockSelection, Qt::BottomLeftCorner);
+
+    layout->addCornerAnchors(m_blockSelection, Qt::TopRightCorner,
+                             m_blockCanvas, Qt::TopLeftCorner);
+    layout->addCornerAnchors(m_blockCanvas, Qt::BottomRightCorner,
+                             layout, Qt::BottomRightCorner);
 }
 
 void AppWindow::resizeWindow(QSize size)

@@ -5,10 +5,11 @@
 #include <QGraphicsAnchorLayout>
 #include <app/core/exceptions.h>
 
-BlockPortValueView::BlockPortValueView(bool editable, QGraphicsItem* parent): BlockPortView (parent)
+BlockPortValueView::BlockPortValueView(BlockPort* data, bool editable, QGraphicsItem* parent)
+    : BlockPortView{data, parent}
 {
-    this->setPreferredSize(20, 20);
-    m_input = new TextEdit(this);
+    this->setPreferredSize(45, 20);
+    m_input = new TextEdit{this};
     m_input->setTextWidth(45);
     m_input->setFont(QFont("Montserrat Light"));
     m_input->setInvalidBorderColor(QColor("#d10000"));
@@ -16,7 +17,7 @@ BlockPortValueView::BlockPortValueView(bool editable, QGraphicsItem* parent): Bl
     m_input->setPlainText("0");
     m_input->setValidator(QRegularExpression("^\\d+\\.?(\\d{1,4})?$"));
     if(!editable)
-        m_input->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        m_input->setTextInteractionFlags(Qt::NoTextInteraction);
 
     this->resizeWithText();
 

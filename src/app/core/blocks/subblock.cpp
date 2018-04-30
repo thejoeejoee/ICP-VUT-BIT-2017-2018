@@ -4,9 +4,9 @@ SubBlock::SubBlock(QGraphicsWidget* parent): Block(parent)
 {
     BlockView* blockView = this->view();
     blockView->setSvgImage(":/res/image/sub_symbol.svg");
-    this->setInputPorts({ new BlockPortValue(true, blockView),
-                          new BlockPortValue(true, blockView) });
-    this->setOutputPort(new BlockPortValue(false, blockView));
+    this->setInputPorts({ new BlockPortValue(this->id(), true, blockView),
+                          new BlockPortValue(this->id(), true, blockView) });
+    this->setOutputPort(new BlockPortValue(this->id(), false, blockView));
 
     blockView->initPortsViews();
 }

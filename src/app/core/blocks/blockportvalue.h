@@ -2,13 +2,14 @@
 #define BLOCKPORTVALUE_H
 
 #include "blockport.h"
+#include <app/core/identified.h>
 #include <QGraphicsWidget>
 
 
 class BlockPortValue: public BlockPort
 {
     public:
-        BlockPortValue(bool editable = true, QGraphicsItem* parent = nullptr);
+        BlockPortValue(Identifier blockId, bool editable = true, QGraphicsItem* parent = nullptr);
 
         QStringList labels() const override;
         void setValue(MappedDataValues v) override;

@@ -35,7 +35,6 @@ void BlocksSelection::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
     painter->setPen(QColor(Qt::transparent));
     painter->setBrush(QColor(Qt::white));
-  //  if(this->container()->y() - 75 > 0)
     painter->drawRect(
                 0, static_cast<int>(this->container()->y()) + 65,
                 static_cast<int>(this->size().width()), 55

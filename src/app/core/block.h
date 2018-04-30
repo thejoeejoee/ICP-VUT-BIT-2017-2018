@@ -20,14 +20,14 @@ class Block : public Identified, public Factoriable, public FactoryBase<Block> {
         QList<BlockPort*> m_ports;
 
         void setOutputPort(BlockPort* p);
-        void setInputPorts(const QList<BlockPort*>& ports);
+        void setInputPorts(const QList<BlockPort*>& inputPorts);
 
     public:
         Block(QGraphicsWidget* parent = nullptr);
         virtual ~Block();
 
         virtual MappedDataValues evaluate(const QList<MappedDataValues>& inputData) = 0;
-        virtual QList<BlockPort*> ports() const;
+        virtual QList<BlockPort*> inputPorts() const;
         BlockPort* outputPort() const;
 
         bool inputMatchesPorts(const QList<MappedDataValues>& inputData) const;

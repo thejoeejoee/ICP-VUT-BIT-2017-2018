@@ -4,6 +4,7 @@
 #include <app/ui/blockportview.h>
 #include <app/ui/control/textedit.h>
 
+class BlockPort;
 
 class BlockPortValueView: public BlockPortView
 {
@@ -12,7 +13,7 @@ class BlockPortValueView: public BlockPortView
         TextEdit* m_input;
 
     public:
-        BlockPortValueView(bool editable = true, QGraphicsItem* parent = nullptr);
+        BlockPortValueView(BlockPort* data, bool editable = true, QGraphicsItem* parent = nullptr);
 
         MappedDataValues value() const override;
         void setValue(MappedDataValues v) override;

@@ -2,9 +2,10 @@
 
 #include <app/ui/blockportvalueview.h>
 
-BlockPortValue::BlockPortValue(bool editable, QGraphicsItem* parent): BlockPort()
+BlockPortValue::BlockPortValue(Identifier blockId, bool editable, QGraphicsItem* parent)
+    : BlockPort(blockId)
 {
-    BlockPortValueView* t = new BlockPortValueView(editable, parent);
+    BlockPortValueView* t = new BlockPortValueView(this, editable, parent);
     this->setView(t);
 }
 

@@ -2,11 +2,14 @@
 
 void Block::setOutputPort(BlockPort* p)
 {
+    p->setIsOutput(true);
     m_outputPort = p;
 }
 
 void Block::setInputPorts(const QList<BlockPort*>& ports)
 {
+    for(auto p: ports)
+        p->setIsOutput(false);
     m_ports = ports;
 }
 
@@ -28,7 +31,7 @@ Block::~Block()
         delete m_ports[i];
 }
 
-QList<BlockPort*> Block::ports() const
+QList<BlockPort*> Block::inputPorts() const
 {
     return m_ports;
 }
@@ -56,3 +59,4 @@ BlockView* Block::view() const
 {
     return m_view;
 }
+

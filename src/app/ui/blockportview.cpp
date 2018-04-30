@@ -1,14 +1,20 @@
 #include "blockportview.h"
 
 
-BlockPortView::BlockPortView(QGraphicsItem* parent): QGraphicsWidget(parent)
+BlockPortView::BlockPortView(BlockPort* data, QGraphicsItem* parent): QGraphicsWidget(parent)
 {
+    m_data = data;
     m_opacityAnimation = new QVariantAnimation{this};
     m_opacityAnimation->setDuration(200);
 
     connect(m_opacityAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
         this->setOpacity(v.toReal());
     });
+}
+
+BlockPort* BlockPortView::data() const
+{
+    return m_data;
 }
 
 void BlockPortView::animateHide(bool animate)

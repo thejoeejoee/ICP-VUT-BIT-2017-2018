@@ -41,9 +41,6 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 
     m_blockCanvas = new BlockCanvas{this};
 
-    auto b = Block::createNew(AddBlock::staticClassId(), m_blockCanvas);
-    b->view()->moveBy(300, 100);
-
 
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

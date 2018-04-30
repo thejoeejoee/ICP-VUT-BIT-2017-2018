@@ -1,29 +1,32 @@
 #ifndef BLOCKMANAGER_H
 #define BLOCKMANAGER_H
 
-#include <qmap.h>
+#include <QJsonObject>
+#include <QMap>
 #include "block.h"
 #include "join.h"
 
 
 class BlockManager {
-        using Blocks = QMap<Identifier, Block *>;
-        using Joins = QMap<Identifier, Join *>;
-
     protected:
-        Blocks m_blocks;
-        Joins m_joins;
-
+        QMap<Identifier, Block*> m_blocks;
+        QMap<Identifier, Join*> m_joins;
 
     public:
-        const Blocks &blocks() const;
+        ~BlockManager();
 
-        const Joins &joins() const;
+        static QJsonObject blockToJson(Block* block);
+        static Block* blockFromJson(const QJsonObject& json, QGraphicsWidget* parent = nullptr);
+        static const char* blockMimeType();
 
-        Block *block(Identifier id);
+        const QMap<Identifier, Block*>& blocks() const;
+        const QMap<Identifier, Join*>& joins() const;
 
-        Join *join(Identifier id);
+        void addBlock(Block* block);
+        void addJoin(Join* join);
 
+        Block* block(Identifier id) const;
+        Join* join(Identifier id) const;
 
 };
 

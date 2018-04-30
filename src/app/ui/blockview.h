@@ -36,6 +36,8 @@ class BlockView : public QGraphicsWidget
         void repositionPorts();
 
     public slots:
+        void setOutputVisible(bool visible, bool animate = true);
+        void setInputsVisible(bool visible, bool animate = true);
         void initPortsViews();
         void setSvgImage(const QString& image);
         void setBackgroundColor(const QColor& color);

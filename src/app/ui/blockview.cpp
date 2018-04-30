@@ -62,6 +62,28 @@ void BlockView::repositionPorts()
                 (this->size().height() - outputPortView->size().height()) / 2.);
 }
 
+void BlockView::setOutputVisible(bool visible, bool animate)
+{
+    if(visible)
+        m_data->outputPort()->view()->animateShow(animate);
+    else
+        m_data->outputPort()->view()->animateHide(animate);
+
+}
+
+void BlockView::setInputsVisible(bool visible, bool animate)
+{
+    if(visible) {
+        for(auto port: m_data->ports())
+            port->view()->animateShow(animate);
+    }
+
+    else {
+        for(auto port: m_data->ports())
+            port->view()->animateHide(animate);
+    }
+}
+
 void BlockView::initPortsViews()
 {
     this->repositionPorts();

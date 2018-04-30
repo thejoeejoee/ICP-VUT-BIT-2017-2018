@@ -6,12 +6,8 @@
 BlocksSelection::BlocksSelection(QGraphicsWidget* parent): ScrollArea(parent)
 {
     m_layout = new QGraphicsLinearLayout(Qt::Vertical, this->container());
-    const QStringList blocksClasessId = {
-        AddBlock::staticClassId(), SubBlock::staticClassId(), MulBlock::staticClassId(),
-        SinBlock::staticClassId(), CosBlock::staticClassId()
-    };
 
-    for(const QString& singleBlockClassId: blocksClasessId)
+    for(const QString& singleBlockClassId: Block::registeredItems())
         this->addItem(Block::createNew(singleBlockClassId, this)->view());
 
     this->setFlags(QGraphicsItem::ItemClipsChildrenToShape);

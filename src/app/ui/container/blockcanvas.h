@@ -9,7 +9,7 @@ class BlockCanvas : public ScrollArea
 {
         Q_OBJECT
     private:
-        bool m_dragOver;
+        bool m_dragOver = false;
         QPointF m_portStartPoint = QPointF(-1, -1);
         QPointF m_portOrigStartPoint;
         QPointF m_portEndPoint = QPointF();

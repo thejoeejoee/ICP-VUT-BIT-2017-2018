@@ -21,20 +21,18 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 
     m_blockCanvas = new BlockCanvas{this};
 
-    m_button = new IconButton{this};
-    m_button->setMinimumHeight(20);
-    m_button->setMaximumHeight(20);
-    connect(m_button, &IconButton::clicked, m_blockCanvas, &BlockCanvas::evaluate);
+    m_toolbar = new ToolBar{this};
+//    connect(m_button, &IconButton::clicked, m_blockCanvas, &BlockCanvas::evaluate);
 
 
 
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_button, Qt::TopLeftCorner);
-    layout->addCornerAnchors(layout, Qt::TopRightCorner, m_button, Qt::TopRightCorner);
+    layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_toolbar, Qt::TopLeftCorner);
+//    layout->addCornerAnchors(layout, Qt::TopRightCorner, m_button, Qt::TopRightCorner);
 
-    layout->addCornerAnchors(m_button, Qt::BottomLeftCorner, m_blockSelection, Qt::TopLeftCorner);
+    layout->addCornerAnchors(m_toolbar, Qt::BottomLeftCorner, m_blockSelection, Qt::TopLeftCorner);
     layout->addCornerAnchors(layout, Qt::BottomLeftCorner,
                              m_blockSelection, Qt::BottomLeftCorner);
 

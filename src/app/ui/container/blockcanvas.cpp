@@ -55,7 +55,6 @@ void BlockCanvas::dragEnterEvent(QGraphicsSceneDragDropEvent* e)
     if(e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
         m_dragOver = true;
         e->setAccepted(true);
-        // TODO aimation?
         this->update();
     }
 
@@ -66,14 +65,12 @@ void BlockCanvas::dragEnterEvent(QGraphicsSceneDragDropEvent* e)
 void BlockCanvas::dragLeaveEvent(QGraphicsSceneDragDropEvent* e)
 {
     Q_UNUSED(e);
-    // TODO animation?
     m_dragOver = false;
     this->update();
 }
 
 void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
 {
-    // TODO animation?
     m_dragOver = false;
     if(e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
         QByteArray rawData{e->mimeData()->data(BlockManager::blockMimeType())};

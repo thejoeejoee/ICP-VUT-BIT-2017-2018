@@ -27,6 +27,7 @@ class TextEditWithFixedText : public QGraphicsWidget
         QColor validBorderColor() const;
         QColor invalidBorderColor() const;
         QFont font() const;
+        QString fixedToPlainText() const;
         QString toPlainText() const;
 
     private slots:

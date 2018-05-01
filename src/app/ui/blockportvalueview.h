@@ -18,6 +18,7 @@ class BlockPortValueView: public BlockPortView
         BlockPortValueView(BlockPort* portData, Type::TypeE type, QGraphicsItem* parent = nullptr);
 
         MappedDataValues value() const override;
+        QString rawValue(bool typed = false) const override;
         void setValue(MappedDataValues v) override;
         void setEditable(bool v);
 

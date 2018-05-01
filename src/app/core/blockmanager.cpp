@@ -147,14 +147,16 @@ void BlockManager::deleteBlock(Identifier id)
 void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
 {
     Join* j = m_joins.value(id, nullptr);
+
     if(j == nullptr)
         return;
 
-    m_joins.remove(id);
     if(j->fromBlock() != excludeBlockId)
         m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
     if(j->toBlock() != excludeBlockId)
         m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
+
+    m_joins.remove(id);
     j->deleteLater();
 }
 

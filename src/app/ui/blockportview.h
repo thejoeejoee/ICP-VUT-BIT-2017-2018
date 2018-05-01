@@ -21,6 +21,7 @@ class BlockPortView: public QGraphicsWidget
         virtual ~BlockPortView();
         virtual MappedDataValues value() const = 0;
         virtual void setValue(MappedDataValues v) = 0;
+        virtual QString rawValue(bool typed = false) const = 0;
 
         BlockPort* portData() const;
 

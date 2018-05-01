@@ -14,7 +14,7 @@ class Type
             Vector,
             Angle
         };
-        // TODO add validators
+
     static QString toString(TypeE type);
     static TypeE fromString(const QString& str);
     static QString validator(TypeE type);

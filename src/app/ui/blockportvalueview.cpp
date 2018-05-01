@@ -15,7 +15,7 @@ BlockPortValueView::BlockPortValueView(BlockPort* data, Type::TypeE type, QGraph
     m_input->setTextColor(QColor(Qt::black));
     m_input->setFixedText(Type::toString(m_type) + ":");
     m_input->setFixedTextColor(QColor("#969696"));
-    m_input->setFont(QFont("Montserrat Light"));
+    m_input->setFont(QFont("Montserrat Light", 12));
     m_input->setInvalidBorderColor(QColor("#d10000"));
     m_input->setValidBorderColor(QColor("#939393"));
     m_input->setPlainText(Type::defaultValue(type));
@@ -44,6 +44,13 @@ MappedDataValues BlockPortValueView::value() const
 
     else
         Q_ASSERT_X(false, "Parsing", "Unkown type");
+}
+
+QString BlockPortValueView::rawValue(bool typed) const
+{
+    if(!typed)
+        return m_input->toPlainText();
+    return QString("%1 %2").arg(m_input->fixedToPlainText(), m_input->toPlainText());
 }
 
 void BlockPortValueView::setValue(MappedDataValues v)

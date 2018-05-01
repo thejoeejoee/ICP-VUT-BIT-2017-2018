@@ -4,6 +4,7 @@
 #include <app/core/identified.h>
 #include <QGraphicsTextItem>
 #include <QPen>
+#include <QVariantAnimation>
 
 class BlockManager;
 
@@ -15,6 +16,9 @@ class JoinView : public QObject, public QGraphicsLineItem
         QPen m_pen;
         Identifier m_dataId;
         BlockManager* m_blockManager = nullptr;
+        bool m_hovered = false;
+        QVariantAnimation* m_opacityAnimation;
+        double m_currentOpacity = 0;
 
     public:
         JoinView(Identifier dataId, QGraphicsItem* parent = nullptr);
@@ -27,6 +31,8 @@ class JoinView : public QObject, public QGraphicsLineItem
     protected:
         void keyPressEvent(QKeyEvent* event) override;
         void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
+        void hoverMoveEvent(QGraphicsSceneHoverEvent * e) override;
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent* e) override;
 
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
         QPainterPath nonStrokedShape() const;

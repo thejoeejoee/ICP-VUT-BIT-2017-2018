@@ -46,6 +46,11 @@ QFont TextEditWithFixedText::font() const
     return m_font;
 }
 
+QString TextEditWithFixedText::fixedToPlainText() const
+{
+    return m_fixedText->toPlainText();
+}
+
 QString TextEditWithFixedText::toPlainText() const
 {
     return m_textEdit->toPlainText();

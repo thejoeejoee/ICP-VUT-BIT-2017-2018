@@ -8,15 +8,25 @@
 #include <app/core/block.h>
 #include <app/ui/blockview.h>
 #include <app/core/blockmanager.h>
+#include <QFontMetrics>
 
 JoinView::JoinView(Identifier dataId, QGraphicsItem* parent)
     : QObject{}, QGraphicsLineItem(parent)
 {
     m_dataId = dataId;
     m_pen = QPen{QColor{"#8c8c8c"}, 3};
+    m_opacityAnimation = new QVariantAnimation(this);
+    m_opacityAnimation->setDuration(150);
+
     this->setPen(m_pen);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
     this->setFlag(ItemIsFocusable);
+    this->setAcceptHoverEvents(true);
+
+    connect(m_opacityAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
+        m_currentOpacity = v.toDouble();
+        this->update();
+    });
 }
 
 void JoinView::keyPressEvent(QKeyEvent* event)
@@ -40,6 +50,25 @@ void JoinView::mousePressEvent(QGraphicsSceneMouseEvent* e)
 {
     if(!this->shape().contains(e->pos()))
         e->ignore();
+}
+
+void JoinView::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
+{
+    bool newVal = this->shape().contains(e->pos());
+    if(newVal == m_hovered)
+        return;
+    m_hovered = newVal;
+    m_opacityAnimation->setStartValue(m_currentOpacity);
+    m_opacityAnimation->setEndValue((m_hovered) ?1. :0.);
+    m_opacityAnimation->start();
+}
+
+void JoinView::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
+{
+    m_hovered = false;
+    m_opacityAnimation->setStartValue(m_currentOpacity);
+    m_opacityAnimation->setEndValue(0.);
+    m_opacityAnimation->start();
 }
 
 QVariant JoinView::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
@@ -80,8 +109,28 @@ void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    painter->save();
     painter->setPen(this->pen());
     painter->drawPath(this->nonStrokedShape());
+
+    if(m_blockManager != nullptr && m_blockManager->join(m_dataId) != nullptr) {
+        painter->setOpacity(m_currentOpacity);
+        Join* join = m_blockManager->join(m_dataId);
+        const QString value = m_blockManager->block(join->fromBlock())
+                              ->outputPort()->view()->rawValue(true);
+        painter->setFont(QFont("Montserrat Light", 12));
+
+        QFontMetrics fm{painter->font()};
+        painter->setBrush(QColor(Qt::white));
+        painter->setPen(QPen("#969696"));
+        painter->drawRect(fm.boundingRect(this->boundingRect().toRect(), Qt::AlignCenter, value)
+                          .adjusted(-5, -5, 5, 5));
+
+        painter->setPen(QPen(QColor(Qt::black)));
+        painter->drawText(this->boundingRect(), value, QTextOption(Qt::AlignCenter));
+    }
+
+    painter->restore();
 }
 
 QPainterPath JoinView::shape() const

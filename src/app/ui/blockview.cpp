@@ -71,7 +71,7 @@ void BlockView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 QVariant BlockView::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     if(change == QGraphicsItem::ItemSelectedChange)
-        this->update(this->boundingRect().adjusted(-10, -10, 10, 10));
+        this->update();
 
     return QGraphicsWidget::itemChange(change, value);
 }

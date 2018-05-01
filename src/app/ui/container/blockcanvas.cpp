@@ -26,7 +26,7 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->save();
     painter->setPen(QPen{QColor{"#4c4c4c"}, 3});
     painter->setOpacity(0.7);
-    if(m_portStartPoint != QPointF(-1, -1)) {
+    if(m_drawLine) {
         QPainterPath path;
         QPointF p1 = m_portStartPoint;
         QPointF p2 = m_portEndPoint;
@@ -118,14 +118,14 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     // TODO check types
     // TODO check cycles
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
+    m_portStartPoint = QPointF(-1, -1);
+    m_drawLine = false;
+
     if(m_portStartPoint == QPointF(-1, -1) || toPortView == nullptr) {
         this->update();
         QGraphicsWidget::mouseReleaseEvent(e);
         return;
     }
-
-    m_portStartPoint = QPointF(-1, -1);
-    m_drawLine = false;
 
     // check if it is relesed over input port
     if(toPortView->portData()->isOutput()) {

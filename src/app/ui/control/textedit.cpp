@@ -23,7 +23,6 @@ TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextIte
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::validate);
     connect(m_borderColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
         m_currentBorderColor = v.value<QColor>();
-//        this->setDefaultTextColor(m_currentBorderColor);
         this->update();
         emit this->currentBorderColorChanged(m_currentBorderColor);
     });

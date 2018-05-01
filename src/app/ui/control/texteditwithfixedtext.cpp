@@ -8,6 +8,7 @@ TextEditWithFixedText::TextEditWithFixedText(QGraphicsItem* parent): QGraphicsWi
     m_textEdit = new TextEdit{this};
     m_textEdit->setDrawBorders(false);
     m_fixedText = new QGraphicsTextItem{this};
+    m_fixedText->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
     connect(this, &TextEditWithFixedText::fontChanged, m_textEdit, &TextEdit::setFont);
     connect(this, &TextEditWithFixedText::fontChanged, m_fixedText, &QGraphicsTextItem::setFont);
@@ -87,6 +88,8 @@ void TextEditWithFixedText::setFixedTextColor(const QColor& color)
 void TextEditWithFixedText::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
     m_textEdit->setTextInteractionFlags(flags);
+    if(flags == Qt::NoTextInteraction)
+        m_fixedText->setTextInteractionFlags(Qt::NoTextInteraction);
 }
 
 void TextEditWithFixedText::setValidBorderColor(QColor validBorderColor)

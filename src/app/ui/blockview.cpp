@@ -18,7 +18,7 @@ BlockView::BlockView(Block* block, QGraphicsItem* parent) : QGraphicsWidget(pare
     m_data = block;
     this->setMinimumSize(BlockView::s_blockSize.width(), BlockView::s_blockSize.height());
     this->setAcceptedMouseButtons(Qt::LeftButton);
-    this->setFlag(ItemIsFocusable);
+    this->setFlags(ItemIsFocusable | QGraphicsItem::ItemSendsScenePositionChanges);
 
     connect(this, &BlockView::geometryChanged, this, &BlockView::repositionPorts);
     connect(this, &BlockView::outputPortVisibleChanged, this, &BlockView::resizeBoundingBox);
@@ -93,6 +93,12 @@ QVariant BlockView::itemChange(QGraphicsItem::GraphicsItemChange change, const Q
         this->update();
         if(value == true)
             this->setFocus();
+    }
+
+    else if(change == QGraphicsItem::ItemPositionChange) {
+        const QPointF newPos = value.toPointF();
+        if(newPos.x() < 0 || newPos.y() < 0)
+            return QPointF{qMax(newPos.x(), 0.), qMax(newPos.y(), 0.)};
     }
 
     return QGraphicsWidget::itemChange(change, value);

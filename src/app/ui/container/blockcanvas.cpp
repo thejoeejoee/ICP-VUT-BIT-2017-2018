@@ -10,6 +10,8 @@ BlockCanvas::BlockCanvas(QGraphicsWidget* parent): ScrollArea(parent)
 {
     m_blockManager = new BlockManager;
 
+    this->setGrooveColor(QColor(Qt::transparent));
+    this->setHandleColor(QColor("#4c4c4c"));
     this->setAcceptDrops(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
 }
@@ -80,7 +82,6 @@ void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
         block->view()->setCopyable(false);
         block->view()->setFlag(QGraphicsItem::ItemIsSelectable);
         block->view()->setFlag(QGraphicsItem::ItemIsMovable);
-        block->view()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
         block->view()->setPos(e->pos() - QPointF(hotspot));
         block->view()->setOutputVisible(false, false);
@@ -137,7 +138,7 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     Block* toBlock = m_blockManager->block(toPortView->portData()->blockId());
     PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->portData());
 
-    auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this};
+    auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this->container()};
     join->setBlockManager(m_blockManager);
     m_blockManager->addJoin(join);
     outPortView->animateHide();

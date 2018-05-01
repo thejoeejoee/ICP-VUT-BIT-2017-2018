@@ -6,22 +6,34 @@
 #include "../control/scrollbar.h"
 
 
+class StretchContainer: public QGraphicsWidget {
+        Q_OBJECT
+    public:
+        StretchContainer(QGraphicsItem* parent = nullptr);
+
+    protected:
+        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+
+    private slots:
+        void resizeToChildren();
+};
+
 class ScrollArea: public QGraphicsWidget
 {
     Q_OBJECT
     private:
-        QGraphicsWidget* m_container;
+        StretchContainer* m_container;
         ScrollBar* m_verticalScrollBar;
         ScrollBar* m_horizontalScrollBar;
 
     public:
-        explicit ScrollArea(QGraphicsWidget *parent = nullptr);
+        ScrollArea(QGraphicsItem *parent = nullptr);
 
     protected:
         void wheelEvent(QGraphicsSceneWheelEvent* e) override;
 
     public:
-        QGraphicsWidget* container() const;
+        StretchContainer* container() const;
 
     private slots:
         void manageScrollbarsVisibility();

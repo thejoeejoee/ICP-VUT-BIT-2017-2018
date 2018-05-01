@@ -4,9 +4,9 @@
 #include <QGraphicsAnchorLayout>
 #include <QDebug>
 
-ScrollArea::ScrollArea(QGraphicsWidget* parent) : QGraphicsWidget(parent)
+ScrollArea::ScrollArea(QGraphicsItem* parent) : QGraphicsWidget(parent)
 {
-    m_container = new QGraphicsWidget(this);
+    m_container = new StretchContainer(this);
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -14,12 +14,13 @@ ScrollArea::ScrollArea(QGraphicsWidget* parent) : QGraphicsWidget(parent)
     m_verticalScrollBar = new ScrollBar(Qt::Vertical, this);
     m_verticalScrollBar->setHandleColor(QColor(Qt::red));
 
-    m_horizontalScrollBar->setThickness(4);
+    m_horizontalScrollBar->setThickness(5);
     m_horizontalScrollBar->setColor(QColor(Qt::green));
     m_horizontalScrollBar->setHandleColor(QColor(Qt::red));
 
-    m_verticalScrollBar->setThickness(4);
+    m_verticalScrollBar->setThickness(5);
     m_verticalScrollBar->setColor(QColor(Qt::green));
+    this->setFlags(QGraphicsItem::ItemClipsChildrenToShape);
 
     connect(m_container, &QGraphicsWidget::geometryChanged,
             this, &ScrollArea::manageScrollbarsVisibility);
@@ -35,7 +36,7 @@ void ScrollArea::wheelEvent(QGraphicsSceneWheelEvent* e)
     m_verticalScrollBar->artificialScroll((e->delta() < 0) ?1 :-1);
 }
 
-QGraphicsWidget*ScrollArea::container() const
+StretchContainer*ScrollArea::container() const
 {
     return m_container;
 }
@@ -94,4 +95,31 @@ void ScrollArea::setGrooveColor(const QColor& color)
 {
     m_verticalScrollBar->setColor(color);
     m_horizontalScrollBar->setColor(color);
+}
+
+StretchContainer::StretchContainer(QGraphicsItem* parent): QGraphicsWidget (parent) {}
+
+QVariant StretchContainer::itemChange(GraphicsItemChange change, const QVariant& value)
+{
+    QVariant res =  QGraphicsWidget::itemChange(change, value);
+
+    if(change == GraphicsItemChange::ItemChildAddedChange
+            || change == GraphicsItemChange::ItemChildRemovedChange) {
+        QGraphicsWidget* newItem = qgraphicsitem_cast<QGraphicsWidget*>(
+                                     qvariant_cast<QGraphicsItem*>(value));
+        if(newItem == nullptr)
+            return res;
+        connect(newItem, &QGraphicsWidget::geometryChanged, this, &StretchContainer::resizeToChildren);
+        this->resizeToChildren();
+    }
+
+    return res;
+}
+
+void StretchContainer::resizeToChildren()
+{
+    QRectF completeRect{0, 0, 1, 1};
+    for(auto child: this->childItems())
+        completeRect |= child->boundingRect().translated(child->pos());
+    this->resize(completeRect.size());
 }

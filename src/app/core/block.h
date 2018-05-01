@@ -16,11 +16,9 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
         QGraphicsWidget* m_parent;
         BlockView* m_view = nullptr;
         BlockPort* m_outputPort = nullptr;
-
-    protected:
-        // TODO make private
         QList<BlockPort*> m_ports;
 
+    protected:
         void setOutputPort(BlockPort* p);
         void setInputPorts(const QList<BlockPort*>& inputPorts);
 

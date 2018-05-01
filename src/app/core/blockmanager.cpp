@@ -64,10 +64,11 @@ void BlockManager::addJoin(Join* join)
     if(join == nullptr)
         return;
     m_joins[join->id()] = join;
-    connect(join, &Join::deleteRequest, [this](Identifier id) { this->deleteJoin(id); });
+
     Block* fromBlock = m_blocks[join->fromBlock()];
     Block* toBlock = m_blocks[join->toBlock()];
 
+    connect(join, &Join::deleteRequest, [this](Identifier id) { this->deleteJoin(id); });
     connect(fromBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
     connect(toBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
 }
@@ -90,15 +91,8 @@ void BlockManager::deleteBlock(Identifier id)
             joinIdsToDelete.append(join->id());
     }
 
-    for(int i = 0; i < joinIdsToDelete.length(); i++) {
-        Join* j = m_joins.value(joinIdsToDelete.at(i), nullptr);
-//        if(j->fromBlock() != id)
-//            m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
-//        else if(j->toBlock() != id)
-//            m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
-//        j->deleteLater();
+    for(int i = 0; i < joinIdsToDelete.length(); i++)
         this->deleteJoin(joinIdsToDelete.at(i), id);
-    }
     joinIdsToDelete.clear();
 
     m_blocks.remove(id);

@@ -28,8 +28,9 @@ class JoinView : public QObject, public QGraphicsLineItem
                 const QStyleOptionGraphicsItem * option,
                 QWidget * widget = nullptr) override;
     public:
-        Identifier dataId() const;
+        QPainterPath shape()const override;
 
+        Identifier dataId() const;
         void setBlockManager(BlockManager* m);
 
     public slots:

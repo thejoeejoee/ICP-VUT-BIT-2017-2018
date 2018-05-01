@@ -58,7 +58,23 @@ void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     Q_UNUSED(widget);
 
     painter->setPen(this->pen());
-    painter->drawLine(this->line());
+    painter->drawPath(this->shape());
+}
+
+QPainterPath JoinView::shape() const
+{
+    QPainterPath path;
+    QPointF p1 = this->line().p1();
+    QPointF p2 = this->line().p2();
+
+    path.moveTo(p1);
+    double startX = qMin(p1.x(), p2.x());
+    const QPointF c1{startX + qAbs((p1.x() - p2.x()) / 2.), p1.y()};
+    const QPointF c2{startX + qAbs((p1.x() - p2.x()) / 2.), p2.y()};
+
+    path.cubicTo(c1, c2, p2);
+
+    return path;
 }
 
 Identifier JoinView::dataId() const
@@ -73,7 +89,6 @@ void JoinView::setBlockManager(BlockManager* m)
 
 void JoinView::adjustJoin()
 {
-    qDebug() << "foo";
     if(m_blockManager == nullptr)
         return;
 

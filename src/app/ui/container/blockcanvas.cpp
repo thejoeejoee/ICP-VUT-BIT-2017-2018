@@ -23,8 +23,20 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 {
     painter->save();
     painter->setPen(QPen{QColor{"#4c4c4c"}, 3});
-    if(m_portStartPoint != QPointF(-1, -1))
-        painter->drawLine(m_portStartPoint, m_portEndPoint);
+    painter->setOpacity(0.7);
+    if(m_portStartPoint != QPointF(-1, -1)) {
+        QPainterPath path;
+        QPointF p1 = m_portStartPoint;
+        QPointF p2 = m_portEndPoint;
+
+        path.moveTo(p1);
+        double startX = qMin(p1.x(), p2.x());
+        const QPointF c1{startX + qAbs((p1.x() - p2.x()) / 2.), p1.y()};
+        const QPointF c2{startX + qAbs((p1.x() - p2.x()) / 2.), p2.y()};
+
+        path.cubicTo(c1, c2, p2);
+        painter->drawPath(path);
+    }
     painter->restore();
 }
 
@@ -131,23 +143,6 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     outPortView->animateHide();
     toPortView->animateHide();
     join->view()->adjustJoin();
-
-//    auto reconnectJoin = [this, outPortView, toPortView, join]{
-//        if(outPortView == nullptr || toPortView == nullptr || join == nullptr)
-//            return;
-//        QPointF start = outPortView->mapToItem(this, QPointF(
-//                                                   0,
-//                                                   outPortView->size().height() / 2.));
-//        QPointF end = toPortView->mapToItem(this, QPointF(
-//                                                toPortView->size().width(),
-//                                                toPortView->size().height() / 2.));
-//        join->view()->setLine(QLineF(start, end));
-//    };
-
-//    reconnectJoin();
-//    connect(fromBlock->view(), &BlockView::geometryChanged, reconnectJoin);
-//    connect(toBlock->view(), &BlockView::geometryChanged, reconnectJoin);
-
     this->update();
 }
 

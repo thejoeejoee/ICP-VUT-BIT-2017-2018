@@ -13,7 +13,7 @@ JoinView::JoinView(Identifier dataId, QGraphicsItem* parent)
     : QObject{}, QGraphicsLineItem(parent)
 {
     m_dataId = dataId;
-    m_pen = QPen{QColor{"#4c4c4c"}, 3};
+    m_pen = QPen{QColor{"#8c8c8c"}, 3};
     this->setPen(m_pen);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
     this->setFlag(ItemIsFocusable);

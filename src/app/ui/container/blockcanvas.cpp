@@ -24,7 +24,7 @@ BlockCanvas::~BlockCanvas()
 void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
-    painter->setPen(QPen{QColor{"#4c4c4c"}, 3});
+    painter->setPen(QPen{QColor{"#8c8c8c"}, 3});
     painter->setOpacity(0.7);
 
     if(m_drawLine) {

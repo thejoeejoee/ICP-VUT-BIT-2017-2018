@@ -1,6 +1,7 @@
 #ifndef BLOCKVIEW_H
 #define BLOCKVIEW_H
 
+#include <app/core/identified.h>
 #include <QGraphicsWidget>
 #include <QSvgRenderer>
 
@@ -30,6 +31,8 @@ class BlockView : public QGraphicsWidget
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
         void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
+        void keyPressEvent(QKeyEvent* event) override;
+
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
     public:
@@ -58,6 +61,7 @@ class BlockView : public QGraphicsWidget
     signals:
         void outputPortVisibleChanged();
         void inputPortsVisibleChanged();
+        void deleteRequest(Identifier blockId);
 };
 
 #endif // BLOCKVIEW_H

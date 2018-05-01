@@ -5,6 +5,7 @@
 #include <QDrag>
 #include <QPainter>
 #include <QMimeData>
+#include <QGraphicsScene>
 #include <QWidget>
 #include <QJsonDocument>
 #include <app/core/block.h>
@@ -17,6 +18,7 @@ BlockView::BlockView(Block* block, QGraphicsItem* parent) : QGraphicsWidget(pare
     m_data = block;
     this->setMinimumSize(BlockView::s_blockSize.width(), BlockView::s_blockSize.height());
     this->setAcceptedMouseButtons(Qt::LeftButton);
+    this->setFlag(ItemIsFocusable);
 
     connect(this, &BlockView::geometryChanged, this, &BlockView::repositionPorts);
     connect(this, &BlockView::outputPortVisibleChanged, this, &BlockView::resizeBoundingBox);
@@ -68,10 +70,30 @@ void BlockView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     this->setCursor(Qt::OpenHandCursor);
 }
 
+void BlockView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Delete) {
+        for(auto item: this->scene()->selectedItems()) {
+            auto blockView = dynamic_cast<BlockView*>(item);
+            auto joinView = dynamic_cast<JoinView*>(item);
+
+            if(blockView != nullptr)
+                emit blockView->deleteRequest(blockView->blockData()->id());
+            else if(joinView != nullptr)
+                emit joinView->deleteRequest(joinView->dataId());
+        }
+    }
+
+    QGraphicsWidget::keyPressEvent(event);
+}
+
 QVariant BlockView::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
-    if(change == QGraphicsItem::ItemSelectedChange)
+    if(change == QGraphicsItem::ItemSelectedChange) {
         this->update();
+        if(value == true)
+            this->setFocus();
+    }
 
     return QGraphicsWidget::itemChange(change, value);
 }

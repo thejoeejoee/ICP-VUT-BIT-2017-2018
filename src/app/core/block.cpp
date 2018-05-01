@@ -13,7 +13,7 @@ void Block::setInputPorts(const QList<BlockPort*>& ports)
     m_ports = ports;
 }
 
-Block::Block(QGraphicsWidget* parent): Identified(), Factoriable(), FactoryBase<Block>()
+Block::Block(QGraphicsWidget* parent): QObject{}, Identified(), Factoriable(), FactoryBase<Block>()
 {
     m_parent = parent;
     m_view = new BlockView(this, parent);
@@ -21,6 +21,8 @@ Block::Block(QGraphicsWidget* parent): Identified(), Factoriable(), FactoryBase<
 
     m_view->setBackgroundColor(QColor("#4c4c4c"));
     m_view->setBackgroundSelectionColor(QColor("#0f81bc"));
+
+    connect(m_view, &BlockView::deleteRequest, this, &Block::deleteRequest);
 }
 
 Block::~Block()

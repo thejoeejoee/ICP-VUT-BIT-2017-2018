@@ -12,7 +12,7 @@ BlockPortView::BlockPortView(BlockPort* data, QGraphicsItem* parent): QGraphicsW
     });
 }
 
-BlockPort* BlockPortView::data() const
+BlockPort* BlockPortView::portData() const
 {
     return m_data;
 }

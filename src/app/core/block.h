@@ -9,7 +9,9 @@
 #include "blocks/blockport.h"
 #include "../ui/blockview.h"
 
-class Block : public Identified, public Factoriable, public FactoryBase<Block> {
+class Block : public QObject, public Identified, public Factoriable, public FactoryBase<Block> {
+        Q_OBJECT
+
     private:
         QGraphicsWidget* m_parent;
         BlockView* m_view;
@@ -33,6 +35,9 @@ class Block : public Identified, public Factoriable, public FactoryBase<Block> {
         bool inputMatchesPorts(const QList<MappedDataValues>& inputData) const;
         QGraphicsWidget* parent() const;
         BlockView* view() const;
+
+    signals:
+        void deleteRequest(Identifier blockId);
 };
 
 

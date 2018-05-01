@@ -13,7 +13,7 @@ class BlockPortValueView: public BlockPortView
         TextEdit* m_input;
 
     public:
-        BlockPortValueView(BlockPort* data, bool editable = true, QGraphicsItem* parent = nullptr);
+        BlockPortValueView(BlockPort* portData, bool editable = true, QGraphicsItem* parent = nullptr);
 
         MappedDataValues value() const override;
         void setValue(MappedDataValues v) override;

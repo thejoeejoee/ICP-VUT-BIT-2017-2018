@@ -6,7 +6,9 @@
 #include <app/ui/joinview.h>
 
 
-class Join : public Identified {
+class Join : public QObject, public Identified {
+        Q_OBJECT
+
     private:
         Identifier m_fromBlock;
         PortIdentifier m_fromPort;
@@ -20,12 +22,16 @@ class Join : public Identified {
              PortIdentifier fromPort,
              Identifier toBlock,
              PortIdentifier toPort, QGraphicsItem* parent = nullptr);
+        ~Join();
 
         Identifier fromBlock() const;
         PortIdentifier fromPort() const;
         Identifier toBlock() const;
         PortIdentifier toPort() const;
         JoinView* view() const;
+
+    signals:
+        void deleteRequest(Identifier blockId);
 };
 
 

@@ -7,12 +7,15 @@
 #include "join.h"
 
 
-class BlockManager {
+class BlockManager: public QObject {
+        Q_OBJECT
+
     protected:
         QMap<Identifier, Block*> m_blocks;
         QMap<Identifier, Join*> m_joins;
 
     public:
+        BlockManager(): QObject{} {}
         ~BlockManager();
 
         static QJsonObject blockToJson(Block* block);
@@ -28,6 +31,9 @@ class BlockManager {
         Block* block(Identifier id) const;
         Join* join(Identifier id) const;
 
+    private slots:
+        void deleteBlock(Identifier id);
+        void deleteJoin(Identifier id);
 };
 
 

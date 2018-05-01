@@ -56,6 +56,7 @@ void BlockManager::addBlock(Block* block)
     if(block == nullptr)
         return;
     m_blocks[block->id()] = block;
+    connect(block, &Block::deleteRequest, this, &BlockManager::deleteBlock);
 }
 
 void BlockManager::addJoin(Join* join)
@@ -63,11 +64,38 @@ void BlockManager::addJoin(Join* join)
     if(join == nullptr)
         return;
     m_joins[join->id()] = join;
+    connect(join, &Join::deleteRequest, this, &BlockManager::deleteJoin);
 }
 
 Join* BlockManager::join(Identifier id) const
 {
     return m_joins.value(id, nullptr);
+}
+
+void BlockManager::deleteBlock(Identifier id)
+{
+    Block* b = m_blocks.value(id);
+    QList<Identifier> joinIdsToDelete;
+
+    for(auto join: m_joins.values()) {
+        if(join->fromBlock() == b->id() || join->toBlock() == b->id())
+            joinIdsToDelete.append(join->id());
+    }
+
+    for(auto id: joinIdsToDelete)
+        this->deleteJoin(id);
+
+    m_blocks.remove(id);
+    b->deleteLater();
+}
+
+void BlockManager::deleteJoin(Identifier id)
+{
+    Join* j = m_joins.value(id);
+    m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
+    m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
+    m_joins.remove(id);
+    j->deleteLater();
 }
 
 Block* BlockManager::block(Identifier id) const

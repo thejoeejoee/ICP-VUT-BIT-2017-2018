@@ -115,15 +115,15 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     m_drawLine = false;
 
     // check if it is relesed over input port
-    if(toPortView->data()->isOutput()) {
+    if(toPortView->portData()->isOutput()) {
         this->update();
         return;
     }
 
     BlockPortView* outPortView = this->portViewAtPos(m_portOrigStartPoint);
-    Block* fromBlock = m_blockManager->block(outPortView->data()->blockId());
-    Block* toBlock = m_blockManager->block(toPortView->data()->blockId());
-    PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->data());
+    Block* fromBlock = m_blockManager->block(outPortView->portData()->blockId());
+    Block* toBlock = m_blockManager->block(toPortView->portData()->blockId());
+    PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->portData());
 
     auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this};
     m_blockManager->addJoin(join);

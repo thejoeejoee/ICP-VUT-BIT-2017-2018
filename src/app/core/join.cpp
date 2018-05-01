@@ -4,9 +4,17 @@
 
 #include "join.h"
 
-Join::Join(Identifier fromBlock, PortIdentifier fromPort, Identifier toBlock, PortIdentifier toPort, QGraphicsItem* parent): m_fromBlock{fromBlock}, m_fromPort{fromPort}, m_toBlock{toBlock}, m_toPort{toPort}
+Join::Join(Identifier fromBlock, PortIdentifier fromPort, Identifier toBlock, PortIdentifier toPort, QGraphicsItem* parent):
+    QObject{}, Identified{}, m_fromBlock{fromBlock}, m_fromPort{fromPort}, m_toBlock{toBlock}, m_toPort{toPort}
 {
-    m_view = new JoinView{parent};
+    m_view = new JoinView{this->id(), parent};
+
+    connect(m_view, &JoinView::deleteRequest, this, &Join::deleteRequest);
+}
+
+Join::~Join()
+{
+    delete m_view;
 }
 
 Identifier Join::fromBlock() const

@@ -16,13 +16,13 @@ class BlockPortView: public QGraphicsWidget
         BlockPort* m_data;
 
     public:
-        BlockPortView(BlockPort* data, QGraphicsItem* parent = nullptr);
+        BlockPortView(BlockPort* portData, QGraphicsItem* parent = nullptr);
 
         virtual ~BlockPortView() {}
         virtual MappedDataValues value() const = 0;
         virtual void setValue(MappedDataValues v) = 0;
 
-        BlockPort* data() const;
+        BlockPort* portData() const;
 
     public slots:
         void animateHide(bool animate = true);

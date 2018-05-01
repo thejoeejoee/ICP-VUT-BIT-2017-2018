@@ -16,9 +16,10 @@ MappedDataValues AddBlock::evaluate(const QList<MappedDataValues>& inputData)
 {
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
-    DataValue result = 0;
+    double result = 0;
+
     for(const MappedDataValues& port: inputData)
-        result += port["value"];
-    return {{ "value", result }};
+        result += port["value"].toDouble();
+    return {{ "value", QVariant(result) }};
 }
 

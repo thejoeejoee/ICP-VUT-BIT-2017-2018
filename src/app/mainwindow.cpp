@@ -11,27 +11,7 @@
 #include <QGraphicsScene>
 #include <app/ui/control/textedit.h>
 
-//MainWindow::MainWindow(QWidget *parent)
-//    : QWidget(parent)
-//{
-
-//    /*PortView* portView = new PortView(this);
-//    portView->move(100, 100);
-//    m_portRegister->registerPort(portView);
-//    portView = new PortView(this);
-//    portView->move(10, 10);
-//    m_portRegister->registerPort(portView);*/
-
-//    this->resize(800, 500);
-//}
-
-//void MainWindow::mouseMoveEvent(QMouseEvent* event)
-//{
-//    /*PortView* port = m_portRegister->attachedPort(event->pos());
-//    if(port != nullptr) {
-//        qDebug() << port->geometry();
-//    }*/
-//}
+// TODO remove portregister
 
 AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 {
@@ -41,11 +21,20 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 
     m_blockCanvas = new BlockCanvas{this};
 
+    m_button = new IconButton{this};
+    m_button->setMinimumHeight(20);
+    m_button->setMaximumHeight(20);
+    connect(m_button, &IconButton::clicked, m_blockCanvas, &BlockCanvas::evaluate);
+
+
 
     auto layout = new QGraphicsAnchorLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_blockSelection, Qt::TopLeftCorner);
+    layout->addCornerAnchors(layout, Qt::TopLeftCorner, m_button, Qt::TopLeftCorner);
+    layout->addCornerAnchors(layout, Qt::TopRightCorner, m_button, Qt::TopRightCorner);
+
+    layout->addCornerAnchors(m_button, Qt::BottomLeftCorner, m_blockSelection, Qt::TopLeftCorner);
     layout->addCornerAnchors(layout, Qt::BottomLeftCorner,
                              m_blockSelection, Qt::BottomLeftCorner);
 

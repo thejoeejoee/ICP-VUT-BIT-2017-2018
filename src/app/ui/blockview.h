@@ -43,6 +43,7 @@ class BlockView : public QGraphicsWidget
         static int portOffset();
         Block* blockData() const;
         QPixmap pixmap();
+        QList<MappedDataValues> values() const;
 
     private slots:
         void repositionPorts();

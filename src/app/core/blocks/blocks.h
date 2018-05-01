@@ -6,5 +6,6 @@
 #include <app/core/blocks/mulblock.h>
 #include <app/core/blocks/sinblock.h>
 #include <app/core/blocks/subblock.h>
+#include <app/core/blocks/vectmagblock.h>
 
 #endif // BLOCKS_H

@@ -36,6 +36,12 @@ void JoinView::keyPressEvent(QKeyEvent* event)
     QGraphicsLineItem::keyPressEvent(event);
 }
 
+void JoinView::mousePressEvent(QGraphicsSceneMouseEvent* e)
+{
+    if(!this->shape().contains(e->pos()))
+        e->ignore();
+}
+
 QVariant JoinView::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     if(change == QGraphicsItem::ItemSelectedChange) {
@@ -44,7 +50,7 @@ QVariant JoinView::itemChange(QGraphicsItem::GraphicsItemChange change, const QV
             m_pen.setColor(QColor{"#0f81bc"});
         }
         else
-            m_pen.setColor(QColor{"#4c4c4c"});
+            m_pen.setColor(QColor{"#8c8c8c"});
         this->setPen(m_pen);
         this->update();
     }
@@ -52,18 +58,10 @@ QVariant JoinView::itemChange(QGraphicsItem::GraphicsItemChange change, const QV
     return QGraphicsLineItem::itemChange(change, value);
 }
 
-void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
-    painter->setPen(this->pen());
-    painter->drawPath(this->shape());
-}
-
-QPainterPath JoinView::shape() const
+QPainterPath JoinView::nonStrokedShape() const
 {
     QPainterPath path;
+
     QPointF p1 = this->line().p1();
     QPointF p2 = this->line().p2();
 
@@ -75,6 +73,23 @@ QPainterPath JoinView::shape() const
     path.cubicTo(c1, c2, p2);
 
     return path;
+}
+
+void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+    painter->setPen(this->pen());
+    painter->drawPath(this->nonStrokedShape());
+}
+
+QPainterPath JoinView::shape() const
+{
+    QPainterPathStroker stroker;
+    stroker.setWidth(20);
+
+    return stroker.createStroke(this->nonStrokedShape());
 }
 
 Identifier JoinView::dataId() const

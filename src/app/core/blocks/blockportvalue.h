@@ -9,10 +9,11 @@
 class BlockPortValue: public BlockPort
 {
     public:
-        BlockPortValue(Identifier blockId, bool editable = true, QGraphicsItem* parent = nullptr);
+        BlockPortValue(Identifier blockId, Type::TypeE type, QGraphicsItem* parent = nullptr);
 
         QStringList labels() const override;
         void setValue(MappedDataValues v) override;
+        void setIsOutput(bool v) override;
 };
 
 #endif // BLOCKPORTVALUE_H

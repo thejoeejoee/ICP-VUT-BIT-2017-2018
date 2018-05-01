@@ -4,9 +4,9 @@ MulBlock::MulBlock(QGraphicsWidget* parent): Block(parent)
 {
     BlockView* blockView = this->view();
     blockView->setSvgImage(":/res/image/mul_symbol.svg");
-    this->setInputPorts({ new BlockPortValue(this->id(), true, blockView),
-                          new BlockPortValue(this->id(), true, blockView) });
-    this->setOutputPort(new BlockPortValue(this->id(), false, blockView));
+    this->setInputPorts({ new BlockPortValue(this->id(), Type::Scalar, blockView),
+                          new BlockPortValue(this->id(), Type::Scalar, blockView) });
+    this->setOutputPort(new BlockPortValue(this->id(), Type::Scalar, blockView));
 
     blockView->initPortsViews();
 }
@@ -15,8 +15,8 @@ MappedDataValues MulBlock::evaluate(const QList<MappedDataValues>& inputData)
 {
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
-    DataValue result = 1;
+    double result = 1;
     for(const MappedDataValues& port: inputData)
-        result *= port["value"];
-    return {{ "value", result }};
+        result *= port["value"].toDouble();
+    return {{ "value", QVariant(result) }};
 }

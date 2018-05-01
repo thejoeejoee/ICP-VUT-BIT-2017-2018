@@ -28,6 +28,11 @@ BlockView::BlockView(Block* block, QGraphicsItem* parent) : QGraphicsWidget(pare
 void BlockView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if(!m_copyable) {
+        QList<MappedDataValues> inputs = this->values();
+
+        MappedDataValues result = m_data->evaluate(inputs);
+        m_data->outputPort()->view()->setValue(result);
+
         QGraphicsWidget::mousePressEvent(event);
         return;
     }
@@ -179,6 +184,14 @@ QPixmap BlockView::pixmap()
     m_imageRenderer.render(&painter, this->boundingRect());
 
     return pixmap;
+}
+
+QList<MappedDataValues> BlockView::values() const
+{
+    QList<MappedDataValues> inputs;
+    for(auto port: m_data->inputPorts())
+        inputs.append(port->value());
+    return inputs;
 }
 
 void BlockView::repositionPorts()

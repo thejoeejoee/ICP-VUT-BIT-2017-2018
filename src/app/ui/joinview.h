@@ -19,16 +19,20 @@ class JoinView : public QObject, public QGraphicsLineItem
     public:
         JoinView(Identifier dataId, QGraphicsItem* parent = nullptr);
 
-    protected:
-        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-        void keyPressEvent(QKeyEvent* event) override;
-
         void paint(
                 QPainter * painter,
                 const QStyleOptionGraphicsItem * option,
                 QWidget * widget = nullptr) override;
+
+    protected:
+        void keyPressEvent(QKeyEvent* event) override;
+        void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
+
+        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+        QPainterPath nonStrokedShape() const;
+
     public:
-        QPainterPath shape()const override;
+        QPainterPath shape() const override;
 
         Identifier dataId() const;
         void setBlockManager(BlockManager* m);

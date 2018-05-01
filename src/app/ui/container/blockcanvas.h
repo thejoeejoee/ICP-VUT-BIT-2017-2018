@@ -7,6 +7,7 @@
 
 class BlockCanvas : public ScrollArea
 {
+        Q_OBJECT
     private:
         bool m_dragOver;
         QPointF m_portStartPoint = QPointF(-1, -1);
@@ -21,6 +22,9 @@ class BlockCanvas : public ScrollArea
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
+    private:
+        QList<Identifier> blockComputeOrder();
+
     protected:
         void dragEnterEvent(QGraphicsSceneDragDropEvent *e) override;
         void dragLeaveEvent(QGraphicsSceneDragDropEvent *e) override;
@@ -31,6 +35,9 @@ class BlockCanvas : public ScrollArea
         void mouseReleaseEvent(QGraphicsSceneMouseEvent* e) override;
 
         BlockPortView* portViewAtPos(QPointF pos) const;
+
+    public slots:
+        void evaluate();
 };
 
 #endif // BLOCKCANVAS_H

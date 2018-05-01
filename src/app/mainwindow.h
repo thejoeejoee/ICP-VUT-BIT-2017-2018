@@ -6,7 +6,7 @@
 #include <app/ui/container/blockcanvas.h>
 #include <app/ui/container/blocksselection.h>
 #include "ui/portregister.h"
-
+#include <app/ui/control/iconbutton.h>
 
 class AppWindow: public QGraphicsWidget
 {
@@ -14,6 +14,7 @@ class AppWindow: public QGraphicsWidget
     private:
         BlocksSelection* m_blockSelection;
         BlockCanvas* m_blockCanvas;
+        IconButton* m_button;
 
     public:
         AppWindow(QGraphicsWidget* parent = nullptr);

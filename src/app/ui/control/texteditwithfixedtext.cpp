@@ -90,6 +90,8 @@ void TextEditWithFixedText::setTextInteractionFlags(Qt::TextInteractionFlags fla
     m_textEdit->setTextInteractionFlags(flags);
     if(flags == Qt::NoTextInteraction)
         m_fixedText->setTextInteractionFlags(Qt::NoTextInteraction);
+    else
+        m_fixedText->setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
 void TextEditWithFixedText::setValidBorderColor(QColor validBorderColor)

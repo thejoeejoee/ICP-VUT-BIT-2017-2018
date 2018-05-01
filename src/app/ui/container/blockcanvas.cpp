@@ -122,11 +122,13 @@ void BlockCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
 
 void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 {
-    // TODO check types
+    // TODO print warning
     // TODO check cycles
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
 
     if(!m_drawLine || toPortView == nullptr) {
+        m_drawLine = false;
+        m_portStartPoint = QPointF(-1, -1);;
         this->update();
         QGraphicsWidget::mouseReleaseEvent(e);
         return;
@@ -145,6 +147,11 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     Block* fromBlock = m_blockManager->block(outPortView->portData()->blockId());
     Block* toBlock = m_blockManager->block(toPortView->portData()->blockId());
     PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->portData());
+
+    if(outPortView->portData()->type() != toPortView->portData()->type()) {
+        this->update();
+        return;
+    }
 
     auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this->container()};
     join->setBlockManager(m_blockManager);
@@ -167,4 +174,42 @@ BlockPortView* BlockCanvas::portViewAtPos(QPointF pos) const
     if(!portViews.length())
         return nullptr;
     return portViews.at(0);
+}
+
+
+QList<Identifier> BlockCanvas::blockComputeOrder()
+{
+    QList<Identifier> computedBlocks;
+    while(computedBlocks.size() < m_blockManager->blocks().values().length()) {
+        for(auto block: m_blockManager->blocks().values()) {
+            if(computedBlocks.contains(block->id()))
+                continue;
+            const QSet<Identifier> blockOuts = m_blockManager->blockBlocksInputs(block->id());
+            bool blockEvaluable = blockOuts.isEmpty() ||
+                                  (blockOuts - computedBlocks.toSet()).isEmpty();
+            if(blockEvaluable)
+                computedBlocks.append(block->id());
+        }
+    }
+
+    return computedBlocks;
+}
+
+void BlockCanvas::evaluate()
+{
+    // check if ports are valid
+    // compute available blocks
+    qDebug() << this->blockComputeOrder();
+    for(Identifier blockId: this->blockComputeOrder()) {
+        Block* block = m_blockManager->block(blockId);
+        MappedDataValues res = block->evaluate(block->view()->values());
+        QList<QPair<Identifier, Identifier> > blocksTopropagate =
+                m_blockManager->blockOutputs(block->id());
+
+        block->outputPort()->setValue(res);
+        for(auto outData: blocksTopropagate) {
+            m_blockManager->blocks()[outData.first]->inputPorts()
+                    .at(static_cast<int>(outData.second))->setValue(res);
+        }
+    }
 }

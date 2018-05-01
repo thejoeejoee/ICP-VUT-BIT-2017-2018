@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     Block::registerItem<MulBlock>();
     Block::registerItem<CosBlock>();
     Block::registerItem<SinBlock>();
+    Block::registerItem<VectMagBlock>();
 
     auto scene = new QGraphicsScene;
 

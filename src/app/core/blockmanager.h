@@ -25,6 +25,11 @@ class BlockManager: public QObject {
         const QMap<Identifier, Block*>& blocks() const;
         const QMap<Identifier, Join*>& joins() const;
 
+        QSet<Identifier> blockBlocksInputs(Identifier blockId) const;
+        QSet<Identifier> blockBlocksOutputs(Identifier blockId) const;
+        QList<QPair<Identifier, Identifier> > blockInputs(Identifier blockId) const;
+        QList<QPair<Identifier, Identifier> > blockOutputs(Identifier blockId) const;
+
         void addBlock(Block* block);
         void addJoin(Join* join);
 

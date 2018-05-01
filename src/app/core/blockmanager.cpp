@@ -11,11 +11,11 @@ QJsonObject BlockManager::blockToJson(Block* block)
 {
     QJsonObject jsonObject;
     jsonObject["type"] = block->classId();
-    jsonObject["output_value"] = block->outputPort()->value()["value"];
+    jsonObject["output_value"] = QJsonValue::fromVariant(block->outputPort()->value()["value"]);
 
     QJsonArray input_values;
     for(auto port: block->inputPorts())
-        input_values.append(port->value()["value"]);
+        input_values.append(QJsonValue::fromVariant(port->value()["value"]));
     jsonObject["input_values"] = QJsonValue(input_values);
 
     return jsonObject;
@@ -27,11 +27,11 @@ Block* BlockManager::blockFromJson(const QJsonObject& json, QGraphicsWidget* par
     for(int i = 0; i < block->inputPorts().length(); i++) {
         auto inputPort = block->inputPorts().at(i);
         QJsonArray values = json["input_values"].toArray();
-        inputPort->setValue(MappedDataValues{{"value", values.at(i).toDouble()}, });
+        inputPort->setValue(MappedDataValues{{"value", values.at(i).toVariant()}, });
     }
 
     block->outputPort()->setValue(MappedDataValues{
-                                      {"value", json["output_value"].toDouble()},
+                                      {"value", json["output_value"].toVariant()},
                                   });
     return block;
 }
@@ -49,6 +49,51 @@ const QMap<Identifier, Block*>& BlockManager::blocks() const
 const QMap<Identifier, Join*>& BlockManager::joins() const
 {
     return m_joins;
+}
+
+QSet<Identifier> BlockManager::blockBlocksInputs(Identifier blockId) const
+{
+    QSet<Identifier> result;
+    for(auto join: m_joins.values()) {
+        if(join->toBlock() == blockId)
+            result.insert(join->fromBlock());
+    }
+
+    return result;
+}
+
+QSet<Identifier> BlockManager::blockBlocksOutputs(Identifier blockId) const
+{
+    QSet<Identifier> result;
+    for(auto join: m_joins.values()) {
+        if(join->fromBlock() == blockId)
+            result.insert(join->toBlock());
+    }
+
+    return result;
+}
+
+
+QList<QPair<Identifier, Identifier> > BlockManager::blockInputs(Identifier blockId) const
+{
+    QList<QPair<Identifier, Identifier> > result;
+    for(auto join: m_joins.values()) {
+        if(join->toBlock() == blockId)
+            result.append(qMakePair(join->fromBlock(), join->fromPort()));
+    }
+
+    return result;
+}
+
+QList<QPair<Identifier, Identifier> > BlockManager::blockOutputs(Identifier blockId) const
+{
+    QList<QPair<Identifier, Identifier> > result;
+    for(auto join: m_joins.values()) {
+        if(join->fromBlock() == blockId)
+            result.append(qMakePair(join->toBlock(), join->toPort()));
+    }
+
+    return result;
 }
 
 void BlockManager::addBlock(Block* block)

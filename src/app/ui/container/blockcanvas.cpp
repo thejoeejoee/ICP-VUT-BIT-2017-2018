@@ -26,6 +26,7 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->save();
     painter->setPen(QPen{QColor{"#4c4c4c"}, 3});
     painter->setOpacity(0.7);
+
     if(m_drawLine) {
         QPainterPath path;
         QPointF p1 = m_portStartPoint;
@@ -39,6 +40,13 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
         path.cubicTo(c1, c2, p2);
         painter->drawPath(path);
     }
+
+    if(m_dragOver) {
+        painter->setPen(QColor(Qt::transparent));
+        painter->setBrush(QColor("#efefef"));
+        painter->drawRect(this->boundingRect());
+    }
+
     painter->restore();
 }
 
@@ -89,6 +97,8 @@ void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
         block->view()->setOutputVisible(true);
         block->view()->setInputsVisible(true);
     }
+
+    this->update();
 }
 
 void BlockCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)

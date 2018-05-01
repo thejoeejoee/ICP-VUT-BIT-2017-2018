@@ -14,7 +14,7 @@ Join::Join(Identifier fromBlock, PortIdentifier fromPort, Identifier toBlock, Po
 
 Join::~Join()
 {
-    delete m_view;
+    m_view->deleteLater();
 }
 
 Identifier Join::fromBlock() const
@@ -40,4 +40,9 @@ PortIdentifier Join::toPort() const
 JoinView* Join::view() const
 {
     return m_view;
+}
+
+void Join::setBlockManager(BlockManager* m)
+{
+    m_view->setBlockManager(m);
 }

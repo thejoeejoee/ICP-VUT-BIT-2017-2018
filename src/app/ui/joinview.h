@@ -5,6 +5,7 @@
 #include <QGraphicsTextItem>
 #include <QPen>
 
+class BlockManager;
 
 class JoinView : public QObject, public QGraphicsLineItem
 {
@@ -13,6 +14,7 @@ class JoinView : public QObject, public QGraphicsLineItem
     private:
         QPen m_pen;
         Identifier m_dataId;
+        BlockManager* m_blockManager = nullptr;
 
     public:
         JoinView(Identifier dataId, QGraphicsItem* parent = nullptr);
@@ -27,6 +29,11 @@ class JoinView : public QObject, public QGraphicsLineItem
                 QWidget * widget = nullptr) override;
     public:
         Identifier dataId() const;
+
+        void setBlockManager(BlockManager* m);
+
+    public slots:
+        void adjustJoin();
 
     signals:
         void deleteRequest(Identifier joinId);

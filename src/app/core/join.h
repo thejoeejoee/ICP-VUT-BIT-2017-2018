@@ -5,6 +5,7 @@
 #include "identified.h"
 #include <app/ui/joinview.h>
 
+class BlockManager;
 
 class Join : public QObject, public Identified {
         Q_OBJECT
@@ -29,6 +30,8 @@ class Join : public QObject, public Identified {
         Identifier toBlock() const;
         PortIdentifier toPort() const;
         JoinView* view() const;
+
+        void setBlockManager(BlockManager* m);
 
     signals:
         void deleteRequest(Identifier blockId);

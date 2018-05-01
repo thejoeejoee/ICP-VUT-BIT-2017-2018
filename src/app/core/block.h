@@ -14,8 +14,8 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
 
     private:
         QGraphicsWidget* m_parent;
-        BlockView* m_view;
-        BlockPort* m_outputPort;
+        BlockView* m_view = nullptr;
+        BlockPort* m_outputPort = nullptr;
 
     protected:
         // TODO make private

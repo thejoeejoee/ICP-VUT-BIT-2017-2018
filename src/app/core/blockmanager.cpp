@@ -64,7 +64,12 @@ void BlockManager::addJoin(Join* join)
     if(join == nullptr)
         return;
     m_joins[join->id()] = join;
-    connect(join, &Join::deleteRequest, this, &BlockManager::deleteJoin);
+    connect(join, &Join::deleteRequest, [this](Identifier id) { this->deleteJoin(id); });
+    Block* fromBlock = m_blocks[join->fromBlock()];
+    Block* toBlock = m_blocks[join->toBlock()];
+
+    connect(fromBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
+    connect(toBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
 }
 
 Join* BlockManager::join(Identifier id) const
@@ -74,7 +79,10 @@ Join* BlockManager::join(Identifier id) const
 
 void BlockManager::deleteBlock(Identifier id)
 {
-    Block* b = m_blocks.value(id);
+    Block* b = m_blocks.value(id, nullptr);
+    if(b == nullptr)
+        return;
+
     QList<Identifier> joinIdsToDelete;
 
     for(auto join: m_joins.values()) {
@@ -82,19 +90,32 @@ void BlockManager::deleteBlock(Identifier id)
             joinIdsToDelete.append(join->id());
     }
 
-    for(auto id: joinIdsToDelete)
-        this->deleteJoin(id);
+    for(int i = 0; i < joinIdsToDelete.length(); i++) {
+        Join* j = m_joins.value(joinIdsToDelete.at(i), nullptr);
+//        if(j->fromBlock() != id)
+//            m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
+//        else if(j->toBlock() != id)
+//            m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
+//        j->deleteLater();
+        this->deleteJoin(joinIdsToDelete.at(i), id);
+    }
+    joinIdsToDelete.clear();
 
     m_blocks.remove(id);
     b->deleteLater();
 }
 
-void BlockManager::deleteJoin(Identifier id)
+void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
 {
-    Join* j = m_joins.value(id);
-    m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
-    m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
+    Join* j = m_joins.value(id, nullptr);
+    if(j == nullptr)
+        return;
+
     m_joins.remove(id);
+    if(j->fromBlock() != excludeBlockId)
+        m_blocks[j->fromBlock()]->outputPort()->view()->animateShow();
+    if(j->toBlock() != excludeBlockId)
+        m_blocks[j->toBlock()]->inputPorts().at(j->toPort())->view()->animateShow();
     j->deleteLater();
 }
 

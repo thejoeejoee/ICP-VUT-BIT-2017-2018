@@ -126,23 +126,27 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->portData());
 
     auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this};
+    join->setBlockManager(m_blockManager);
     m_blockManager->addJoin(join);
     outPortView->animateHide();
     toPortView->animateHide();
+    join->view()->adjustJoin();
 
-    auto reconnectJoin = [this, outPortView, toPortView, join]{
-        QPointF start = outPortView->mapToItem(this, QPointF(
-                                                   0,
-                                                   outPortView->size().height() / 2.));
-        QPointF end = toPortView->mapToItem(this, QPointF(
-                                                toPortView->size().width(),
-                                                toPortView->size().height() / 2.));
-        join->view()->setLine(QLineF(start, end));
-    };
+//    auto reconnectJoin = [this, outPortView, toPortView, join]{
+//        if(outPortView == nullptr || toPortView == nullptr || join == nullptr)
+//            return;
+//        QPointF start = outPortView->mapToItem(this, QPointF(
+//                                                   0,
+//                                                   outPortView->size().height() / 2.));
+//        QPointF end = toPortView->mapToItem(this, QPointF(
+//                                                toPortView->size().width(),
+//                                                toPortView->size().height() / 2.));
+//        join->view()->setLine(QLineF(start, end));
+//    };
 
-    reconnectJoin();
-    connect(fromBlock->view(), &BlockView::geometryChanged, reconnectJoin);
-    connect(toBlock->view(), &BlockView::geometryChanged, reconnectJoin);
+//    reconnectJoin();
+//    connect(fromBlock->view(), &BlockView::geometryChanged, reconnectJoin);
+//    connect(toBlock->view(), &BlockView::geometryChanged, reconnectJoin);
 
     this->update();
 }

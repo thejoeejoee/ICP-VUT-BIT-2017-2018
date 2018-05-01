@@ -33,7 +33,7 @@ class BlockManager: public QObject {
 
     private slots:
         void deleteBlock(Identifier id);
-        void deleteJoin(Identifier id);
+        void deleteJoin(Identifier id, Identifier excludeBlockId = -1);
 };
 
 

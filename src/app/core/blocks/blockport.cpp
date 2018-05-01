@@ -11,6 +11,10 @@ BlockPort::BlockPort(Identifier blockId)
     m_blockId = blockId;
 }
 
+BlockPort::~BlockPort() {
+    m_view->deleteLater();
+}
+
 MappedDataValues BlockPort::value() const
 {
     return m_view->value();

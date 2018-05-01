@@ -12,6 +12,11 @@ BlockPortView::BlockPortView(BlockPort* data, QGraphicsItem* parent): QGraphicsW
     });
 }
 
+BlockPortView::~BlockPortView()
+{
+    m_opacityAnimation->deleteLater();
+}
+
 BlockPort* BlockPortView::portData() const
 {
     return m_data;

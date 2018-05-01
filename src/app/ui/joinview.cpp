@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <app/core/block.h>
 #include <app/ui/blockview.h>
+#include <app/core/blockmanager.h>
 
 JoinView::JoinView(Identifier dataId, QGraphicsItem* parent)
     : QObject{}, QGraphicsLineItem(parent)
@@ -63,4 +64,30 @@ void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 Identifier JoinView::dataId() const
 {
     return m_dataId;
+}
+
+void JoinView::setBlockManager(BlockManager* m)
+{
+    m_blockManager = m;
+}
+
+void JoinView::adjustJoin()
+{
+    qDebug() << "foo";
+    if(m_blockManager == nullptr)
+        return;
+
+    Join* data = m_blockManager->join(m_dataId);
+    BlockPortView* fromPortView = m_blockManager->block(data->fromBlock())->outputPort()->view();
+    BlockPortView* toPortView = m_blockManager->block(data->toBlock())->inputPorts()
+                                .at(data->toPort())->view();
+
+    QPointF start = fromPortView->mapToItem(this->parentItem(), QPointF(
+                                               0,
+                                               fromPortView->size().height() / 2.));
+    QPointF end = toPortView->mapToItem(this->parentItem(), QPointF(
+                                            toPortView->size().width(),
+                                            toPortView->size().height() / 2.));
+    this->setLine(QLineF(start, end));
+    this->update();
 }

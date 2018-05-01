@@ -19,7 +19,7 @@ class BlockPort
     public:
         BlockPort(Identifier blockId);
 
-        virtual ~BlockPort() {}
+        virtual ~BlockPort();
         virtual QStringList labels() const = 0;
         MappedDataValues value() const;
         virtual void setValue(MappedDataValues v) = 0;

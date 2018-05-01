@@ -16,7 +16,7 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
         QGraphicsWidget* m_parent;
         BlockView* m_view = nullptr;
         BlockPort* m_outputPort = nullptr;
-        QList<BlockPort*> m_ports;
+        QList<BlockPort*> m_inputPorts;
 
     protected:
         void setOutputPort(BlockPort* p);
@@ -33,6 +33,8 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
         bool inputMatchesPorts(const QList<MappedDataValues>& inputData) const;
         QGraphicsWidget* parent() const;
         BlockView* view() const;
+
+        bool validInputs() const;
 
     signals:
         void deleteRequest(Identifier blockId);

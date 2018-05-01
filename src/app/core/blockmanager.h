@@ -13,6 +13,7 @@ class BlockManager: public QObject {
     protected:
         QMap<Identifier, Block*> m_blocks;
         QMap<Identifier, Join*> m_joins;
+        bool m_disableDelete = false;
 
     public:
         BlockManager(): QObject{} {}
@@ -39,6 +40,9 @@ class BlockManager: public QObject {
     private slots:
         void deleteBlock(Identifier id);
         void deleteJoin(Identifier id, Identifier excludeBlockId = -1);
+
+    public slots:
+        void setDisableDelete(bool v);
 };
 
 

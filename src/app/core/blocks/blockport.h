@@ -45,6 +45,8 @@ class BlockPort
         Identifier blockId() const;
         bool isOutput() const;
         Type::TypeE type() const;
+        bool valid() const;
+        bool isConnected() const;
 };
 
 #endif // BLOCKPORT_H

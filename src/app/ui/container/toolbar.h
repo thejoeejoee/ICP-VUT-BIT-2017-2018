@@ -23,6 +23,14 @@ class ToolBar : public QGraphicsWidget
         void paint(QPainter *painter,
                    const QStyleOptionGraphicsItem *option,
                    QWidget *widget = nullptr) override;
+
+    signals:
+        void newFile();
+        void saveFile();
+        void openFile();
+        void run();
+        void debug();
+        void stop();
 };
 
 #endif // TOOLBAR_H

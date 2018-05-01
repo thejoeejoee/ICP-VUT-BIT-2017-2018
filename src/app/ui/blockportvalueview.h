@@ -20,6 +20,7 @@ class BlockPortValueView: public BlockPortView
         MappedDataValues value() const override;
         QString rawValue(bool typed = false) const override;
         void setValue(MappedDataValues v) override;
+        bool valid() const override;
         void setEditable(bool v);
 
     private slots:

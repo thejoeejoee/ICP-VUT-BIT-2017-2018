@@ -10,7 +10,7 @@ void Block::setInputPorts(const QList<BlockPort*>& ports)
 {
     for(auto p: ports)
         p->setIsOutput(false);
-    m_ports = ports;
+    m_inputPorts = ports;
 }
 
 Block::Block(QGraphicsWidget* parent): QObject{}, Identified(), Factoriable(), FactoryBase<Block>()
@@ -29,13 +29,13 @@ Block::~Block()
 {
     m_view->deleteLater();
     delete m_outputPort;
-    for(int i = 0; i < m_ports.length(); i++)
-        delete m_ports[i];
+    for(int i = 0; i < m_inputPorts.length(); i++)
+        delete m_inputPorts[i];
 }
 
 QList<BlockPort*> Block::inputPorts() const
 {
-    return m_ports;
+    return m_inputPorts;
 }
 
 BlockPort* Block::outputPort() const
@@ -46,9 +46,9 @@ BlockPort* Block::outputPort() const
 bool Block::inputMatchesPorts(const QList<MappedDataValues>& inputData) const
 {
     bool matches = true;
-    matches = matches && inputData.length() == m_ports.length();
-    for(int i = 0; i < m_ports.length(); i++)
-        matches = matches && inputData.at(i).keys() == m_ports.at(i)->labels();
+    matches = matches && inputData.length() == m_inputPorts.length();
+    for(int i = 0; i < m_inputPorts.length(); i++)
+        matches = matches && inputData.at(i).keys() == m_inputPorts.at(i)->labels();
     return matches;
 }
 
@@ -60,5 +60,17 @@ QGraphicsWidget* Block::parent() const
 BlockView* Block::view() const
 {
     return m_view;
+}
+
+bool Block::validInputs() const
+{
+    bool valid = true;
+    for(auto port: m_inputPorts) {
+        if(port->isConnected())
+            continue;
+        valid = valid && port->valid();
+    }
+
+    return valid;
 }
 

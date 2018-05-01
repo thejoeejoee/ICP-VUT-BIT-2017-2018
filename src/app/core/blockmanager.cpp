@@ -125,6 +125,9 @@ Join* BlockManager::join(Identifier id) const
 
 void BlockManager::deleteBlock(Identifier id)
 {
+    if(m_disableDelete)
+        return;
+
     Block* b = m_blocks.value(id, nullptr);
     if(b == nullptr)
         return;
@@ -146,6 +149,9 @@ void BlockManager::deleteBlock(Identifier id)
 
 void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
 {
+    if(m_disableDelete)
+        return;
+
     Join* j = m_joins.value(id, nullptr);
 
     if(j == nullptr)
@@ -158,6 +164,11 @@ void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
 
     m_joins.remove(id);
     j->deleteLater();
+}
+
+void BlockManager::setDisableDelete(bool v)
+{
+    m_disableDelete = v;
 }
 
 Block* BlockManager::block(Identifier id) const

@@ -84,6 +84,11 @@ void BlockPortValueView::setValue(MappedDataValues v)
     m_input->setPlainText(repr);
 }
 
+bool BlockPortValueView::valid() const
+{
+    return m_input->valid();
+}
+
 void BlockPortValueView::setEditable(bool v)
 {
     if(v)

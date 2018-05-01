@@ -45,6 +45,14 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     this->setMinimumWidth(450);
     this->setMinimumHeight(45);
     this->setMaximumHeight(45);
+
+    connect(m_newButton, &Clickable::clicked, this, &ToolBar::newFile);
+    connect(m_saveButton, &Clickable::clicked, this, &ToolBar::saveFile);
+    connect(m_openButton, &Clickable::clicked, this, &ToolBar::openFile);
+
+    connect(m_runButton, &Clickable::clicked, this, &ToolBar::run);
+    connect(m_debugButton, &Clickable::clicked, this, &ToolBar::debug);
+    connect(m_stopButton, &Clickable::clicked, this, &ToolBar::stop);
 }
 
 void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

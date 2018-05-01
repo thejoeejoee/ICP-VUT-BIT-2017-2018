@@ -71,6 +71,9 @@ void BlockCanvas::dragLeaveEvent(QGraphicsSceneDragDropEvent* e)
 
 void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
 {
+    if(m_disableDrop)
+        return;
+
     m_dragOver = false;
     if(e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
         QByteArray rawData{e->mimeData()->data(BlockManager::blockMimeType())};
@@ -176,6 +179,14 @@ BlockPortView* BlockCanvas::portViewAtPos(QPointF pos) const
     return portViews.at(0);
 }
 
+bool BlockCanvas::schemeValidity() const
+{
+    bool valid = true;
+    for(auto block: m_blockManager->blocks().values())
+        valid = valid && block->validInputs();
+
+    return valid;
+}
 
 QList<Identifier> BlockCanvas::blockComputeOrder()
 {
@@ -195,21 +206,66 @@ QList<Identifier> BlockCanvas::blockComputeOrder()
     return computedBlocks;
 }
 
+
+void BlockCanvas::evaluateBlock(Identifier blockId)
+{
+    Block* block = m_blockManager->block(blockId);
+    MappedDataValues res = block->evaluate(block->view()->values());
+    QList<QPair<Identifier, Identifier> > blocksTopropagate =
+            m_blockManager->blockOutputs(block->id());
+
+    block->outputPort()->setValue(res);
+    for(auto outData: blocksTopropagate) {
+        m_blockManager->blocks()[outData.first]->inputPorts()
+                .at(static_cast<int>(outData.second))->setValue(res);
+    }
+}
+
 void BlockCanvas::evaluate()
 {
+    // TODO validate
     // check if ports are valid
+    qDebug() << this->schemeValidity();
+    if(!this->schemeValidity())
+        return;
     // compute available blocks
-    qDebug() << this->blockComputeOrder();
-    for(Identifier blockId: this->blockComputeOrder()) {
-        Block* block = m_blockManager->block(blockId);
-        MappedDataValues res = block->evaluate(block->view()->values());
-        QList<QPair<Identifier, Identifier> > blocksTopropagate =
-                m_blockManager->blockOutputs(block->id());
+    for(Identifier blockId: this->blockComputeOrder())
+        this->evaluateBlock(blockId);
+}
 
-        block->outputPort()->setValue(res);
-        for(auto outData: blocksTopropagate) {
-            m_blockManager->blocks()[outData.first]->inputPorts()
-                    .at(static_cast<int>(outData.second))->setValue(res);
-        }
+void BlockCanvas::debug()
+{
+    // TODO validate
+    QList<Identifier> computeOrder = this->blockComputeOrder();
+    if(m_debugIteration >= computeOrder.length()) {
+        this->stopDebug();
+        return;
     }
+
+    if(m_debugIteration == 0)
+        this->scene()->clearSelection();
+    m_blockManager->setDisableDelete(true);
+    this->setDisableDrop(true);
+
+    Block* block = m_blockManager->block(computeOrder.at(m_debugIteration));
+    block->view()->setSelected(true);
+
+    if(m_debugIteration > 0)
+        m_blockManager->block(computeOrder.at(m_debugIteration - 1))->view()->setSelected(false);
+    this->evaluateBlock(block->id());
+
+    m_debugIteration++;
+}
+
+void BlockCanvas::stopDebug()
+{
+    m_debugIteration = 0;
+    m_blockManager->setDisableDelete(false);
+    this->scene()->clearSelection();
+    this->setDisableDrop(false);
+}
+
+void BlockCanvas::setDisableDrop(bool v)
+{
+    m_disableDrop = v;
 }

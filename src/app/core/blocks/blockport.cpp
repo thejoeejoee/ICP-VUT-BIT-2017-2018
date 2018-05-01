@@ -46,6 +46,16 @@ Type::TypeE BlockPort::type() const
     return m_type;
 }
 
+bool BlockPort::valid() const
+{
+    return m_view->valid();
+}
+
+bool BlockPort::isConnected() const
+{
+    return m_view->opacity() == 0.;
+}
+
 QString Type::toString(Type::TypeE type)
 {
     if(type == Type::Angle)
@@ -70,9 +80,9 @@ Type::TypeE Type::fromString(const QString& str)
 QString Type::validator(Type::TypeE type)
 {
     if(type == Type::Scalar || type == Type::Angle)
-        return "^\\d+\\.?(\\d{1,4})?$";
+        return "^-?\\d+\\.?(\\d{1,4})?$";
     else if(type == Type::Vector)
-        return "^\\{\\d+\\.?(\\d{1,4})?(, *\\d+\\.?(\\d{1,4})?)*\\}$";
+        return "^\\{-?\\d+\\.?(\\d{1,4})?(, *-?\\d+\\.?(\\d{1,4})?)*\\}$";
     return ".*";
 }
 

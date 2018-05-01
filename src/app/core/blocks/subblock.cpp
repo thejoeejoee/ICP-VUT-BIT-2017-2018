@@ -16,7 +16,8 @@ MappedDataValues SubBlock::evaluate(const QList<MappedDataValues>& inputData)
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
     double result = inputData.at(0)["value"].toDouble();
+
     for(int i = 1; i < inputData.length(); i++)
-        result -= inputData.at(0)["value"].toDouble();
+        result -= inputData.at(i)["value"].toDouble();
     return {{ "value", QVariant(result) }};
 }

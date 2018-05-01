@@ -15,6 +15,8 @@ class BlockCanvas : public ScrollArea
         QPointF m_portEndPoint = QPointF();
         bool m_drawLine = false;
         BlockManager* m_blockManager;
+        int m_debugIteration = 0;
+        bool m_disableDrop = false;
 
     public:
         explicit BlockCanvas(QGraphicsWidget* parent = nullptr);
@@ -36,8 +38,20 @@ class BlockCanvas : public ScrollArea
 
         BlockPortView* portViewAtPos(QPointF pos) const;
 
+        bool schemeValidity() const;
+
+    private slots:
+        void evaluateBlock(Identifier blockId);
+
     public slots:
         void evaluate();
+        void debug();
+        void stopDebug();
+
+        void setDisableDrop(bool v);
+
+    signals:
+        void error(const QString& msg);
 };
 
 #endif // BLOCKCANVAS_H

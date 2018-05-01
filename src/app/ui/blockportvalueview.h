@@ -2,7 +2,7 @@
 #define BLOCKPORTVALUEVIEW_H
 
 #include <app/ui/blockportview.h>
-#include <app/ui/control/textedit.h>
+#include <app/ui/control/texteditwithfixedtext.h>
 
 class BlockPort;
 
@@ -10,7 +10,7 @@ class BlockPortValueView: public BlockPortView
 {
         Q_OBJECT
     private:
-        TextEdit* m_input;
+        TextEditWithFixedText* m_input;
 
     public:
         BlockPortValueView(BlockPort* portData, bool editable = true, QGraphicsItem* parent = nullptr);

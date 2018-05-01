@@ -9,17 +9,28 @@ TextEdit::TextEdit(QGraphicsItem* parent): TextEdit{"", parent} {}
 
 TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextItem{text, parent}
 {
+    m_textColorAnimation = new QVariantAnimation{this};
+    m_textColorAnimation->setDuration(300);
+
     m_borderColorAnimation = new QVariantAnimation(this);
     m_borderColorAnimation->setDuration(300);
     m_valid = true;
 
     this->setTextInteractionFlags(Qt::TextEditorInteraction);
 
+    connect(this, &TextEdit::textColorChanged, [this]() { this->update(); });
+    connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::contentChanged);
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::validate);
     connect(m_borderColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
         m_currentBorderColor = v.value<QColor>();
-        this->setDefaultTextColor(m_currentBorderColor);
+//        this->setDefaultTextColor(m_currentBorderColor);
         this->update();
+        emit this->currentBorderColorChanged(m_currentBorderColor);
+    });
+
+    connect(m_textColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
+        m_currentTextColor = v.value<QColor>();
+        this->setDefaultTextColor(m_currentTextColor);
     });
 }
 
@@ -27,12 +38,14 @@ void TextEdit::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 {
     Q_UNUSED(widget);
 
-    painter->save();
-    painter->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing, false);
-    painter->setRenderHint(QPainter::TextAntialiasing);
-    painter->setPen(m_currentBorderColor);
-    painter->drawRect(this->boundingRect());
-    painter->restore();
+    if(m_drawBorders) {
+        painter->save();
+        painter->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing, false);
+        painter->setRenderHint(QPainter::TextAntialiasing);
+        painter->setPen(m_currentBorderColor);
+        painter->drawRect(this->boundingRect());
+        painter->restore();
+    }
 
     QStyleOptionGraphicsItem option2 = *option;
     option2.state = QStyle::State_None;
@@ -54,9 +67,19 @@ QColor TextEdit::invalidBorderColor() const
     return m_invalidBorderColor;
 }
 
+QColor TextEdit::currentBorderColor() const
+{
+    return m_currentBorderColor;
+}
+
 bool TextEdit::valid() const
 {
     return m_valid;
+}
+
+QColor TextEdit::textColor() const
+{
+    return m_textColor;
 }
 
 void TextEdit::setValidBorderColor(QColor validBorderColor)
@@ -77,6 +100,22 @@ void TextEdit::setInvalidBorderColor(QColor invalidBorderColor)
     emit invalidBorderColorChanged(m_invalidBorderColor);
 }
 
+void TextEdit::setDrawBorders(bool v)
+{
+    m_drawBorders = v;
+    this->update();
+}
+
+void TextEdit::setTextColor(QColor textColor)
+{
+    if (m_textColor == textColor)
+        return;
+
+    m_textColor = textColor;
+    m_currentTextColor = m_textColor;
+    emit textColorChanged(m_textColor);
+}
+
 void TextEdit::validate()
 {
     QTextDocument* document = this->document();
@@ -86,15 +125,25 @@ void TextEdit::validate()
     if(!match.hasMatch() && m_currentBorderColor != m_invalidBorderColor) {
         m_borderColorAnimation->setStartValue(m_currentBorderColor);
         m_borderColorAnimation->setEndValue(m_invalidBorderColor);
+
+        m_textColorAnimation->setStartValue(m_currentTextColor);
+        m_textColorAnimation->setEndValue(m_invalidBorderColor);
+
         m_valid = false;
         m_borderColorAnimation->start();
+        m_textColorAnimation->start();
     }
 
     else if(match.hasMatch() && m_currentBorderColor != m_validBorderColor){
         m_borderColorAnimation->setStartValue(m_currentBorderColor);
         m_borderColorAnimation->setEndValue(m_validBorderColor);
+
+        m_textColorAnimation->setStartValue(m_currentTextColor);
+        m_textColorAnimation->setEndValue(m_textColor);
+
         m_valid = true;
         m_borderColorAnimation->start();
+        m_textColorAnimation->start();
     }
 }
 

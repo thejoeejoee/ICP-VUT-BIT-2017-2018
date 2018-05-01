@@ -127,7 +127,6 @@ void BlockView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawRect(blockRect);
 
     // draw port connection lines
-
     painter->setPen(QPen(m_backgroundColor, 3, Qt::SolidLine, Qt::FlatCap));
     if(m_outputPortVisible) {
         painter->drawLine(QLineF{
@@ -273,6 +272,9 @@ void BlockView::initPortsViews()
         connect(m_data->outputPort()->view(),
                 &BlockPortView::geometryChanged, this, &BlockView::repositionPorts);
     }
+
+    for(auto port: m_data->inputPorts())
+        connect(port->view(), &BlockPortView::geometryChanged, this, &BlockView::repositionPorts);
 }
 
 void BlockView::setSvgImage(const QString& image)

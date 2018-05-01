@@ -9,8 +9,11 @@ BlockPortValueView::BlockPortValueView(BlockPort* data, bool editable, QGraphics
     : BlockPortView{data, parent}
 {
     this->setPreferredSize(45, 20);
-    m_input = new TextEdit{this};
-    m_input->setTextWidth(45);
+
+    m_input = new TextEditWithFixedText{this};
+    m_input->setTextColor(QColor(Qt::black));
+    m_input->setFixedText("Vector:");
+    m_input->setFixedTextColor(QColor("#969696"));
     m_input->setFont(QFont("Montserrat Light"));
     m_input->setInvalidBorderColor(QColor("#d10000"));
     m_input->setValidBorderColor(QColor("#939393"));
@@ -20,8 +23,8 @@ BlockPortValueView::BlockPortValueView(BlockPort* data, bool editable, QGraphics
         m_input->setTextInteractionFlags(Qt::NoTextInteraction);
 
     this->resizeWithText();
-
-    connect(m_input, &TextEdit::widthChanged, this, &BlockPortValueView::resizeWithText);
+    connect(m_input, &TextEditWithFixedText::geometryChanged,
+            this, &BlockPortValueView::resizeWithText);
 }
 
 MappedDataValues BlockPortValueView::value() const

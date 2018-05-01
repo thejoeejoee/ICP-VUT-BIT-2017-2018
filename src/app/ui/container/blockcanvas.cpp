@@ -125,14 +125,15 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     // TODO check types
     // TODO check cycles
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
-    m_portStartPoint = QPointF(-1, -1);
-    m_drawLine = false;
 
-    if(m_portStartPoint == QPointF(-1, -1) || toPortView == nullptr) {
+    if(!m_drawLine || toPortView == nullptr) {
         this->update();
         QGraphicsWidget::mouseReleaseEvent(e);
         return;
     }
+
+    m_drawLine = false;
+    m_portStartPoint = QPointF(-1, -1);;
 
     // check if it is relesed over input port
     if(toPortView->portData()->isOutput()) {

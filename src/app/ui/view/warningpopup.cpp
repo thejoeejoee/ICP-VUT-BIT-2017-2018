@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QStyleOptionGraphicsItem>
 
 WarningPopUp::WarningPopUp(QGraphicsWidget* parent): QGraphicsWidget (parent)
 {
@@ -20,6 +21,7 @@ WarningPopUp::WarningPopUp(QGraphicsWidget* parent): QGraphicsWidget (parent)
 void WarningPopUp::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
+    painter->setClipRect(option->exposedRect);
     painter->setOpacity(0.4 * this->opacity());
     painter->setPen(QColor{Qt::transparent});
     painter->setBrush(QColor("#f8a61a"));

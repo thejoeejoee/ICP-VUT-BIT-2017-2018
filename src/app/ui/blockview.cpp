@@ -28,11 +28,6 @@ BlockView::BlockView(Block* block, QGraphicsItem* parent) : QGraphicsWidget(pare
 void BlockView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if(!m_copyable) {
-        QList<MappedDataValues> inputs = this->values();
-
-        MappedDataValues result = m_data->evaluate(inputs);
-        m_data->outputPort()->view()->setValue(result);
-
         QGraphicsWidget::mousePressEvent(event);
         return;
     }

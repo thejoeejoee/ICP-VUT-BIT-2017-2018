@@ -50,6 +50,8 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
         painter->drawRect(this->boundingRect());
     }
 
+    painter->setFont(QFont("Montserrat", 20));
+    painter->drawText(this->boundingRect(), Qt::AlignBottom | Qt::AlignRight, "Son Hai Nguyen, Josef Kolář ©2018");
     painter->restore();
 }
 

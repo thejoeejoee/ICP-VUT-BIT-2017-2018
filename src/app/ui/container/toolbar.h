@@ -49,7 +49,7 @@ class ToolBar : public QGraphicsWidget {
         /**
          * Run evaluator.
          */
-        void run();
+        void evaluate();
         /**
          * Start debugging.
          */

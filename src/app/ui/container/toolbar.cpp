@@ -54,7 +54,7 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     connect(m_saveAsButton, &Clickable::clicked, this, &ToolBar::saveAsFile);
     connect(m_openButton, &Clickable::clicked, this, &ToolBar::openFile);
 
-    connect(m_runButton, &Clickable::clicked, this, &ToolBar::run);
+    connect(m_runButton, &Clickable::clicked, this, &ToolBar::evaluate);
     connect(m_debugButton, &Clickable::clicked, this, &ToolBar::debug);
     connect(m_stopButton, &Clickable::clicked, this, &ToolBar::stop);
 }

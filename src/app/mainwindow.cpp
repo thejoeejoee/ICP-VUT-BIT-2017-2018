@@ -30,7 +30,7 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 
     this->setTitle();
 
-    connect(m_toolbar, &ToolBar::run, m_blockCanvas, &BlockCanvas::evaluate);
+    connect(m_toolbar, &ToolBar::evaluate, m_blockCanvas, &BlockCanvas::evaluate);
     connect(m_toolbar, &ToolBar::debug, m_blockCanvas, &BlockCanvas::debug);
     connect(m_toolbar, &ToolBar::stop, m_blockCanvas, &BlockCanvas::stopDebug);
     connect(m_blockCanvas, &BlockCanvas::error, [this](const QString& msg) {

@@ -14,6 +14,7 @@ class ToolBar : public QGraphicsWidget {
     private:
         TextButton* m_newButton;
         TextButton* m_saveButton;
+        TextButton* m_saveAsButton;
         TextButton* m_openButton;
         IconButton* m_runButton;
         IconButton* m_debugButton;
@@ -57,6 +58,9 @@ class ToolBar : public QGraphicsWidget {
          * Stop debugging.
          */
         void stop();
+
+        // TODO doc
+        void saveAsFile();
 };
 
 #endif // TOOLBAR_H

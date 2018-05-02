@@ -8,10 +8,12 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     m_newButton = new TextButton{tr("New"), this};
     m_openButton = new TextButton{tr("Open"), this};
     m_saveButton = new TextButton{tr("Save"), this};
+    m_saveAsButton = new TextButton{tr("Save As"), this};
 
     m_newButton->setFont(QFont{"Montserrat", 18});
     m_openButton->setFont(m_newButton->font());
     m_saveButton->setFont(m_newButton->font());
+    m_saveAsButton->setFont(m_newButton->font());
 
     m_runButton = new IconButton{":/res/image/play_icon.svg", this};
     m_debugButton = new IconButton{":/res/image/play_iter_icon.svg", this};
@@ -29,6 +31,7 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     layout->addItem(m_newButton);
     layout->addItem(m_openButton);
     layout->addItem(m_saveButton);
+    layout->addItem(m_saveAsButton);
     layout->addItem(subLayout);
 
     subLayout->addItem(m_runButton);
@@ -42,12 +45,13 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     mainLayout->addCornerAnchors(mainLayout, Qt::BottomRightCorner,
                                  subLayout, Qt::BottomRightCorner);
 
-    this->setMinimumWidth(450);
+    this->setMinimumWidth(580);
     this->setMinimumHeight(45);
     this->setMaximumHeight(45);
 
     connect(m_newButton, &Clickable::clicked, this, &ToolBar::newFile);
     connect(m_saveButton, &Clickable::clicked, this, &ToolBar::saveFile);
+    connect(m_saveAsButton, &Clickable::clicked, this, &ToolBar::saveAsFile);
     connect(m_openButton, &Clickable::clicked, this, &ToolBar::openFile);
 
     connect(m_runButton, &Clickable::clicked, this, &ToolBar::run);
@@ -66,8 +70,8 @@ void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     const QSizeF size = this->size();
     polygon << QPointF{size.width(), 0}
             << QPointF{size.width(), size.height()}
-            << QPointF{size.width() / 1.55 - size.height(), size.height()}
-            << QPointF{size.width() / 1.55, 0}
+            << QPointF{size.width() / 1.40 - size.height(), size.height()}
+            << QPointF{size.width() / 1.40, 0}
             << QPointF{size.width(), 0};
 
     painter->setBrush(QColor("#dbdbda"));

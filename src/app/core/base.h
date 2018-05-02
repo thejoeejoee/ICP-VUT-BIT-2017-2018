@@ -9,8 +9,8 @@
 #define GET_OVERLOADED_MACRO23(_1, _2, _3, NAME, ...) NAME
 #define GET_OVERLOADED_MACRO12(_1, _2, NAME, ...) NAME
 
-using Identifier = unsigned;
-using PortIdentifier = int;
+using Identifier = unsigned int;
+using PortIdentifier = unsigned int;
 using DataValue = QVariant;
 using MappedDataValues = QMap<QString, DataValue>;
 

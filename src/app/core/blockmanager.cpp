@@ -113,6 +113,10 @@ void BlockManager::addJoin(Join* join)
     Block* fromBlock = m_blocks[join->fromBlock()];
     Block* toBlock = m_blocks[join->toBlock()];
 
+    fromBlock->outputPort()->view()->animateHide();
+    toBlock->inputPorts().at(join->toPort())->view()->animateHide();
+    join->view()->adjustJoin();
+
     connect(join, &Join::deleteRequest, [this](Identifier id) { this->deleteJoin(id); });
     connect(fromBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
     connect(toBlock->view(), &BlockView::geometryChanged, join->view(), &JoinView::adjustJoin);
@@ -145,6 +149,8 @@ void BlockManager::deleteBlock(Identifier id)
 
     m_blocks.remove(id);
     b->deleteLater();
+
+    emit this->blockDeleted();
 }
 
 void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
@@ -164,6 +170,8 @@ void BlockManager::deleteJoin(Identifier id, Identifier excludeBlockId)
 
     m_joins.remove(id);
     j->deleteLater();
+
+    emit this->joinDeleted();
 }
 
 void BlockManager::setDisableDelete(bool v)

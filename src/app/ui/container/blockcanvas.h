@@ -79,7 +79,12 @@ class BlockCanvas : public ScrollArea {
          * @return
          */
         bool schemeValidity() const;
+        // TODO docS
         bool cycled() const;
+
+    public:
+        // TODO doc
+        BlockManager* manager() const;
 
     private slots:
         /**
@@ -108,12 +113,21 @@ class BlockCanvas : public ScrollArea {
          */
         void setDisableDrop(bool v);
 
+        // TODO doc
+        void clear();
+
     signals:
         /**
          * Display error of msg.
          * @param msg text
          */
         void error(const QString &msg);
+        // TODO doc
+        void blockAdded(Identifier id);
+        // TODO doc
+        void joinAdded(Identifier id);
+        void joinDeleted();
+        void blockDeleted();
 };
 
 #endif // BLOCKCANVAS_H

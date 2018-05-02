@@ -14,6 +14,9 @@ BlockCanvas::BlockCanvas(QGraphicsWidget* parent): ScrollArea(parent)
     this->setHandleColor(QColor("#4c4c4c"));
     this->setAcceptDrops(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
+
+    connect(m_blockManager, &BlockManager::blockDeleted, this, &BlockCanvas::blockDeleted);
+    connect(m_blockManager, &BlockManager::joinDeleted, this, &BlockCanvas::joinDeleted);
 }
 
 BlockCanvas::~BlockCanvas()
@@ -96,6 +99,8 @@ void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
         block->view()->setInputsVisible(false, false);
         block->view()->setOutputVisible(true);
         block->view()->setInputsVisible(true);
+
+        emit this->blockAdded(block->id());
     }
 
     this->update();
@@ -159,9 +164,8 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     auto join = new Join{fromBlock->id(), 0, toBlock->id(), toPortId, this->container()};
     join->setBlockManager(m_blockManager);
     m_blockManager->addJoin(join);
-    outPortView->animateHide();
-    toPortView->animateHide();
-    join->view()->adjustJoin();
+
+    emit this->joinAdded(join->id());
     this->update();
 }
 
@@ -227,6 +231,11 @@ bool BlockCanvas::cycled() const
     }
 
     return false;
+}
+
+BlockManager*BlockCanvas::manager() const
+{
+    return m_blockManager;
 }
 
 QList<Identifier> BlockCanvas::blockComputeOrder()
@@ -319,4 +328,11 @@ void BlockCanvas::stopDebug()
 void BlockCanvas::setDisableDrop(bool v)
 {
     m_disableDrop = v;
+}
+
+void BlockCanvas::clear()
+{
+    QList<Identifier> blocks = m_blockManager->blocks().keys();
+    for(auto blockId: blocks)
+        m_blockManager->deleteBlock(blockId);
 }

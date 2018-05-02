@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
 
     view->setScene(scene);
 
-    view->setWindowTitle("Block editor");
     view->resize(1500, 800);
+    view->setWindowTitle("Block Editor");
     view->show();
 
     return a.exec();

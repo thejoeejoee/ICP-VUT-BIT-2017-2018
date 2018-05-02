@@ -37,12 +37,15 @@ class BlockManager: public QObject {
         Block* block(Identifier id) const;
         Join* join(Identifier id) const;
 
-    private slots:
+    public slots:
+        void setDisableDelete(bool v);
         void deleteBlock(Identifier id);
         void deleteJoin(Identifier id, Identifier excludeBlockId = -1);
 
-    public slots:
-        void setDisableDelete(bool v);
+    signals:
+        // TODO doc
+        void blockDeleted();
+        void joinDeleted();
 };
 
 

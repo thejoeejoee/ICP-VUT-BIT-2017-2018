@@ -6,12 +6,14 @@
 #include <QPainter>
 #include <QDebug>
 #include <QGraphicsAnchorLayout>
+#include <QJsonDocument>
+#include <QMessageBox>
 #include "ui/blockportview.h"
 #include "core/blocks/addblock.h"
 #include <QGraphicsScene>
 #include <app/ui/control/textedit.h>
-
-// TODO remove portregister
+#include <QFileDialog>
+#include <app/ui/window/graphicsview.h>
 
 AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 {
@@ -22,14 +24,31 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
     m_blockCanvas = new BlockCanvas{this};
     m_warning = new WarningPopUp{m_blockCanvas};
     m_warning->resize(300, 40);
+    m_schemeIO = new SchemeIO{m_blockCanvas->manager(), this};
 
     m_toolbar = new ToolBar{this};
+
+    this->setTitle();
+
     connect(m_toolbar, &ToolBar::run, m_blockCanvas, &BlockCanvas::evaluate);
     connect(m_toolbar, &ToolBar::debug, m_blockCanvas, &BlockCanvas::debug);
     connect(m_toolbar, &ToolBar::stop, m_blockCanvas, &BlockCanvas::stopDebug);
     connect(m_blockCanvas, &BlockCanvas::error, [this](const QString& msg) {
         m_warning->popUp(msg, 2);
     });
+
+    connect(m_toolbar, &ToolBar::openFile, this, &AppWindow::schemeOpen);
+    connect(m_toolbar, &ToolBar::saveFile, this, &AppWindow::schemeSave);
+    connect(m_toolbar, &ToolBar::newFile, this, &AppWindow::schemeNew);
+    connect(m_toolbar, &ToolBar::saveAsFile, this, &AppWindow::schemeSaveAs);
+
+    connect(m_blockCanvas, &BlockCanvas::blockAdded, [this]() { this->setSaved(false); });
+    connect(m_blockCanvas, &BlockCanvas::joinAdded, [this]() { this->setSaved(false); });
+    connect(m_blockCanvas, &BlockCanvas::blockDeleted, [this]() { this->setSaved(false); });
+    connect(m_blockCanvas, &BlockCanvas::joinDeleted, [this]() { this->setSaved(false); });
+
+    connect(this, &AppWindow::savedChanged, this, &AppWindow::setTitle);
+    connect(this, &AppWindow::currentPathChanged, this, &AppWindow::setTitle);
 
 
     auto layout = new QGraphicsAnchorLayout(this);
@@ -47,7 +66,147 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
                              layout, Qt::BottomRightCorner);
 }
 
+QString AppWindow::currentPath() const
+{
+    return m_currentPath;
+}
+
+bool AppWindow::saved() const
+{
+    return m_saved;
+}
+
+void AppWindow::setTitle()
+{
+    QString title{"%1%4%2%3"};
+    title = title
+            .arg(tr("Block Editor"))
+            .arg(m_currentPath)
+            .arg((!m_saved && !m_currentPath.isEmpty()) ?"*" :"")
+            .arg((m_currentPath.isEmpty()) ?"" :" - ");
+    if(this->scene() != nullptr && this->scene()->views().length())
+        this->scene()->views().at(0)->setWindowTitle(title);
+}
+
+void AppWindow::setCurrentPath(const QString& path)
+{
+    if(path == m_currentPath)
+        return;
+    m_currentPath = path;
+    emit this->currentPathChanged(path);
+}
+
+void AppWindow::setSaved(bool saved)
+{
+    if(saved == m_saved)
+        return;
+    m_saved = saved;
+    emit this->savedChanged(saved);
+}
+
 void AppWindow::resizeWindow(QSize size)
 {
     this->resize(size);
+}
+
+bool AppWindow::handleUnsavedScheme()
+{
+    if(m_saved)
+        return false;
+    auto reply = QMessageBox::question(
+                     nullptr,
+                     tr("Unsaved scheme"),
+                     tr("Do you want to save scheme?"));
+    if(reply == QMessageBox::Yes)
+        this->schemeSave();
+    return true;
+}
+
+void AppWindow::schemeOpen()
+{
+    this->handleUnsavedScheme();
+
+    const QString filePath = QFileDialog::getOpenFileName(
+                                 nullptr,
+                                 tr("Open file"),
+                                 QString(),
+                                 QString("%1 (*.%2)")
+                                 .arg(tr("Block schemes"))
+                                 .arg(AppWindow::s_fileFormat));
+    if(filePath.isEmpty())
+        return;
+
+    this->setCurrentPath(filePath);
+    QFile file(m_currentPath);
+
+    if(!file.open(QIODevice::ReadOnly)) {
+        emit this->error(tr("File could not be open."));
+        return;
+    }
+
+    this->setSaved(true);
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    m_schemeIO->loadFromJson(doc.object(), m_blockCanvas->container());
+}
+
+void AppWindow::schemeSave()
+{
+    if(m_currentPath.isEmpty()) {
+        const QString filePath = QFileDialog::getSaveFileName(
+                                     nullptr,
+                                     tr("Save file"),
+                                     QString(),
+                                     QString("%1 (*.%2)")
+                                     .arg(tr("Block schemes"))
+                                     .arg(AppWindow::s_fileFormat));
+        if(filePath.isEmpty())
+            return;
+        this->setCurrentPath(filePath);
+    }
+
+
+    QJsonDocument doc{m_schemeIO->exportToJson()};
+    QFile file(m_currentPath);
+
+    if(!file.open(QIODevice::WriteOnly)) {
+        emit this->error(tr("File could not be open."));
+        return;
+    }
+
+    this->setSaved(true);
+    file.write(doc.toJson());
+}
+
+void AppWindow::schemeSaveAs()
+{
+    const QString filePath = QFileDialog::getSaveFileName(
+                                 nullptr,
+                                 tr("Save file as"),
+                                 QString(),
+                                 QString("%1 (*.%2)")
+                                 .arg(tr("Block schemes"))
+                                 .arg(AppWindow::s_fileFormat));
+    if(filePath.isEmpty())
+        return;
+    this->setCurrentPath(filePath);
+
+    QJsonDocument doc{m_schemeIO->exportToJson()};
+    QFile file(m_currentPath);
+
+    if(!file.open(QIODevice::WriteOnly)) {
+        emit this->error(tr("File could not be open."));
+        return;
+    }
+
+    this->setSaved(true);
+    file.write(doc.toJson());
+}
+
+void AppWindow::schemeNew()
+{
+    this->handleUnsavedScheme();
+
+    m_blockCanvas->clear();
+    this->setSaved(true);
+    this->setCurrentPath("");
 }

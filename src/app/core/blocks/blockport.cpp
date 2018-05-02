@@ -64,6 +64,7 @@ QString Type::toString(Type::TypeE type)
         return "Scalar";
     if(type == Type::Vector)
         return "Vector";
+    return "";
 }
 
 Type::TypeE Type::fromString(const QString& str)

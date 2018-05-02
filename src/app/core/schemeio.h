@@ -3,22 +3,36 @@
 
 #include <app/core/blockmanager.h>
 
-// TODO doc
-class SchemeIO: public QObject
-{
-        Q_OBJECT
+/**
+ * Class for managing schema save and load.
+ */
+class SchemeIO : public QObject {
+    Q_OBJECT
     private:
         BlockManager* m_manager;
 
     public:
-        SchemeIO(BlockManager* manager, QObject* parent = nullptr);
+        explicit SchemeIO(BlockManager* manager, QObject* parent = nullptr);
 
         QString jsonValid(const QJsonObject& scheme) const;
+        /**
+         * Exports manager into json.
+         * @return serialized
+         */
         QJsonObject exportToJson() const;
+        /**
+         * Loads from scheme into manager.
+         * @param scheme to load
+         * @param parent qt parent
+         */
         void loadFromJson(QJsonObject scheme, QGraphicsWidget* parent);
 
     signals:
-        void error(const QString& msg);
+        /**
+         * On load error.
+         * @param msg error description
+         */
+        void error(const QString &msg);
 };
 
 #endif // SCHEMEIO_H

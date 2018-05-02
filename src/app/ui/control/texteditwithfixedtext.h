@@ -7,10 +7,20 @@
 #include <QGraphicsTextItem>
 
 
-class TextEditWithFixedText : public QGraphicsWidget
-{
-        Q_OBJECT
-        Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged)
+/**
+ * Editable text with fixed value.
+ */
+class TextEditWithFixedText : public QGraphicsWidget {
+    Q_OBJECT
+        Q_PROPERTY(QFont
+                           font
+                           READ
+                           font
+                           WRITE
+                           setFont
+                           NOTIFY
+                           fontChanged
+        )
 
     private:
         TextEdit* m_textEdit;
@@ -18,34 +28,107 @@ class TextEditWithFixedText : public QGraphicsWidget
         QFont m_font;
 
     public:
-        TextEditWithFixedText(QGraphicsItem* parent = nullptr);
-        void paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget = nullptr) override;
+        explicit TextEditWithFixedText(QGraphicsItem* parent = nullptr);
+        /**
+         * Paints field into widget.
+         * @param painter painter
+         * @param option style
+         * @param widget qt parent
+         */
+        void paint(
+                QPainter* painter,
+                const QStyleOptionGraphicsItem* option,
+                QWidget* widget
+        ) override;
 
+        /**
+         * Is input valid?
+         * @return state
+         */
         bool valid() const;
+        /**
+         * Getter for valid border color.
+         * @return color
+         */
         QColor validBorderColor() const;
+
+        /**
+         * Getter for invalid border color.
+         * @return color
+         */
         QColor invalidBorderColor() const;
+        /**
+         * Returns font.
+         * @return font
+         */
         QFont font() const;
+        /**
+         * Returns fixed text as string.
+         * @return string
+         */
         QString fixedToPlainText() const;
+        /**
+         * Returns text as string.
+         * @return string
+         */
         QString toPlainText() const;
 
     private slots:
         void resizeToContent();
 
     public slots:
-        void setTextColor(const QColor& color);
-        void setValidator(const QRegularExpression& validator);
-        void setPlainText(const QString& str);
-        void setFixedText(const QString& str);
-        void setFixedTextColor(const QColor& color);
+        /**
+         * Sets new text color.
+         * @param color new color
+         */
+        void setTextColor(const QColor &color);
+        /**
+         * Sets regex validator
+         * @param validator regex validator
+         */
+        void setValidator(const QRegularExpression &validator);
+        /**
+         * Sets text to input.
+         * @param str string
+         */
+        void setPlainText(const QString &str);
+        /**
+         * Sets fixed text.
+         * @param str fixed text
+         */
+        void setFixedText(const QString &str);
+        /**
+         * Sets new color.
+         * @param color fixed color
+         */
+        void setFixedTextColor(const QColor &color);
+        /**
+         * Sets interaction flags.
+         * @param flags new flags
+         */
         void setTextInteractionFlags(Qt::TextInteractionFlags flags);
+        /**
+         * Set new color of valid
+         * @param validBorderColor color
+         */
         void setValidBorderColor(QColor validBorderColor);
+        /**
+         * Set new color of invalid
+         * @param validBorderColor color
+         */
         void setInvalidBorderColor(QColor invalidBorderColor);
-        void setFont(const QFont& font);
+        /**
+         * Sets new font.
+         * @param font new font
+         */
+        void setFont(const QFont &font);
 
     signals:
-        void fontChanged(const QFont& font);
+        /**
+         * On font chnaged.
+         * @param font new font
+         */
+        void fontChanged(const QFont &font);
 };
 
 #endif // TEXTEDITWITHFIXEDTEXT_H

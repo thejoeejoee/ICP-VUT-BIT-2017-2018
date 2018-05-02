@@ -28,15 +28,38 @@ class AppWindow : public QGraphicsWidget {
     public:
         explicit AppWindow(QGraphicsWidget* parent = nullptr);
 
+        /**
+         * Gets current path of editation scheme file.
+         * @return current path
+         */
         QString currentPath() const;
+        /**
+         * Is scheme saved?
+         * @return state
+         */
         bool saved() const;
 
     private slots:
+        /**
+         * On title set.
+         */
         void setTitle();
 
     protected slots:
+        /**
+         * Checks, if scheme was saved.
+         * @return
+         */
         bool handleUnsavedScheme();
-        void setCurrentPath(const QString& path);
+        /**
+         * Sets currents scheme file path.
+         * @param path new path
+         */
+        void setCurrentPath(const QString &path);
+        /**
+         * Sets, if scheme is actually saved.
+         * @param saved state
+         */
         void setSaved(bool saved);
 
     public slots:
@@ -46,19 +69,27 @@ class AppWindow : public QGraphicsWidget {
          */
         void resizeWindow(QSize size);
 
-        // TODO doc
+        /**
+         * Open scheme from file.
+         */
         void schemeOpen();
-        // TODO doc
+        /**
+         * Save scheme to file.
+         */
         void schemeSave();
-        // TODO doc
+        /**
+         * Save as file scheme to file.
+         */
         void schemeSaveAs();
-        // TODO doc
+        /**
+         * Creates empty scheme.
+         */
         void schemeNew();
 
     signals:
-        void currentPathChanged(const QString& path);
+        void currentPathChanged(const QString &path);
         void savedChanged(bool saved);
-        void error(const QString& msg);
+        void error(const QString &msg);
 };
 
 #endif // MAINWINDOW_H

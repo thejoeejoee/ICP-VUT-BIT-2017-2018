@@ -79,11 +79,17 @@ class BlockCanvas : public ScrollArea {
          * @return
          */
         bool schemeValidity() const;
-        // TODO docS
+        /**
+         * Is schema cycled?
+         * @return state
+         */
         bool cycled() const;
 
     public:
-        // TODO doc
+        /**
+         * Returns manager from block canvas.
+         * @return block manager
+         */
         BlockManager* manager() const;
 
     private slots:
@@ -113,7 +119,9 @@ class BlockCanvas : public ScrollArea {
          */
         void setDisableDrop(bool v);
 
-        // TODO doc
+        /**
+         * Remove all blocks and joins.
+         */
         void clear();
 
     signals:
@@ -122,11 +130,23 @@ class BlockCanvas : public ScrollArea {
          * @param msg text
          */
         void error(const QString &msg);
-        // TODO doc
+        /**
+         * On block added signal.
+         * @param id new block identifier
+         */
         void blockAdded(Identifier id);
-        // TODO doc
+        /**
+         * On join added signal.
+         * @param id new block identifier
+         */
         void joinAdded(Identifier id);
+        /**
+         * On join deleted signal.
+         */
         void joinDeleted();
+        /**
+         * On block deleted signal.
+         */
         void blockDeleted();
 };
 

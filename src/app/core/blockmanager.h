@@ -10,8 +10,8 @@
 /**
  * Manager for handling all blocks in schema.
  */
-class BlockManager: public QObject {
-        Q_OBJECT
+class BlockManager : public QObject {
+    Q_OBJECT
 
     protected:
         /**
@@ -28,8 +28,8 @@ class BlockManager: public QObject {
         bool m_disableDelete = false;
 
     public:
-        BlockManager(): QObject{} {}
-        ~BlockManager();
+        BlockManager() : QObject{} {}
+        ~BlockManager() override;
 
         /**
          * Serialize block to json.
@@ -43,7 +43,7 @@ class BlockManager: public QObject {
          * @param parent parent for block
          * @return created block
          */
-        static Block* blockFromJson(const QJsonObject& json, QGraphicsWidget* parent = nullptr);
+        static Block* blockFromJson(const QJsonObject &json, QGraphicsWidget* parent = nullptr);
         /**
          * Returns block mime type for D&D.
          * @return mime type
@@ -54,12 +54,12 @@ class BlockManager: public QObject {
          * All blocks getter.
          * @return blocks
          */
-        const QMap<Identifier, Block*>& blocks() const;
+        const QMap<Identifier, Block*> &blocks() const;
         /**
          * All joins getter.
          * @return joins
          */
-        const QMap<Identifier, Join*>& joins() const;
+        const QMap<Identifier, Join*> &joins() const;
 
         /**
          * Returns all input ports for block defined by id.
@@ -117,12 +117,26 @@ class BlockManager: public QObject {
          * @param v state
          */
         void setDisableDelete(bool v);
+        /**
+         * Slot to delete block.
+         * @param id block identifier
+         */
         void deleteBlock(Identifier id);
+        /**
+         * Slot to delete join.
+         * @param id join identifier
+         * @param excludeBlockId exlude block identifier
+         */
         void deleteJoin(Identifier id, Identifier excludeBlockId = -1);
 
     signals:
-        // TODO doc
+        /**
+         * On block deleted signal.
+         */
         void blockDeleted();
+        /**
+         * On join deleted signal.
+         */
         void joinDeleted();
 };
 

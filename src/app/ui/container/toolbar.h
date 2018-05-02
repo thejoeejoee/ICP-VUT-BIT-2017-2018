@@ -59,7 +59,9 @@ class ToolBar : public QGraphicsWidget {
          */
         void stop();
 
-        // TODO doc
+        /**
+         * Save schema as file.
+         */
         void saveAsFile();
 };
 

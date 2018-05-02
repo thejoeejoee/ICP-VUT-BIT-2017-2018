@@ -7,9 +7,10 @@ TextEditWithFixedText::TextEditWithFixedText(QGraphicsItem* parent): QGraphicsWi
 {
     m_textEdit = new TextEdit{this};
     m_textEdit->setDrawBorders(false);
-    m_fixedText = new QGraphicsTextItem{this};
-    m_fixedText->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_fixedText = new PlainText{this};
 
+
+    connect(m_fixedText, &PlainText::clicked, this, &TextEditWithFixedText::passFocus);
     connect(this, &TextEditWithFixedText::fontChanged, m_textEdit, &TextEdit::setFont);
     connect(this, &TextEditWithFixedText::fontChanged, m_fixedText, &QGraphicsTextItem::setFont);
     connect(m_textEdit, &TextEdit::currentBorderColorChanged, [this]() { this->update(); });
@@ -65,6 +66,13 @@ void TextEditWithFixedText::resizeToContent()
     this->resize(contentRect.size());
 }
 
+void TextEditWithFixedText::passFocus()
+{
+    if(m_textEdit->flags() == Qt::NoTextInteraction)
+        return;
+    m_textEdit->setFocus();
+}
+
 void TextEditWithFixedText::setOneLineMode(bool v)
 {
     m_textEdit->setOneLineMode(v);
@@ -98,10 +106,6 @@ void TextEditWithFixedText::setFixedTextColor(const QColor& color)
 void TextEditWithFixedText::setTextInteractionFlags(Qt::TextInteractionFlags flags)
 {
     m_textEdit->setTextInteractionFlags(flags);
-    if(flags == Qt::NoTextInteraction)
-        m_fixedText->setTextInteractionFlags(Qt::NoTextInteraction);
-    else
-        m_fixedText->setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
 void TextEditWithFixedText::setValidBorderColor(QColor validBorderColor)

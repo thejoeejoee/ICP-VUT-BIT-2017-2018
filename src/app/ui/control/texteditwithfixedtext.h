@@ -4,7 +4,7 @@
 #include <QGraphicsWidget>
 #include <QRegularExpression>
 #include "textedit.h"
-#include <QGraphicsTextItem>
+#include <app/ui/control/plaintext.h>
 
 
 /**
@@ -24,7 +24,7 @@ class TextEditWithFixedText : public QGraphicsWidget {
 
     private:
         TextEdit* m_textEdit;
-        QGraphicsTextItem* m_fixedText;
+        PlainText* m_fixedText;
         QFont m_font;
 
     public:
@@ -75,6 +75,8 @@ class TextEditWithFixedText : public QGraphicsWidget {
 
     private slots:
         void resizeToContent();
+        // TODO doc
+        void passFocus();
 
     public slots:
         /**

@@ -91,6 +91,7 @@ bool BlockPortValueView::valid() const
 
 void BlockPortValueView::setEditable(bool v)
 {
+    m_input->setPropagateMouse(!v);
     if(v)
         m_input->setTextInteractionFlags(Qt::TextEditorInteraction);
     else

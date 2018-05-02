@@ -8,8 +8,13 @@
 class PlainText : public QGraphicsTextItem
 {
         Q_OBJECT
+    private:
+        bool m_propagateMouse = false;
+
     public:
         explicit PlainText(QGraphicsItem* parent = nullptr);
+
+        void setPropagateMouse(bool v);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent* e) override;

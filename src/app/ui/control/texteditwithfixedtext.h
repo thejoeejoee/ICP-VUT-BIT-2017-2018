@@ -109,6 +109,8 @@ class TextEditWithFixedText : public QGraphicsWidget {
          * @param flags new flags
          */
         // TODO doc
+        void setPropagateMouse(bool v);
+        // TODO doc
         void setOneLineMode(bool v);
         void setTextInteractionFlags(Qt::TextInteractionFlags flags);
         /**

@@ -9,7 +9,6 @@ TextEditWithFixedText::TextEditWithFixedText(QGraphicsItem* parent): QGraphicsWi
     m_textEdit->setDrawBorders(false);
     m_fixedText = new PlainText{this};
 
-
     connect(m_fixedText, &PlainText::clicked, this, &TextEditWithFixedText::passFocus);
     connect(this, &TextEditWithFixedText::fontChanged, m_textEdit, &TextEdit::setFont);
     connect(this, &TextEditWithFixedText::fontChanged, m_fixedText, &QGraphicsTextItem::setFont);
@@ -71,6 +70,11 @@ void TextEditWithFixedText::passFocus()
     if(m_textEdit->flags() == Qt::NoTextInteraction)
         return;
     m_textEdit->setFocus();
+}
+
+void TextEditWithFixedText::setPropagateMouse(bool v)
+{
+    m_fixedText->setPropagateMouse(v);
 }
 
 void TextEditWithFixedText::setOneLineMode(bool v)

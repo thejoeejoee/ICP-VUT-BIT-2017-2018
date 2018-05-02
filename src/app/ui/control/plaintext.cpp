@@ -1,6 +1,7 @@
 #include "plaintext.h"
 
 #include <QGraphicsSceneMouseEvent>
+#include <QDebug>
 
 #include <QDebug>
 
@@ -20,9 +21,6 @@ void PlainText::mousePressEvent(QGraphicsSceneMouseEvent* e)
         QGraphicsTextItem::mousePressEvent(e);
         return;
     }
-
-void PlainText::mousePressEvent(QGraphicsSceneMouseEvent* e)
-{
     e->accept();
     emit this->clicked();
 }

@@ -2,6 +2,7 @@
 #define WARNINGPOPUP_H
 
 #include <QGraphicsWidget>
+#include <QSvgRenderer>
 #include <QTimer>
 #include <QVariantAnimation>
 
@@ -13,6 +14,8 @@ class WarningPopUp : public QGraphicsWidget
         QVariantAnimation* m_animation;
         QTimer m_timer;
         QString m_msg;
+        QSvgRenderer m_renderer;
+        QFont m_font;
 
     public:
         WarningPopUp(QGraphicsWidget* parent = nullptr);

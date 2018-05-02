@@ -226,8 +226,11 @@ void BlockCanvas::evaluate()
     // TODO validate
     // check if ports are valid
     qDebug() << this->schemeValidity();
-    if(!this->schemeValidity())
+    if(!this->schemeValidity()) {
+        emit this->error(tr("Scheme has invalid inputs."));
         return;
+    }
+
     // compute available blocks
     for(Identifier blockId: this->blockComputeOrder())
         this->evaluateBlock(blockId);

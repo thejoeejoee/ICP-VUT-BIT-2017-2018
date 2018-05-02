@@ -11,5 +11,7 @@
         <file>res/font/Montserrat-Light.ttf</file>
         <file>res/font/Montserrat-Medium.ttf</file>
         <file>res/font/Roboto-Light.ttf</file>
+        <file>res/image/bug_icon.svg</file>
+        <file>res/image/warning_icon.svg</file>
     </qresource>
 </RCC>

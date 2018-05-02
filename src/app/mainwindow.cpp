@@ -21,6 +21,7 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
 
     m_blockCanvas = new BlockCanvas{this};
     m_warning = new WarningPopUp{m_blockCanvas};
+    m_warning->resize(300, 40);
 
     m_toolbar = new ToolBar{this};
     connect(m_toolbar, &ToolBar::run, m_blockCanvas, &BlockCanvas::evaluate);

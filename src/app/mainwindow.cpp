@@ -36,11 +36,15 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
     connect(m_blockCanvas, &BlockCanvas::debugStateChanged,
             m_toolbar, &ToolBar::setDebugIconVisiblity);
     connect(m_blockCanvas, &BlockCanvas::error, [this](const QString& msg) {
-        m_warning->popUp(msg, 2);
+        m_warning->popUp(msg, 3);
     });
 
     connect(m_schemeIO, &SchemeIO::error, [this](const QString& msg) {
-        m_warning->popUp(msg, 2);
+        m_warning->popUp(msg, 3);
+    });
+
+    connect(this, &AppWindow::error, [this](const QString& msg) {
+        m_warning->popUp(msg, 3);
     });
 
     connect(m_toolbar, &ToolBar::openFile, this, &AppWindow::schemeOpen);
@@ -136,7 +140,7 @@ void AppWindow::schemeOpen()
                                  nullptr,
                                  tr("Open file"),
                                  QString(),
-                                 QString("%1 (*.%2)")
+                                 QString("%1 (*.%2);;All Files (*.*)")
                                  .arg(tr("Block schemes"))
                                  .arg(AppWindow::s_fileFormat));
     if(filePath.isEmpty())
@@ -152,6 +156,10 @@ void AppWindow::schemeOpen()
 
     this->setSaved(true);
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    if(doc.isNull()) {
+        emit this->error(tr("Json parse error"));
+        return;
+    }
     m_schemeIO->loadFromJson(doc.object(), m_blockCanvas->container());
 }
 
@@ -162,7 +170,7 @@ void AppWindow::schemeSave()
                                      nullptr,
                                      tr("Save file"),
                                      QString(),
-                                     QString("%1 (*.%2)")
+                                     QString("%1 (*.%2);;All Files (*.*)")
                                      .arg(tr("Block schemes"))
                                      .arg(AppWindow::s_fileFormat));
         if(filePath.isEmpty())
@@ -189,7 +197,7 @@ void AppWindow::schemeSaveAs()
                                  nullptr,
                                  tr("Save file as"),
                                  QString(),
-                                 QString("%1 (*.%2)")
+                                 QString("%1 (*.%2);;All Files (*.*)")
                                  .arg(tr("Block schemes"))
                                  .arg(AppWindow::s_fileFormat));
     if(filePath.isEmpty())

@@ -49,7 +49,6 @@ QString SchemeIO::jsonValid(const QJsonObject& scheme) const
         {"id", {QJsonValue::Double}},
         {"x", {QJsonValue::Double}},
         {"y", {QJsonValue::Double}},
-        {"output_value", {QJsonValue::Double, QJsonValue::Null}},
         {"type", {QJsonValue::String}}
     };
 
@@ -64,7 +63,7 @@ QString SchemeIO::jsonValid(const QJsonObject& scheme) const
     for(auto blockJson: scheme["blocks"].toArray()) {
         const QJsonObject blockObject = blockJson.toObject();
         if(blockObject.keys().toSet() !=
-                (blockExpectedTypes.keys().toSet() | QSet<QString>{"input_values"})) {
+                (blockExpectedTypes.keys().toSet() | QSet<QString>{"input_values", "output_value"})) {
             return tr("Block structure is not valid.");
         }
 

@@ -37,6 +37,10 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
         m_warning->popUp(msg, 2);
     });
 
+    connect(m_schemeIO, &SchemeIO::error, [this](const QString& msg) {
+        m_warning->popUp(msg, 2);
+    });
+
     connect(m_toolbar, &ToolBar::openFile, this, &AppWindow::schemeOpen);
     connect(m_toolbar, &ToolBar::saveFile, this, &AppWindow::schemeSave);
     connect(m_toolbar, &ToolBar::newFile, this, &AppWindow::schemeNew);

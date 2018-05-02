@@ -13,6 +13,7 @@ class SchemeIO: public QObject
     public:
         SchemeIO(BlockManager* manager, QObject* parent = nullptr);
 
+        QString jsonValid(const QJsonObject& scheme) const;
         QJsonObject exportToJson() const;
         void loadFromJson(QJsonObject scheme, QGraphicsWidget* parent);
 

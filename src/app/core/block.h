@@ -20,6 +20,7 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
         BlockView* m_view = nullptr;
         BlockPort* m_outputPort = nullptr;
         QList<BlockPort*> m_inputPorts;
+        static QMap<QString, int> s_blocksInputsCount;
 
     protected:
         /**
@@ -60,6 +61,13 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
          * @return state, if is ok
          */
         bool inputMatchesPorts(const QList<MappedDataValues> &inputData) const;
+
+        // TODO doc
+        template<typename T>
+        static void registerBlock(int inputPortsCount);
+        // TODO doc
+        static int blockInputsCount(const QString& classId);
+
         /**
          * Getter for qt parent.
          * @return parent
@@ -85,5 +93,12 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
         void deleteRequest(Identifier blockId);
 };
 
+
+template<typename T>
+void Block::registerBlock(int inputPortsCount)
+{
+    Block::registerItem<T>();
+    Block::s_blocksInputsCount.insert(T::staticClassId(), inputPortsCount);
+}
 
 #endif //BLOCK_H

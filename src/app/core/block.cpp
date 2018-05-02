@@ -1,5 +1,7 @@
 #include "block.h"
 
+QMap<QString, int> Block::s_blocksInputsCount;
+
 void Block::setOutputPort(BlockPort* p)
 {
     p->setIsOutput(true);
@@ -50,6 +52,11 @@ bool Block::inputMatchesPorts(const QList<MappedDataValues>& inputData) const
     for(int i = 0; i < m_inputPorts.length(); i++)
         matches = matches && inputData.at(i).keys() == m_inputPorts.at(i)->labels();
     return matches;
+}
+
+int Block::blockInputsCount(const QString& classId)
+{
+    return Block::s_blocksInputsCount.value(classId, -1);
 }
 
 QGraphicsWidget* Block::parent() const

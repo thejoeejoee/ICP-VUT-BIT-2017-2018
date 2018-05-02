@@ -14,13 +14,13 @@ int main(int argc, char *argv[]) {
     QFontDatabase::addApplicationFont(":/res/font/Roboto-Light.ttf");
 
 
-    Block::registerItem<AddBlock>();
-    Block::registerItem<SubBlock>();
-    Block::registerItem<MulBlock>();
-    Block::registerItem<CosBlock>();
-    Block::registerItem<SinBlock>();
-    Block::registerItem<VectMagBlock>();
-    Block::registerItem<VectInitBlock>();
+    Block::registerBlock<AddBlock>(2);
+    Block::registerBlock<SubBlock>(2);
+    Block::registerBlock<MulBlock>(2);
+    Block::registerBlock<CosBlock>(1);
+    Block::registerBlock<SinBlock>(1);
+    Block::registerBlock<VectMagBlock>(1);
+    Block::registerBlock<VectInitBlock>(2);
 
     auto scene = new QGraphicsScene;
 

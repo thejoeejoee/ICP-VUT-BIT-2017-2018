@@ -5,9 +5,8 @@
 #include <app/core/blockmanager.h>
 
 
-class BlockCanvas : public ScrollArea
-{
-        Q_OBJECT
+class BlockCanvas : public ScrollArea {
+    Q_OBJECT
     private:
         bool m_dragOver = false;
         QPointF m_portStartPoint = QPointF(-1, -1);
@@ -20,17 +19,22 @@ class BlockCanvas : public ScrollArea
 
     public:
         explicit BlockCanvas(QGraphicsWidget* parent = nullptr);
-        ~BlockCanvas();
-
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+        ~BlockCanvas() override;
+        /**
+         * Paints to canvas.
+         * @param painter painter
+         * @param option style
+         * @param widget optional qt parent
+         */
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
     private:
         QList<Identifier> blockComputeOrder();
 
     protected:
-        void dragEnterEvent(QGraphicsSceneDragDropEvent *e) override;
-        void dragLeaveEvent(QGraphicsSceneDragDropEvent *e) override;
-        void dropEvent(QGraphicsSceneDragDropEvent *e) override;
+        void dragEnterEvent(QGraphicsSceneDragDropEvent* e) override;
+        void dragLeaveEvent(QGraphicsSceneDragDropEvent* e) override;
+        void dropEvent(QGraphicsSceneDragDropEvent* e) override;
 
         void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
         void mouseMoveEvent(QGraphicsSceneMouseEvent* e) override;
@@ -38,9 +42,17 @@ class BlockCanvas : public ScrollArea
 
         BlockPortView* portViewAtPos(QPointF pos) const;
 
+        /**
+         * Is schema valid?
+         * @return
+         */
         bool schemeValidity() const;
 
     private slots:
+        /**
+         * Evaluate concrete block.
+         * @param blockId concrete block identifier
+         */
         void evaluateBlock(Identifier blockId);
 
     public slots:
@@ -51,7 +63,7 @@ class BlockCanvas : public ScrollArea
         void setDisableDrop(bool v);
 
     signals:
-        void error(const QString& msg);
+        void error(const QString &msg);
 };
 
 #endif // BLOCKCANVAS_H

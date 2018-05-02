@@ -6,12 +6,30 @@
 #include <QVariantAnimation>
 
 
-class TextEdit : public QGraphicsTextItem
-{
-        Q_OBJECT
-        Q_PROPERTY(QColor validBorderColor READ validBorderColor WRITE setValidBorderColor NOTIFY validBorderColorChanged)
-        Q_PROPERTY(QColor invalidBorderColor READ invalidBorderColor WRITE setInvalidBorderColor NOTIFY invalidBorderColorChanged)
-        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
+class TextEdit : public QGraphicsTextItem {
+    Q_OBJECT
+        Q_PROPERTY(QColor validBorderColor
+                           READ
+                           validBorderColor
+                           WRITE
+                           setValidBorderColor
+                           NOTIFY
+                           validBorderColorChanged)
+        Q_PROPERTY(QColor invalidBorderColor
+                           READ
+                           invalidBorderColor
+                           WRITE
+                           setInvalidBorderColor
+                           NOTIFY
+                           invalidBorderColorChanged)
+        Q_PROPERTY(QColor textColor
+                           READ
+                           textColor
+                           WRITE
+                           setTextColor
+                           NOTIFY
+                           textColorChanged
+        )
 
     private:
         QString m_prevText;
@@ -29,11 +47,11 @@ class TextEdit : public QGraphicsTextItem
 
     public:
         TextEdit(QGraphicsItem* parent = nullptr);
-        TextEdit(const QString& text, QGraphicsItem* parent = nullptr);
+        TextEdit(const QString &text, QGraphicsItem* parent = nullptr);
 
-        void paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget = nullptr) override;
+        void paint(QPainter* painter,
+                   const QStyleOptionGraphicsItem* option,
+                   QWidget* widget = nullptr) override;
 
         QColor validBorderColor() const;
         QColor invalidBorderColor() const;
@@ -42,7 +60,7 @@ class TextEdit : public QGraphicsTextItem
         QColor textColor() const;
 
     public slots:
-        void setValidator(const QRegularExpression& validator);
+        void setValidator(const QRegularExpression &validator);
         void setValidBorderColor(QColor validBorderColor);
         void setInvalidBorderColor(QColor invalidBorderColor);
         void setDrawBorders(bool v);
@@ -54,7 +72,7 @@ class TextEdit : public QGraphicsTextItem
     signals:
         void validBorderColorChanged(QColor validBorderColor);
         void invalidBorderColorChanged(QColor invalidBorderColor);
-        void currentBorderColorChanged(const QColor& borderColor);
+        void currentBorderColorChanged(const QColor &borderColor);
         void contentChanged();
         void textColorChanged(QColor textColor);
 };

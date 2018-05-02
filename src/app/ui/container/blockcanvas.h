@@ -5,6 +5,9 @@
 #include <app/core/blockmanager.h>
 
 
+/**
+ * Canvas for all placed blocks in application.
+ */
 class BlockCanvas : public ScrollArea {
     Q_OBJECT
     private:
@@ -32,14 +35,43 @@ class BlockCanvas : public ScrollArea {
         QList<Identifier> blockComputeOrder();
 
     protected:
+        /**
+         * Start of drag event.
+         * @param e drag event
+         */
         void dragEnterEvent(QGraphicsSceneDragDropEvent* e) override;
+        /**
+         * End of drag event.
+         * @param e drag event
+         */
         void dragLeaveEvent(QGraphicsSceneDragDropEvent* e) override;
+        /**
+         * Drop event.
+         * @param e drop event
+         */
         void dropEvent(QGraphicsSceneDragDropEvent* e) override;
 
+        /**
+         * Mouse click event.
+         * @param e mouse event
+         */
         void mousePressEvent(QGraphicsSceneMouseEvent* e) override;
+        /**
+         * Mouse move event.
+         * @param e mouse event
+         */
         void mouseMoveEvent(QGraphicsSceneMouseEvent* e) override;
+        /**
+         * Mouse release event.
+         * @param e mouse event
+         */
         void mouseReleaseEvent(QGraphicsSceneMouseEvent* e) override;
 
+        /**
+         * Returns port view placed at given position
+         * @param pos position to detect
+         * @return port on position
+         */
         BlockPortView* portViewAtPos(QPointF pos) const;
 
         /**
@@ -56,13 +88,30 @@ class BlockCanvas : public ScrollArea {
         void evaluateBlock(Identifier blockId);
 
     public slots:
+        /**
+         * Eval all blocks.
+         */
         void evaluate();
+        /**
+         * Starts debug session.
+         */
         void debug();
+        /**
+         * Stops debug session.
+         */
         void stopDebug();
 
+        /**
+         * Sets flag to disable drop.
+         * @param v state
+         */
         void setDisableDrop(bool v);
 
     signals:
+        /**
+         * Display error of msg.
+         * @param msg text
+         */
         void error(const QString &msg);
 };
 

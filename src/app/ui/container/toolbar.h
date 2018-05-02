@@ -6,9 +6,11 @@
 #include <app/ui/control/iconbutton.h>
 
 
-class ToolBar : public QGraphicsWidget
-{
-        Q_OBJECT
+/**
+ * Main toolbar to control editor.
+ */
+class ToolBar : public QGraphicsWidget {
+    Q_OBJECT
     private:
         TextButton* m_newButton;
         TextButton* m_saveButton;
@@ -20,16 +22,40 @@ class ToolBar : public QGraphicsWidget
     public:
         ToolBar(QGraphicsItem* parent = nullptr);
 
-        void paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget = nullptr) override;
+        /**
+         * Paints bar to widget via painter.
+         * @param painter painter
+         * @param option style
+         * @param widget qt parent
+         */
+        void paint(QPainter* painter,
+                   const QStyleOptionGraphicsItem* option,
+                   QWidget* widget) override;
 
     signals:
+        /**
+         * New file to edit.
+         */
         void newFile();
+        /**
+         * Save current schema to file.
+         */
         void saveFile();
+        /**
+         * Open file with schema.
+         */
         void openFile();
+        /**
+         * Run evaluator.
+         */
         void run();
+        /**
+         * Start debugging.
+         */
         void debug();
+        /**
+         * Stop debugging.
+         */
         void stop();
 };
 

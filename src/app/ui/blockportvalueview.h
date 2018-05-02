@@ -35,7 +35,7 @@ class BlockPortValueView : public BlockPortView {
          * @param typed should be value typed?
          * @return value
          */
-        QString rawValue(bool typed = false) const override;
+        QString rawValue(bool typed) const override;
         /**
          * Sets value to port.
          * @param v value

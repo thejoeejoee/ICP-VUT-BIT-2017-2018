@@ -7,37 +7,115 @@
 #include "join.h"
 
 
+/**
+ * Manager for handling all blocks in schema.
+ */
 class BlockManager: public QObject {
         Q_OBJECT
 
     protected:
+        /**
+         * All blocks mapped to ids.
+         */
         QMap<Identifier, Block*> m_blocks;
+        /**
+         * All joins mapped to ids.
+         */
         QMap<Identifier, Join*> m_joins;
+        /**
+         * Is deleting disabled?
+         */
         bool m_disableDelete = false;
 
     public:
         BlockManager(): QObject{} {}
         ~BlockManager();
 
+        /**
+         * Serialize block to json.
+         * @param block block
+         * @return serialized
+         */
         static QJsonObject blockToJson(Block* block);
+        /**
+         * Load object from json.
+         * @param json content
+         * @param parent parent for block
+         * @return created block
+         */
         static Block* blockFromJson(const QJsonObject& json, QGraphicsWidget* parent = nullptr);
+        /**
+         * Returns block mime type for D&D.
+         * @return mime type
+         */
         static const char* blockMimeType();
 
+        /**
+         * All blocks getter.
+         * @return blocks
+         */
         const QMap<Identifier, Block*>& blocks() const;
+        /**
+         * All joins getter.
+         * @return joins
+         */
         const QMap<Identifier, Join*>& joins() const;
 
+        /**
+         * Returns all input ports for block defined by id.
+         * @param blockId block id
+         * @return all inputs
+         */
         QSet<Identifier> blockBlocksInputs(Identifier blockId) const;
+        /**
+         * Returns output port block defined by id.
+         * @param blockId block id
+         * @return output
+         */
         QSet<Identifier> blockBlocksOutputs(Identifier blockId) const;
+        /**
+         * Returns all input ports with source blocks for block defined by id.
+         * @param blockId block id
+         * @return all inputs mapped with blocks
+         */
         QList<QPair<Identifier, Identifier> > blockInputs(Identifier blockId) const;
+        /**
+         * Returns output port mapped with target block block defined by id.
+         * @param blockId block id
+         * @return output port with block
+         */
         QList<QPair<Identifier, Identifier> > blockOutputs(Identifier blockId) const;
 
+        /**
+         * Adds new block.
+         * @param block new block
+         */
         void addBlock(Block* block);
+        /**
+         * Adds new join.
+         * @param join new join
+         */
         void addJoin(Join* join);
 
+        /**
+         * Get block by id from schema.
+         * @param id block identifer
+         * @return found block
+         */
         Block* block(Identifier id) const;
+
+        /**
+         * Get block by id from schema.
+         * @param id
+         * @return
+         */
         Join* join(Identifier id) const;
 
     public slots:
+        /**
+         * Setter for delete disable flag.
+         * @param v state
+         */
         void setDisableDelete(bool v);
         void deleteBlock(Identifier id);
         void deleteJoin(Identifier id, Identifier excludeBlockId = -1);

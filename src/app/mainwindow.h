@@ -8,7 +8,6 @@
 #include <app/ui/container/blocksselection.h>
 #include <app/ui/container/toolbar.h>
 #include <app/ui/view/warningpopup.h>
-#include "ui/portregister.h"
 
 /**
  * Main app window.
@@ -27,7 +26,7 @@ class AppWindow : public QGraphicsWidget {
         bool m_saved = true;
 
     public:
-        AppWindow(QGraphicsWidget* parent = nullptr);
+        explicit AppWindow(QGraphicsWidget* parent = nullptr);
 
         QString currentPath() const;
         bool saved() const;

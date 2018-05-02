@@ -18,7 +18,7 @@ class AddBlock : public Block {
         explicit AddBlock(QGraphicsWidget* parent = nullptr);
 
         /**
-         * Evaluate operation on inputs data.
+         * Evaluate operation add on inputs data.
          * @param inputData input data
          * @return computed data
          */

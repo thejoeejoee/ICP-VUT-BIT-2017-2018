@@ -41,7 +41,7 @@ class BlockPortView : public QGraphicsWidget {
          * @param typed flag if values should be type
          * @return value
          */
-        virtual QString rawValue(bool typed = false) const = 0;
+        virtual QString rawValue(bool typed) const = 0;
         /**
          * Getter, if port is valid.
          * @return state

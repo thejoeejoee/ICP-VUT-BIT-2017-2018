@@ -15,9 +15,27 @@ class FactoryBase
         static QList<QString> s_registeredItems;
 
     public:
+        /**
+         * Template for base factory.
+         * @tparam SubItemT
+         */
         template<typename SubItemT>
+        /**
+         * Register new type of item.
+         * @tparam SubItemT type
+         */
         static void registerItem();
+        /**
+         * Get all registered items.
+         * @return list of identifier
+         */
         static QList<QString> registeredItems();
+        /**
+         * Create new item
+         * @param classId identification
+         * @param parent parent of type
+         * @return new type
+         */
         static ItemT* createNew(const QString& classId, QGraphicsWidget* parent);
 
 };

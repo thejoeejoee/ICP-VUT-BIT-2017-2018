@@ -19,7 +19,7 @@ class WarningPopUp : public QGraphicsWidget {
         QFont m_font;
 
     public:
-        WarningPopUp(QGraphicsWidget* parent = nullptr);
+        explicit WarningPopUp(QGraphicsWidget* parent = nullptr);
 
         /**
          * Paints pop-up into widget.
@@ -27,7 +27,7 @@ class WarningPopUp : public QGraphicsWidget {
          * @param option style
          * @param widget parent widget
          */
-        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
     protected slots:
         /**

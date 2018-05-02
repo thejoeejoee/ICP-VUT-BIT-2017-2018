@@ -6,23 +6,27 @@
 #include <QVariantAnimation>
 
 
+/**
+ * Interactive widget for editable text.
+ */
 class TextEdit : public QGraphicsTextItem {
     Q_OBJECT
         Q_PROPERTY(QColor validBorderColor
                            READ
-                           validBorderColor
+                                   validBorderColor
                            WRITE
-                           setValidBorderColor
+                                   setValidBorderColor
                            NOTIFY
                            validBorderColorChanged)
         Q_PROPERTY(QColor invalidBorderColor
                            READ
-                           invalidBorderColor
+                                   invalidBorderColor
                            WRITE
-                           setInvalidBorderColor
+                                   setInvalidBorderColor
                            NOTIFY
                            invalidBorderColorChanged)
-        Q_PROPERTY(QColor textColor
+        Q_PROPERTY(QColor
+                           textColor
                            READ
                            textColor
                            WRITE
@@ -46,34 +50,107 @@ class TextEdit : public QGraphicsTextItem {
         QVariantAnimation* m_textColorAnimation;
 
     public:
-        TextEdit(QGraphicsItem* parent = nullptr);
-        TextEdit(const QString &text, QGraphicsItem* parent = nullptr);
+        explicit TextEdit(QGraphicsItem* parent = nullptr);
+        /**
+         * Create edit text with given text.
+         * @param text text to set
+         * @param parent qt parent
+         */
+        explicit TextEdit(const QString &text, QGraphicsItem* parent = nullptr);
 
-        void paint(QPainter* painter,
-                   const QStyleOptionGraphicsItem* option,
-                   QWidget* widget = nullptr) override;
+        /**
+         * Paints widget.
+         * @param painter painter
+         * @param option style
+         * @param widget qt parent
+         */
+        void paint(
+                QPainter* painter,
+                const QStyleOptionGraphicsItem* option,
+                QWidget* widget
+        ) override;
 
+        /**
+         * Getter for valid border color.
+         * @return color
+         */
         QColor validBorderColor() const;
+        /**
+         * Getter for invalid border color.
+         * @return color
+         */
         QColor invalidBorderColor() const;
+        /**
+         * Getter for current border color.
+         * @return color
+         */
         QColor currentBorderColor() const;
+        /**
+         * Getter for validity state.
+         * @return state
+         */
         bool valid() const;
+        /**
+         * Getter for text color.
+         * @return color
+         */
         QColor textColor() const;
 
     public slots:
+        /**
+         * Sets new validator.
+         * @param validator new validator.
+         */
         void setValidator(const QRegularExpression &validator);
+        /**
+         * Sets new validator.
+         * @param validBorderColor new validator.
+         */
         void setValidBorderColor(QColor validBorderColor);
+        /**
+         * Sets new validator.
+         * @param invalidBorderColor new validator.
+         */
         void setInvalidBorderColor(QColor invalidBorderColor);
+        /**
+         * Sets new state, if borders should be drawn.
+         * @param v new validator.
+         */
         void setDrawBorders(bool v);
+        /**
+         * Sets new text color.
+         * @param textColor new text color.
+         */
         void setTextColor(QColor textColor);
+
 
     private slots:
         void validate();
 
     signals:
+        /**
+         * On change valid color of border.
+         * @param validBorderColor new color
+         */
         void validBorderColorChanged(QColor validBorderColor);
+        /**
+         * On change invalid color of border.
+         * @param invalidBorderColor new color
+         */
         void invalidBorderColorChanged(QColor invalidBorderColor);
+        /**
+         * On change current color of border.
+         * @param borderColor new color
+         */
         void currentBorderColorChanged(const QColor &borderColor);
+        /**
+         * On change content.
+         */
         void contentChanged();
+        /**
+         * On change color of text.
+         * @param textColor new color
+         */
         void textColorChanged(QColor textColor);
 };
 

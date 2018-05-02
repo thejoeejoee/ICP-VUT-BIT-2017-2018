@@ -25,7 +25,7 @@
 class Factoriable
 {
     public:
-        Factoriable() {}
+        Factoriable() = default;
 
         /**
          * @brief id Returns id of item.

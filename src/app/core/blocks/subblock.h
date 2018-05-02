@@ -4,14 +4,21 @@
 #include <app/core/block.h>
 #include "blockportvalue.h"
 
-class SubBlock : public Block
-{
-        FACTORIABLE_ID(Block, SubBlock, "sub_block")
+/**
+ * Block for substracting operation.
+ */
+class SubBlock : public Block {
+    FACTORIABLE_ID(Block, SubBlock, "sub_block")
 
     public:
-        SubBlock(QGraphicsWidget* parent = nullptr);
+        explicit SubBlock(QGraphicsWidget* parent = nullptr);
 
-        MappedDataValues evaluate(const QList<MappedDataValues>& inputData) override;
+        /**
+         * Creates result from input data.
+         * @param inputData input data
+         * @return new value
+         */
+        MappedDataValues evaluate(const QList<MappedDataValues> &inputData) override;
 };
 
 #endif // SUBBLOCK_H

@@ -7,5 +7,6 @@
 #include <app/core/blocks/sinblock.h>
 #include <app/core/blocks/subblock.h>
 #include <app/core/blocks/vectmagblock.h>
+#include <app/core/blocks/vectinitblock.h>
 
 #endif // BLOCKS_H

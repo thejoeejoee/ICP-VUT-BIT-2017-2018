@@ -11,7 +11,7 @@ class GraphicsView : public QGraphicsView {
 
     public:
         GraphicsView();
-        virtual ~GraphicsView() {}
+        ~GraphicsView() override {}
 
     protected:
         /**

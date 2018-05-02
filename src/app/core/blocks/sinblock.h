@@ -4,14 +4,21 @@
 #include <app/core/block.h>
 #include "blockportvalue.h"
 
-class SinBlock : public Block
-{
-        FACTORIABLE_ID(Block, SinBlock, "sin_block")
+/**
+ * Block for sinus operation.
+ */
+class SinBlock : public Block {
+    FACTORIABLE_ID(Block, SinBlock, "sin_block")
 
     public:
-        SinBlock(QGraphicsWidget* parent = nullptr);
+        explicit SinBlock(QGraphicsWidget* parent = nullptr);
 
-        MappedDataValues evaluate(const QList<MappedDataValues>& inputData) override;
+        /**
+         * Evaluate input data into result.
+         * @param inputData data to compute
+         * @return result
+         */
+        MappedDataValues evaluate(const QList<MappedDataValues> &inputData) override;
 };
 
 #endif // SINBLOCK_H

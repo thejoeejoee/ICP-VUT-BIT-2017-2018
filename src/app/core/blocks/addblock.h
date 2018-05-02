@@ -5,7 +5,7 @@
 #include "blockportvalue.h"
 
 /**
- * Implementation for block with add operation.
+ * Block for adding operation.
  */
 class AddBlock : public Block {
     FACTORIABLE_ID(Block, AddBlock, "add_block")

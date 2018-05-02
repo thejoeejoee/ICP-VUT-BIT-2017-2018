@@ -3,7 +3,6 @@
 #include <QFont>
 #include <QDebug>
 #include <QGraphicsAnchorLayout>
-#include <app/core/exceptions.h>
 
 BlockPortValueView::BlockPortValueView(BlockPort* data, Type::TypeE type, QGraphicsItem* parent)
     : BlockPortView{data, parent}
@@ -36,7 +35,7 @@ MappedDataValues BlockPortValueView::value() const
         QString raw = m_input->toPlainText();
         raw = raw.remove("{").remove("}");
         QList<QVariant> values;
-        for(auto singleVal: raw.split(","))
+        for(const auto &singleVal: raw.split(","))
             values.append(QVariant(singleVal.toDouble()));
 
         return MappedDataValues{{ "value", QVariant(values) }};
@@ -69,7 +68,7 @@ void BlockPortValueView::setValue(MappedDataValues v)
     else if(val.type() == QVariant::List) {
         int i = 0;
         QList<DataValue> values = val.value<QList<DataValue> >();
-        for(auto v: values) {
+        for(const auto &v: values) {
             repr += QString::number(v.toDouble(), 'g', 4);
             if(i + 1 < values.length())
                 repr += ",";
@@ -79,7 +78,7 @@ void BlockPortValueView::setValue(MappedDataValues v)
     }
 
     else
-        Q_ASSERT_X(false, "Repr value", "Uknown type");
+        Q_ASSERT_X(false, "Repr value", "Unknown type");
 
     m_input->setPlainText(repr);
 }

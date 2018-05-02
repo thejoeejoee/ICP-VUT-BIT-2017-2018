@@ -6,13 +6,27 @@
 #include <QGraphicsWidget>
 
 
-class BlockPortValue: public BlockPort
-{
+/**
+ * Value of port in block.
+ */
+class BlockPortValue : public BlockPort {
     public:
         BlockPortValue(Identifier blockId, Type::TypeE type, QGraphicsItem* parent = nullptr);
 
+        /**
+         * Keys of port.
+         * @return list of labels
+         */
         QStringList labels() const override;
+        /**
+         * Set new value for port.
+         * @param v new value for port
+         */
         void setValue(MappedDataValues v) override;
+        /**
+         * Is port output?
+         * @param v state
+         */
         void setIsOutput(bool v) override;
 };
 

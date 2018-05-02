@@ -1,7 +1,6 @@
 #include "vectmagblock.h"
 
-VectMagBlock::VectMagBlock(QGraphicsWidget* parent): Block(parent)
-{
+VectMagBlock::VectMagBlock(QGraphicsWidget* parent) : Block(parent) {
     BlockView* blockView = this->view();
     blockView->setSvgImage(":/res/image/add_symbol.svg");
     this->setInputPorts({ new BlockPortValue(this->id(), Type::Vector, blockView)});
@@ -10,8 +9,7 @@ VectMagBlock::VectMagBlock(QGraphicsWidget* parent): Block(parent)
     blockView->initPortsViews();
 }
 
-MappedDataValues VectMagBlock::evaluate(const QList<MappedDataValues>& inputData)
-{
+MappedDataValues VectMagBlock::evaluate(const QList<MappedDataValues> &inputData) {
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
     double result = 0;

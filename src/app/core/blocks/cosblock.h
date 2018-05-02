@@ -4,14 +4,21 @@
 #include <app/core/block.h>
 #include "blockportvalue.h"
 
-class CosBlock : public Block
-{
-        FACTORIABLE_ID(Block, CosBlock, "cos_block")
+/**
+ * Block for cosius operation.
+ */
+class CosBlock : public Block {
+    FACTORIABLE_ID(Block, CosBlock, "cos_block")
 
     public:
-        CosBlock(QGraphicsWidget* parent = nullptr);
+        explicit CosBlock(QGraphicsWidget* parent = nullptr);
 
-        MappedDataValues evaluate(const QList<MappedDataValues>& inputData) override;
+        /**
+         * Evaluate cosinus operation.
+         * @param inputData data to eval
+         * @return new data
+         */
+        MappedDataValues evaluate(const QList<MappedDataValues> &inputData) override;
 };
 
 #endif // COSBLOCK_H

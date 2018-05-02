@@ -13,7 +13,7 @@ class Clickable : public QGraphicsWidget {
         bool m_hovered = false;
 
     public:
-        Clickable(QGraphicsItem* parent = nullptr);
+        explicit Clickable(QGraphicsItem* parent = nullptr);
         /**
          * Paints widget via painter.
          * @param painter painter
@@ -22,7 +22,7 @@ class Clickable : public QGraphicsWidget {
          */
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,
-                   QWidget* widget = nullptr) override;
+                   QWidget* widget) override;
 
     protected:
         /**

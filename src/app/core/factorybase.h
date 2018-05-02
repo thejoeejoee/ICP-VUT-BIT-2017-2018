@@ -7,6 +7,10 @@
 #include <QGraphicsWidget>
 #include <functional>
 
+/**
+ * Utility class for registering base items into register.
+ * @tparam ItemT
+ */
 template<typename ItemT>
 class FactoryBase
 {

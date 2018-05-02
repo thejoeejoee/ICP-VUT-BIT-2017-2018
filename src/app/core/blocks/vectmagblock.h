@@ -4,15 +4,21 @@
 #include <app/core/block.h>
 #include "blockportvalue.h"
 
-
-class VectMagBlock: public Block
-{
-        FACTORIABLE_ID(Block, VectMagBlock, "vect_mag_block")
+/**
+ * Block for computing vector magnitude.
+ */
+class VectMagBlock : public Block {
+    FACTORIABLE_ID(Block, VectMagBlock, "vect_mag_block")
 
     public:
-        VectMagBlock(QGraphicsWidget* parent = nullptr);
+        explicit VectMagBlock(QGraphicsWidget* parent = nullptr);
 
-        MappedDataValues evaluate(const QList<MappedDataValues>& inputData) override;
+        /**
+         * Evaluates data into result.
+         * @param inputData data to compute
+         * @return result
+         */
+        MappedDataValues evaluate(const QList<MappedDataValues> &inputData) override;
 };
 
 #endif // VECTMAGBLOCK_H

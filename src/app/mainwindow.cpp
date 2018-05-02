@@ -33,6 +33,8 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
     connect(m_toolbar, &ToolBar::evaluate, m_blockCanvas, &BlockCanvas::evaluate);
     connect(m_toolbar, &ToolBar::debug, m_blockCanvas, &BlockCanvas::debug);
     connect(m_toolbar, &ToolBar::stop, m_blockCanvas, &BlockCanvas::stopDebug);
+    connect(m_blockCanvas, &BlockCanvas::debugStateChanged,
+            m_toolbar, &ToolBar::setDebugIconVisiblity);
     connect(m_blockCanvas, &BlockCanvas::error, [this](const QString& msg) {
         m_warning->popUp(msg, 2);
     });

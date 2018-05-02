@@ -316,6 +316,7 @@ void BlockCanvas::debug()
     this->evaluateBlock(block->id());
 
     m_debugIteration++;
+    emit this->debugStateChanged(true);
 }
 
 void BlockCanvas::stopDebug()
@@ -324,6 +325,7 @@ void BlockCanvas::stopDebug()
     m_blockManager->setDisableDelete(false);
     this->scene()->clearSelection();
     this->setDisableDrop(false);
+    emit this->debugStateChanged(false);
 }
 
 void BlockCanvas::setDisableDrop(bool v)

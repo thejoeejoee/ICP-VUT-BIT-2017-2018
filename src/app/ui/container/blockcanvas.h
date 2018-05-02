@@ -125,6 +125,9 @@ class BlockCanvas : public ScrollArea {
         void clear();
 
     signals:
+        // TODO doc
+        void debugStateChanged(bool debugging);
+
         /**
          * Display error of msg.
          * @param msg text

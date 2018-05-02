@@ -19,6 +19,8 @@ class ToolBar : public QGraphicsWidget {
         IconButton* m_runButton;
         IconButton* m_debugButton;
         IconButton* m_stopButton;
+        bool m_debugIconVisible = false;
+        QSvgRenderer m_bugRenderer;
 
     public:
         ToolBar(QGraphicsItem* parent = nullptr);
@@ -32,6 +34,9 @@ class ToolBar : public QGraphicsWidget {
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,
                    QWidget* widget) override;
+
+    public slots:
+        void setDebugIconVisiblity(bool v);
 
     signals:
         /**

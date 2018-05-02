@@ -79,6 +79,7 @@ class BlockCanvas : public ScrollArea {
          * @return
          */
         bool schemeValidity() const;
+        bool cycled() const;
 
     private slots:
         /**

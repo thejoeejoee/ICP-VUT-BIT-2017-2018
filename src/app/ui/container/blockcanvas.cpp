@@ -188,6 +188,46 @@ bool BlockCanvas::schemeValidity() const
     return valid;
 }
 
+bool BlockCanvas::cycled() const
+{
+    QSet<Identifier> expansion, toBeExpanded, endBlocks, passed, notPassed;
+    notPassed = m_blockManager->blocks().keys().toSet();
+
+    for(auto block: m_blockManager->blocks().values()) {
+        if(!block->outputPort()->isConnected())
+            endBlocks.insert(block->id());
+    }
+
+    while(!notPassed.isEmpty()) {
+        Identifier blockId = notPassed.toList().at(0);
+        notPassed.remove(blockId);
+        bool expasionEnded = false;
+
+        expansion.clear();
+        expansion.insert(blockId);
+
+        do {
+            notPassed -= expansion;
+            if(!(expansion & passed).isEmpty())
+                return true;
+            if((expansion - endBlocks).isEmpty()) {
+                expasionEnded = true;
+                break;
+            }
+            passed |= expansion;
+
+            // expand
+            for(Identifier id: expansion)
+                toBeExpanded |= m_blockManager->blockBlocksOutputs(id);
+            expansion = toBeExpanded;
+            toBeExpanded.clear();
+
+        } while(!expasionEnded);
+    }
+
+    return false;
+}
+
 QList<Identifier> BlockCanvas::blockComputeOrder()
 {
     QList<Identifier> computedBlocks;
@@ -224,6 +264,11 @@ void BlockCanvas::evaluateBlock(Identifier blockId)
 void BlockCanvas::evaluate()
 {
     // check if ports are valid
+    if(this->cycled()) {
+        emit this->error(tr("Scheme has cycle."));
+        return;
+    }
+
     if(!this->schemeValidity()) {
         emit this->error(tr("Scheme has invalid inputs."));
         return;

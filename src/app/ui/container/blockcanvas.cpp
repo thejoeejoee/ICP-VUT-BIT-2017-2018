@@ -125,7 +125,6 @@ void BlockCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
 
 void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 {
-    // TODO print warning
     // TODO check cycles
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
 
@@ -153,6 +152,7 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 
     if(outPortView->portData()->type() != toPortView->portData()->type()) {
         this->update();
+        emit this->error(tr("Ports types are not the same."));
         return;
     }
 
@@ -223,9 +223,7 @@ void BlockCanvas::evaluateBlock(Identifier blockId)
 
 void BlockCanvas::evaluate()
 {
-    // TODO validate
     // check if ports are valid
-    qDebug() << this->schemeValidity();
     if(!this->schemeValidity()) {
         emit this->error(tr("Scheme has invalid inputs."));
         return;
@@ -238,7 +236,12 @@ void BlockCanvas::evaluate()
 
 void BlockCanvas::debug()
 {
-    // TODO validate
+    // check if ports are valid
+    if(!this->schemeValidity()) {
+        emit this->error(tr("Scheme has invalid inputs."));
+        return;
+    }
+
     QList<Identifier> computeOrder = this->blockComputeOrder();
     if(m_debugIteration >= computeOrder.length()) {
         this->stopDebug();

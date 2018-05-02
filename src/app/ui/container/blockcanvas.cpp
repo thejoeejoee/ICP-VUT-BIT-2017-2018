@@ -205,6 +205,7 @@ bool BlockCanvas::cycled() const
 
         expansion.clear();
         expansion.insert(blockId);
+        passed.clear();
 
         do {
             notPassed -= expansion;
@@ -245,7 +246,6 @@ QList<Identifier> BlockCanvas::blockComputeOrder()
 
     return computedBlocks;
 }
-
 
 void BlockCanvas::evaluateBlock(Identifier blockId)
 {

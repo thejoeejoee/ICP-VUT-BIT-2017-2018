@@ -80,9 +80,9 @@ Type::TypeE Type::fromString(const QString& str)
 QString Type::validator(Type::TypeE type)
 {
     if(type == Type::Scalar || type == Type::Angle)
-        return "^-?\\d+\\.?(\\d{1,4})?$";
+        return R"(^-?\d+\.?(\d{1,4})?$)";
     else if(type == Type::Vector)
-        return "^\\{-?\\d+\\.?(\\d{1,4})?(, *-?\\d+\\.?(\\d{1,4})?)*\\}$";
+        return R"(^\{-?\d+\.?(\d{1,4})?(, *-?\d+\.?(\d{1,4})?)*\}$)";
     return ".*";
 }
 

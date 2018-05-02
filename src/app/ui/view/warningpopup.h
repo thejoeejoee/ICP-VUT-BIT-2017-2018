@@ -6,10 +6,11 @@
 #include <QTimer>
 #include <QVariantAnimation>
 
-
-class WarningPopUp : public QGraphicsWidget
-{
-        Q_OBJECT
+/**
+ * Utility graphics class for warning pop-up.
+ */
+class WarningPopUp : public QGraphicsWidget {
+    Q_OBJECT
     private:
         QVariantAnimation* m_animation;
         QTimer m_timer;
@@ -20,13 +21,27 @@ class WarningPopUp : public QGraphicsWidget
     public:
         WarningPopUp(QGraphicsWidget* parent = nullptr);
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+        /**
+         * Paints pop-up into widget.
+         * @param painter painter
+         * @param option style
+         * @param widget parent widget
+         */
+        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
     protected slots:
+        /**
+         * Hide animation.
+         */
         void hideAnimate();
 
     public slots:
-        void popUp(const QString& msg, int seconds);
+        /**
+         * Shows pop-up with text on seconds.
+         * @param msg text for warning
+         * @param seconds time duration
+         */
+        void popUp(const QString &msg, int seconds);
 };
 
 #endif // WARNINGPOPUP_H

@@ -11,6 +11,7 @@ BlockPortValueView::BlockPortValueView(BlockPort* data, Type::TypeE type, QGraph
 
     m_type = type;
     m_input = new TextEditWithFixedText{this};
+    m_input->setOneLineMode(true);
     m_input->setTextColor(QColor(Qt::black));
     m_input->setFixedText(Type::toString(m_type) + ":");
     m_input->setFixedTextColor(QColor("#969696"));

@@ -45,6 +45,7 @@ class TextEdit : public QGraphicsTextItem {
         bool m_drawBorders = true;
         QColor m_textColor;
         QColor m_currentTextColor;
+        bool m_oneLineMode = false;
 
         QVariantAnimation* m_borderColorAnimation;
         QVariantAnimation* m_textColorAnimation;
@@ -96,6 +97,10 @@ class TextEdit : public QGraphicsTextItem {
          */
         QColor textColor() const;
 
+    private slots:
+        // TODO doc
+        void removeNewLines();
+
     public slots:
         /**
          * Sets new validator.
@@ -122,6 +127,9 @@ class TextEdit : public QGraphicsTextItem {
          * @param textColor new text color.
          */
         void setTextColor(QColor textColor);
+
+        // TODO doc
+        void setOneLineMode(bool v);
 
 
     private slots:

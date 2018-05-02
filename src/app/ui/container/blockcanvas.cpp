@@ -130,7 +130,6 @@ void BlockCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
 
 void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 {
-    // TODO check cycles
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
 
     if(!m_drawLine || toPortView == nullptr) {

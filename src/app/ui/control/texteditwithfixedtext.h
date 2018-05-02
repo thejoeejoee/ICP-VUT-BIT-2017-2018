@@ -106,6 +106,8 @@ class TextEditWithFixedText : public QGraphicsWidget {
          * Sets interaction flags.
          * @param flags new flags
          */
+        // TODO doc
+        void setOneLineMode(bool v);
         void setTextInteractionFlags(Qt::TextInteractionFlags flags);
         /**
          * Set new color of valid

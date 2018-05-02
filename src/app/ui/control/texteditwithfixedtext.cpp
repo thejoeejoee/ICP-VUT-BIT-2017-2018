@@ -65,6 +65,11 @@ void TextEditWithFixedText::resizeToContent()
     this->resize(contentRect.size());
 }
 
+void TextEditWithFixedText::setOneLineMode(bool v)
+{
+    m_textEdit->setOneLineMode(v);
+}
+
 void TextEditWithFixedText::setTextColor(const QColor& color)
 {
     m_textEdit->setTextColor(color);

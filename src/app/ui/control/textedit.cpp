@@ -21,6 +21,7 @@ TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextIte
     connect(this, &TextEdit::textColorChanged, [this]() { this->update(); });
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::contentChanged);
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::validate);
+    connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::removeNewLines);
     connect(m_borderColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
         m_currentBorderColor = v.value<QColor>();
         this->update();
@@ -81,6 +82,17 @@ QColor TextEdit::textColor() const
     return m_textColor;
 }
 
+void TextEdit::removeNewLines()
+{
+    if(!m_oneLineMode)
+        return;
+
+    QTextDocument* document = this->document();
+    QString content = document->toPlainText();
+    if(content.contains("\n"))
+        document->setPlainText(content.replace("\n", ""));
+}
+
 void TextEdit::setValidBorderColor(QColor validBorderColor)
 {
     if (m_validBorderColor == validBorderColor)
@@ -113,6 +125,11 @@ void TextEdit::setTextColor(QColor textColor)
     m_textColor = textColor;
     m_currentTextColor = m_textColor;
     emit textColorChanged(m_textColor);
+}
+
+void TextEdit::setOneLineMode(bool v)
+{
+    m_oneLineMode = v;
 }
 
 void TextEdit::validate()

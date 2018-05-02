@@ -2,7 +2,7 @@
 
 VectMagBlock::VectMagBlock(QGraphicsWidget* parent) : Block(parent) {
     BlockView* blockView = this->view();
-    blockView->setSvgImage(":/res/image/add_symbol.svg");
+    blockView->setSvgImage(":/res/image/vect_mag_symbol.svg");
     this->setInputPorts({ new BlockPortValue(this->id(), Type::Vector, blockView)});
     this->setOutputPort(new BlockPortValue(this->id(), Type::Scalar, blockView));
 

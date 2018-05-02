@@ -2,7 +2,7 @@
 
 VectInitBlock::VectInitBlock(QGraphicsWidget* parent) : Block(parent) {
     BlockView* blockView = this->view();
-    // blockView->setSvgImage(":/res/image/add_symbol.svg"); // TODO
+    blockView->setSvgImage(":/res/image/vectoriaze_symbol.svg");
     this->setInputPorts({
                                 new BlockPortValue(this->id(), Type::Scalar, blockView),
                                 new BlockPortValue(this->id(), Type::Scalar, blockView),

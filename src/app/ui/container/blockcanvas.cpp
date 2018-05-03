@@ -117,6 +117,7 @@ void BlockCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)
         return;
     }
 
+    this->dishighlightPorts(portView->portData()->type());
     m_portOrigStartPoint = e->pos();
     m_portStartPoint = portView->mapToItem(
                            this, QPointF(0, portView->size().height() / 2.));
@@ -134,6 +135,7 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 {
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
 
+    this->restoreHighlightPorts();
     if(!m_drawLine || toPortView == nullptr) {
         m_drawLine = false;
         m_portStartPoint = QPointF(-1, -1);;
@@ -268,6 +270,26 @@ void BlockCanvas::evaluateBlock(Identifier blockId)
     for(auto outData: blocksTopropagate) {
         m_blockManager->blocks()[outData.first]->inputPorts()
                 .at(static_cast<int>(outData.second))->setValue(res);
+    }
+}
+
+void BlockCanvas::restoreHighlightPorts()
+{
+    for(auto block: m_blockManager->blocks()) {
+        for(auto port: block->inputPorts()) {
+            if(!port->isOutput() && !port->isConnected())
+                port->view()->animateShow();
+        }
+    }
+}
+
+void BlockCanvas::dishighlightPorts(Type::TypeE type)
+{
+    for(auto block: m_blockManager->blocks()) {
+        for(auto port: block->inputPorts()) {
+            if(!port->isOutput() && !port->isConnected() && port->type() != type)
+                port->view()->animatePartialHide(0.3);
+        }
     }
 }
 

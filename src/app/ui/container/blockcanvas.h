@@ -99,6 +99,11 @@ class BlockCanvas : public ScrollArea {
          */
         void evaluateBlock(Identifier blockId);
 
+        // TODO doc
+        void restoreHighlightPorts();
+        // TODO doc
+        void dishighlightPorts(Type::TypeE type);
+
     public slots:
         /**
          * Eval all blocks.

@@ -28,7 +28,7 @@ void BlockPortView::animateHide(bool animate)
         return;
 
     if(animate) {
-        m_opacityAnimation->setStartValue(1.);
+        m_opacityAnimation->setStartValue(this->opacity());
         m_opacityAnimation->setEndValue(0.);
         m_opacityAnimation->start();
     }
@@ -43,11 +43,26 @@ void BlockPortView::animateShow(bool animate)
         return;
 
     if(animate) {
-        m_opacityAnimation->setStartValue(0.);
+        m_opacityAnimation->setStartValue(this->opacity());
         m_opacityAnimation->setEndValue(1.);
         m_opacityAnimation->start();
     }
 
     else
         this->setOpacity(1);
+}
+
+void BlockPortView::animatePartialHide(double v, bool animate)
+{
+    if(qFuzzyCompare(this->opacity(), v))
+        return;
+
+    if(animate) {
+        m_opacityAnimation->setStartValue(this->opacity());
+        m_opacityAnimation->setEndValue(v);
+        m_opacityAnimation->start();
+    }
+
+    else
+        this->setOpacity(v);
 }

@@ -66,6 +66,9 @@ class BlockPortView : public QGraphicsWidget {
          * @param animate flag
          */
         void animateShow(bool animate = true);
+
+        // TODO doc
+        void animatePartialHide(double v, bool animate = true);
 };
 
 #endif // BLOCKPORTVIEW_H

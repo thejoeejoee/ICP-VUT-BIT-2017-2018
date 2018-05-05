@@ -1,4 +1,5 @@
 #include "cosblock.h"
+#include <QtMath>
 
 CosBlock::CosBlock(QGraphicsWidget* parent): Block(parent)
 {
@@ -14,5 +15,5 @@ MappedDataValues CosBlock::evaluate(const QList<MappedDataValues>& inputData)
 {
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
-    return {{ "value", QVariant(cos(inputData.at(0)["value"].toDouble())) }};
+    return {{ "value", QVariant(qCos(inputData.at(0)["value"].toDouble())) }};
 }

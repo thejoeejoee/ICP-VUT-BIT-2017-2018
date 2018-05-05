@@ -1,4 +1,5 @@
 #include "vectmagblock.h"
+#include <QtMath>
 
 VectMagBlock::VectMagBlock(QGraphicsWidget* parent) : Block(parent) {
     BlockView* blockView = this->view();
@@ -17,7 +18,7 @@ MappedDataValues VectMagBlock::evaluate(const QList<MappedDataValues> &inputData
     for(auto port: inputData) {
         QList<QVariant> inputVect = port["value"].toList();
         for(auto val: inputVect)
-            result += pow(val.toDouble(), 2);
+            result += qPow(val.toDouble(), 2);
     }
-    return {{ "value", QVariant(sqrt(result)) }};
+    return {{ "value", QVariant(qSqrt(result)) }};
 }

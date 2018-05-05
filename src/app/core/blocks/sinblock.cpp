@@ -1,4 +1,5 @@
 #include "sinblock.h"
+#include <QtMath>
 
 SinBlock::SinBlock(QGraphicsWidget* parent): Block(parent)
 {
@@ -14,5 +15,5 @@ MappedDataValues SinBlock::evaluate(const QList<MappedDataValues>& inputData)
 {
     Q_ASSERT(this->inputMatchesPorts(inputData));
 
-    return {{ "value", QVariant(sin(inputData.at(0)["value"].toDouble())) }};
+    return {{ "value", QVariant(qSin(inputData.at(0)["value"].toDouble())) }};
 }

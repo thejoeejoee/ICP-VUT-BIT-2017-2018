@@ -110,7 +110,7 @@ QPainterPath JoinView::nonStrokedShape() const
 void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
-    painter->setClipRect(option->exposedRect);
+    Q_UNUSED(option);
 
     painter->save();
     painter->setPen(this->pen());

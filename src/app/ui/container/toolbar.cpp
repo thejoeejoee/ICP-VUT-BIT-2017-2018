@@ -64,7 +64,7 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
 void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
-    painter->setClipRect(option->exposedRect);
+    Q_UNUSED(option);
 
     painter->save();
     painter->setPen(QColor(Qt::transparent));

@@ -62,11 +62,19 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
          */
         bool inputMatchesPorts(const QList<MappedDataValues> &inputData) const;
 
-        // TODO doc
+        /**
+         * Registers new type of block into all enumeration.
+         * @tparam T type of block
+         * @param inputPortsCount count of input ports
+         */
         template<typename T>
         static void registerBlock(int inputPortsCount);
-        // TODO doc
-        static int blockInputsCount(const QString& classId);
+        /**
+         * Gets count of ports in block given by class string resp.
+         * @param classId block identification
+         * @return count of ports
+         */
+        static int blockInputsCount(const QString &classId);
 
         /**
          * Getter for qt parent.
@@ -95,8 +103,7 @@ class Block : public QObject, public Identified, public Factoriable, public Fact
 
 
 template<typename T>
-void Block::registerBlock(int inputPortsCount)
-{
+void Block::registerBlock(int inputPortsCount) {
     Block::registerItem<T>();
     Block::s_blocksInputsCount.insert(T::staticClassId(), inputPortsCount);
 }

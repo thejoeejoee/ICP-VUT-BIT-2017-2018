@@ -8,7 +8,7 @@ QT       += core gui svg
 CONFIG += c++14
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = app
+TARGET = blockeditor
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,6 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += $$files(*.h, true) $$files(*.tpp, true)
 SOURCES += $$files(*.cc, true) $$files(*.cpp, true)
+
+# DESTDIR=
+OBJECTS_DIR=build
+MOC_DIR=build
 
 RESOURCES += \
     app/ui/resources.qrc

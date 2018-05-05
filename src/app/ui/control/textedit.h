@@ -98,7 +98,9 @@ class TextEdit : public QGraphicsTextItem {
         QColor textColor() const;
 
     private slots:
-        // TODO doc
+        /**
+         * Removes invalid new lines in input.
+         */
         void removeNewLines();
 
     public slots:
@@ -128,7 +130,10 @@ class TextEdit : public QGraphicsTextItem {
          */
         void setTextColor(QColor textColor);
 
-        // TODO doc
+        /**
+         *
+         * @param v
+         */
         void setOneLineMode(bool v);
 
 

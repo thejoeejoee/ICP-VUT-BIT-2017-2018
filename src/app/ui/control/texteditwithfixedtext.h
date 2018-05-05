@@ -74,8 +74,13 @@ class TextEditWithFixedText : public QGraphicsWidget {
         QString toPlainText() const;
 
     private slots:
+        /**
+         * Change size to fit content.
+         */
         void resizeToContent();
-        // TODO doc
+        /**
+         * Pass focus to backward.
+         */
         void passFocus();
 
     public slots:
@@ -105,13 +110,20 @@ class TextEditWithFixedText : public QGraphicsWidget {
          */
         void setFixedTextColor(const QColor &color);
         /**
+         * Set state if mouse should be propagated backward.
+         * @param v state
+         */
+        void setPropagateMouse(bool v);
+        /**
+         * Sets one line mode of editation.
+         * @param v state
+         */
+        void setOneLineMode(bool v);
+
+        /**
          * Sets interaction flags.
          * @param flags new flags
          */
-        // TODO doc
-        void setPropagateMouse(bool v);
-        // TODO doc
-        void setOneLineMode(bool v);
         void setTextInteractionFlags(Qt::TextInteractionFlags flags);
         /**
          * Set new color of valid

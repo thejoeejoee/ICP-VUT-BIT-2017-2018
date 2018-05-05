@@ -99,9 +99,14 @@ class BlockCanvas : public ScrollArea {
          */
         void evaluateBlock(Identifier blockId);
 
-        // TODO doc
+        /**
+         * Restores highlights of all ports.
+         */
         void restoreHighlightPorts();
-        // TODO doc
+        /**
+         * Dishighlight all compatible ports.
+         * @param type compatible port
+         */
         void dishighlightPorts(Type::TypeE type);
 
     public slots:
@@ -130,7 +135,10 @@ class BlockCanvas : public ScrollArea {
         void clear();
 
     signals:
-        // TODO doc
+        /**
+         * Change of debugger state.
+         * @param debugging state
+         */
         void debugStateChanged(bool debugging);
 
         /**

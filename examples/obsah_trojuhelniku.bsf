@@ -1,0 +1,34 @@
+{
+    "blocks": [
+        {
+            "id": 34,
+            "input_values": [
+                3,
+                3
+            ],
+            "output_value": 9,
+            "type": "mul_block",
+            "x": 220,
+            "y": 141
+        },
+        {
+            "id": 35,
+            "input_values": [
+                9,
+                0.5
+            ],
+            "output_value": 4.5,
+            "type": "mul_block",
+            "x": 539,
+            "y": 274
+        }
+    ],
+    "joins": [
+        {
+            "fromBlock": 34,
+            "fromPort": 0,
+            "toBlock": 35,
+            "toPort": 0
+        }
+    ]
+}

@@ -319,6 +319,11 @@ void BlockCanvas::debug()
         return;
     }
 
+    if(this->cycled()) {
+        emit this->error(tr("Scheme has cycle."));
+        return;
+    }
+
     QList<Identifier> computeOrder = this->blockComputeOrder();
     if(m_debugIteration >= computeOrder.length()) {
         this->stopDebug();

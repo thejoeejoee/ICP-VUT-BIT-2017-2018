@@ -1,6 +1,7 @@
 #include "iconbutton.h"
 
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 IconButton::IconButton(const QString& imagePath, QGraphicsItem* parent): Clickable (parent)
 {
@@ -16,6 +17,7 @@ IconButton::IconButton(QGraphicsItem* parent): IconButton("", parent) {}
 void IconButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
+    painter->setClipRect(option->exposedRect);
     Clickable::paint(painter, option, widget);
 
     const double height = this->boundingRect().height();

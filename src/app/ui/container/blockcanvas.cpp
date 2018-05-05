@@ -26,6 +26,9 @@ BlockCanvas::~BlockCanvas()
 
 void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     painter->save();
     painter->setPen(QPen{QColor{"#8c8c8c"}, 3});
     painter->setOpacity(0.7);

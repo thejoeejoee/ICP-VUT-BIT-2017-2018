@@ -37,13 +37,14 @@ TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextIte
 void TextEdit::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(widget);
+    painter->setClipRect(option->exposedRect);
 
     if(m_drawBorders) {
         painter->save();
         painter->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing, false);
         painter->setRenderHint(QPainter::TextAntialiasing);
         painter->setPen(m_currentBorderColor);
-        painter->drawRect(this->boundingRect());
+        painter->drawRect(this->boundingRect().adjusted(1, 1, -1, -1));
         painter->restore();
     }
 

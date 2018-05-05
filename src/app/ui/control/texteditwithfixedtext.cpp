@@ -1,6 +1,7 @@
 #include "texteditwithfixedtext.h"
 
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
 #include <QTextDocument>
 
 TextEditWithFixedText::TextEditWithFixedText(QGraphicsItem* parent): QGraphicsWidget (parent)
@@ -20,9 +21,12 @@ TextEditWithFixedText::TextEditWithFixedText(QGraphicsItem* parent): QGraphicsWi
 
 void TextEditWithFixedText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(widget);
+    painter->setClipRect(option->exposedRect);
+
     painter->save();
     painter->setPen(m_textEdit->currentBorderColor());
-    painter->drawRect(this->boundingRect());
+    painter->drawRect(this->boundingRect().adjusted(1, 1, -1, -1));
     painter->restore();
 }
 

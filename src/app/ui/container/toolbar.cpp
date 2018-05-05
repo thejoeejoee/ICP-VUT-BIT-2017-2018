@@ -2,6 +2,7 @@
 #include <QGraphicsAnchorLayout>
 #include <QGraphicsLinearLayout>
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
 {
@@ -62,6 +63,9 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
 
 void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(widget);
+    painter->setClipRect(option->exposedRect);
+
     painter->save();
     painter->setPen(QColor(Qt::transparent));
     painter->setBrush(QColor("#c6c5c5"));

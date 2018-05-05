@@ -1,6 +1,7 @@
 #include "textbutton.h"
 
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 TextButton::TextButton(const QString& text, QGraphicsItem* parent): Clickable (parent)
 {
@@ -12,6 +13,7 @@ TextButton::TextButton(const QString& text, QGraphicsItem* parent): Clickable (p
 void TextButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
+    painter->setClipRect(option->exposedRect);
     painter->setFont(m_font);
 
     Clickable::paint(painter, option, widget);

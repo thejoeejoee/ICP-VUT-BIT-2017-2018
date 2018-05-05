@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
+#include <QStyleOptionGraphicsItem>
 
 ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget* parent): QGraphicsWidget(parent)
 {
@@ -66,8 +67,8 @@ void ScrollBar::wheelEvent(QGraphicsSceneWheelEvent* e)
 
 void ScrollBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    Q_UNUSED(option);
     Q_UNUSED(widget);
+    painter->setClipRect(option->exposedRect);
 
     painter->save();
     painter->setBrush(m_color);

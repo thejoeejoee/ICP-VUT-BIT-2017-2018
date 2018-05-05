@@ -9,6 +9,7 @@
 #include <app/ui/blockview.h>
 #include <app/core/blockmanager.h>
 #include <QFontMetrics>
+#include <QStyleOptionGraphicsItem>
 
 JoinView::JoinView(Identifier dataId, QGraphicsItem* parent)
     : QObject{}, QGraphicsLineItem(parent)
@@ -65,6 +66,8 @@ void JoinView::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
 
 void JoinView::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
 {
+    Q_UNUSED(e);
+
     m_hovered = false;
     m_opacityAnimation->setStartValue(m_currentOpacity);
     m_opacityAnimation->setEndValue(0.);
@@ -106,8 +109,8 @@ QPainterPath JoinView::nonStrokedShape() const
 
 void JoinView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    Q_UNUSED(option);
     Q_UNUSED(widget);
+    painter->setClipRect(option->exposedRect);
 
     painter->save();
     painter->setPen(this->pen());

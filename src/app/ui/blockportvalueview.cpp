@@ -65,12 +65,12 @@ void BlockPortValueView::setValue(MappedDataValues v)
     if(val.isNull())
         repr = "";
     else if(val.type() == QVariant::Double)
-        repr = QString::number(val.toDouble(), 'g', 4);
+        repr = QString::number(val.toDouble());
     else if(val.type() == QVariant::List) {
         int i = 0;
         QList<DataValue> values = val.value<QList<DataValue> >();
         for(const auto &v: values) {
-            repr += QString::number(v.toDouble(), 'g', 4);
+            repr += QString::number(v.toDouble());
             if(i + 1 < values.length())
                 repr += ",";
             i++;

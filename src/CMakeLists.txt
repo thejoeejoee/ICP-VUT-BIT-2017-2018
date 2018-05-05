@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 2.8.3)
 project(icp18)
 
 set(CMAKE_CXX_STANDARD 14)
-
 list(
         APPEND CMAKE_PREFIX_PATH
         /opt/qt/5.10.1/gcc_64/lib/cmake/Qt5Widgets/
@@ -37,13 +36,18 @@ file(
         GLOB_RECURSE SRC
         LIST_DIRECTORIES false
         RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-        "app/*.h" "app/*.cpp" "app/*.qrc"
+        "app/*.h" "app/*.cpp" # "app/*.qrc"
 )
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+qt5_add_resources(RESOURCES app/ui/resources.qrc)
+
 # Tell CMake to create the helloworld executable
 add_executable(
         blockeditor
+        ${RESOURCES}
         ${SRC}
-        app/ui/resources.qrc
 )
 
 #Link the helloworld executable to the Qt 5 widgets library.

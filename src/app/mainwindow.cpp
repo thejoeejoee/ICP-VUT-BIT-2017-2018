@@ -154,7 +154,9 @@ void AppWindow::schemeOpen()
         return;
     }
 
+    m_blockCanvas->clear();
     this->setSaved(true);
+
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     if(doc.isNull()) {
         emit this->error(tr("Json parse error"));

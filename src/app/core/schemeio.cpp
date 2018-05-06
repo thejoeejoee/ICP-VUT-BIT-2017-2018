@@ -9,6 +9,9 @@ SchemeIO::SchemeIO(BlockManager* manager, QObject* parent): QObject (parent)
 
 QJsonObject SchemeIO::exportToJson() const
 {
+    if(m_manager == nullptr)
+        return QJsonObject{};
+
     QJsonObject json;
     QJsonArray blocksJsonArr;
     QJsonArray joinsJsonArr;
@@ -109,6 +112,9 @@ QString SchemeIO::jsonValid(const QJsonObject& scheme) const
 
 void SchemeIO::loadFromJson(QJsonObject scheme, QGraphicsWidget* parent)
 {
+    if(m_manager == nullptr)
+        return;
+
     const QString errorMsg = this->jsonValid(scheme);
     if(!errorMsg.isEmpty()) {
         emit this->error(errorMsg);

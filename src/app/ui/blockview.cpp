@@ -109,6 +109,9 @@ void BlockView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
+    if(m_data.isNull())
+        return;
+
     painter->save();
 
     const QRectF blockRect = this->boundingRect().adjusted(

@@ -3,6 +3,7 @@
 
 #include <app/core/identified.h>
 #include <QGraphicsWidget>
+#include <QPointer>
 #include <QSvgRenderer>
 
 class Block;
@@ -17,7 +18,7 @@ class BlockView : public QGraphicsWidget {
         constexpr static int s_portsMargin = 5;
         static const QSize s_blockSize;
 
-        Block* m_data;
+        QPointer<Block> m_data;
         QSvgRenderer m_imageRenderer;
         QColor m_backgroundColor;
         QColor m_backgroundSelectionColor;

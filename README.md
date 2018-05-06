@@ -1,2 +1,0 @@
-# ICJ-VUT-BIT-2017-2018
-Qt game

@@ -1,11 +1,19 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "toolbar.h"
 #include <QGraphicsAnchorLayout>
 #include <QGraphicsLinearLayout>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
-{
+ToolBar::ToolBar(QGraphicsItem* parent) : QGraphicsWidget(parent) {
     m_newButton = new TextButton{tr("New"), this};
     m_openButton = new TextButton{tr("Open"), this};
     m_saveButton = new TextButton{tr("Save"), this};
@@ -61,8 +69,7 @@ ToolBar::ToolBar(QGraphicsItem* parent): QGraphicsWidget (parent)
     connect(m_stopButton, &Clickable::clicked, this, &ToolBar::stop);
 }
 
-void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
@@ -81,7 +88,7 @@ void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
 
     painter->setBrush(QColor("#dbdbda"));
     painter->drawPolygon(polygon);
-    if(m_debugIconVisible) {
+    if (m_debugIconVisible) {
         painter->setPen(QColor(Qt::transparent));
         painter->setBrush(QColor{"#0f81bc"});
         const QRectF iconRect = QRectF(size.width() - size.height(),
@@ -95,8 +102,7 @@ void ToolBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     painter->restore();
 }
 
-void ToolBar::setDebugIconVisiblity(bool v)
-{
+void ToolBar::setDebugIconVisiblity(bool v) {
     m_debugIconVisible = v;
     this->update();
 }

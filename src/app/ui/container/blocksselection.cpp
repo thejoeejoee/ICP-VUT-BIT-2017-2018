@@ -1,15 +1,23 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "blocksselection.h"
 #include <QDebug>
 #include <QPainter>
 #include <app/core/blocks/blocks.h>
 
-BlocksSelection::BlocksSelection(QGraphicsWidget* parent): ScrollArea(parent)
-{
+BlocksSelection::BlocksSelection(QGraphicsWidget* parent) : ScrollArea(parent) {
     m_layout = new QGraphicsLinearLayout(Qt::Vertical, this->container());
     m_layout->setSpacing(30);
     m_layout->setContentsMargins(30, 75, 30, 30);
 
-    for(const QString& singleBlockClassId: Block::registeredItems()) {
+    for (const QString &singleBlockClassId: Block::registeredItems()) {
         auto newBlock = Block::createNew(singleBlockClassId, this);
         newBlock->view()->setInputsVisible(false);
         newBlock->view()->setOutputVisible(false);
@@ -23,8 +31,7 @@ BlocksSelection::BlocksSelection(QGraphicsWidget* parent): ScrollArea(parent)
     connect(this->container(), &QGraphicsWidget::geometryChanged, [this]() { this->update(); });
 }
 
-void BlocksSelection::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
+void BlocksSelection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
@@ -36,8 +43,8 @@ void BlocksSelection::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     painter->setPen(QColor(Qt::transparent));
     painter->setBrush(QColor(Qt::white));
     painter->drawRect(
-                0, static_cast<int>(this->container()->y()) + 65,
-                static_cast<int>(this->size().width()), 55
+            0, static_cast<int>(this->container()->y()) + 65,
+            static_cast<int>(this->size().width()), 55
     );
 
     painter->setPen(QColor("#e0e0df"));
@@ -46,8 +53,7 @@ void BlocksSelection::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     painter->restore();
 }
 
-void BlocksSelection::addItem(QGraphicsWidget* item)
-{
+void BlocksSelection::addItem(QGraphicsWidget* item) {
     Q_ASSERT(item != nullptr);
 
     item->setParentItem(this->container());

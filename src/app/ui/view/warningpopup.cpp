@@ -1,11 +1,19 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "warningpopup.h"
 
 #include <QPainter>
 #include <QDebug>
 #include <QStyleOptionGraphicsItem>
 
-WarningPopUp::WarningPopUp(QGraphicsWidget* parent): QGraphicsWidget (parent)
-{
+WarningPopUp::WarningPopUp(QGraphicsWidget* parent) : QGraphicsWidget(parent) {
     m_animation = new QVariantAnimation{this};
     m_animation->setDuration(350);
     this->setOpacity(0);
@@ -13,13 +21,12 @@ WarningPopUp::WarningPopUp(QGraphicsWidget* parent): QGraphicsWidget (parent)
     m_font = QFont{"Montserrat", 20};
 
     connect(&m_timer, &QTimer::timeout, this, &WarningPopUp::hideAnimate);
-    connect(m_animation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
+    connect(m_animation, &QVariantAnimation::valueChanged, [this](const QVariant &v) {
         this->setOpacity(v.toDouble());
     });
 }
 
-void WarningPopUp::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void WarningPopUp::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     painter->save();
     painter->setClipRect(option->exposedRect);
     painter->setOpacity(0.4 * this->opacity());
@@ -39,10 +46,10 @@ void WarningPopUp::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->setOpacity(1.0 * this->opacity());
     constexpr int iconOffset = 3;
     m_renderer.render(painter, QRectF(
-                          10 + iconOffset,
-                          iconOffset,
-                          height - 2 * iconOffset,
-                          height - 2* iconOffset));
+            10 + iconOffset,
+            iconOffset,
+            height - 2 * iconOffset,
+            height - 2 * iconOffset));
 
     // draw text
     painter->setPen(QColor{"#ca7a29"});
@@ -53,15 +60,13 @@ void WarningPopUp::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->restore();
 }
 
-void WarningPopUp::hideAnimate()
-{
+void WarningPopUp::hideAnimate() {
     m_animation->setStartValue(this->opacity());
     m_animation->setEndValue(0.);
     m_animation->start();
 }
 
-void WarningPopUp::popUp(const QString& msg, int seconds)
-{
+void WarningPopUp::popUp(const QString &msg, int seconds) {
     m_msg = msg;
     QFontMetrics fm(m_font);
     this->resize(fm.width(m_msg) + 25 + this->size().height() * 2, this->size().height());

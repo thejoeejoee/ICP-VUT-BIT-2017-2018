@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "scrollbar.h"
 #include <QGraphicsAnchorLayout>
 #include <QPainter>
@@ -5,8 +14,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QStyleOptionGraphicsItem>
 
-ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget* parent): QGraphicsWidget(parent)
-{
+ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget* parent) : QGraphicsWidget(parent) {
     auto parentLayout = dynamic_cast<QGraphicsAnchorLayout*>(parent->layout());
     Q_ASSERT_X(parentLayout != nullptr,
                "Scrollbar init", "Parent(ScrollArea) need to has anchor layout");
@@ -16,13 +24,11 @@ ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget* parent): QGra
     m_handle = new ScrollBarHandle(orientation, this);
     this->setMinimumSize(0, 0);
 
-    if(orientation == Qt::Vertical) {
+    if (orientation == Qt::Vertical) {
         parentLayout->addCornerAnchors(this, Qt::TopRightCorner, parentLayout, Qt::TopRightCorner);
         parentLayout->addCornerAnchors(this, Qt::BottomRightCorner,
                                        parentLayout, Qt::BottomRightCorner);
-    }
-
-    else if(orientation == Qt::Horizontal) {
+    } else if (orientation == Qt::Horizontal) {
         parentLayout->addCornerAnchors(this, Qt::BottomLeftCorner,
                                        parentLayout, Qt::BottomLeftCorner);
         parentLayout->addCornerAnchors(this, Qt::BottomRightCorner,
@@ -39,34 +45,29 @@ ScrollBar::ScrollBar(Qt::Orientation orientation, QGraphicsWidget* parent): QGra
     connect(m_handle, &ScrollBarHandle::relativePosChanged, this, &ScrollBar::relativePosChanged);
 }
 
-void ScrollBar::mousePressEvent(QGraphicsSceneMouseEvent* e)
-{
+void ScrollBar::mousePressEvent(QGraphicsSceneMouseEvent* e) {
     m_mousePressed = true;
     m_pressPoint = e->pos();
     m_handleOriginPos = m_handle->pos();
 }
 
-void ScrollBar::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
-{
+void ScrollBar::mouseReleaseEvent(QGraphicsSceneMouseEvent* e) {
     Q_UNUSED(e);
     m_mousePressed = false;
 }
 
-void ScrollBar::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
-{
-    if(m_orientation == Qt::Vertical)
+void ScrollBar::mouseMoveEvent(QGraphicsSceneMouseEvent* e) {
+    if (m_orientation == Qt::Vertical)
         this->move(m_handleOriginPos, (e->pos() - m_pressPoint).y());
     else
         this->move(m_handleOriginPos, (e->pos() - m_pressPoint).x());
 }
 
-void ScrollBar::wheelEvent(QGraphicsSceneWheelEvent* e)
-{
-    this->artificialScroll((e->delta() < 0) ?1 :-1);
+void ScrollBar::wheelEvent(QGraphicsSceneWheelEvent* e) {
+    this->artificialScroll((e->delta() < 0) ? 1 : -1);
 }
 
-void ScrollBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void ScrollBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(widget);
     painter->setClipRect(option->exposedRect);
 
@@ -77,99 +78,82 @@ void ScrollBar::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->restore();
 }
 
-qreal ScrollBar::relativePos() const
-{
+qreal ScrollBar::relativePos() const {
     return m_handle->relativePos();
 }
 
-void ScrollBar::resizeThickeness()
-{
-    if(m_orientation == Qt::Vertical) {
+void ScrollBar::resizeThickeness() {
+    if (m_orientation == Qt::Vertical) {
         this->setPreferredWidth(m_thickness);
         m_handle->setPreferredWidth(m_thickness);
-    }
-    else if(m_orientation == Qt::Horizontal) {
+    } else if (m_orientation == Qt::Horizontal) {
         this->setPreferredHeight(m_thickness);
         m_handle->setPreferredHeight(m_thickness);
     }
 }
 
-void ScrollBar::setSlideArea()
-{
+void ScrollBar::setSlideArea() {
     m_handle->setSlideArea(this->geometry().toRect().size());
 }
 
-void ScrollBar::resizeHandle()
-{
-    if(m_orientation == Qt::Vertical){
+void ScrollBar::resizeHandle() {
+    if (m_orientation == Qt::Vertical) {
         m_handle->setMaximumHeight(m_sizeRatio * this->size().height());
         m_handle->setMinimumHeight(m_sizeRatio * this->size().height());
-    }
-
-    else if(m_orientation == Qt::Horizontal) {
+    } else if (m_orientation == Qt::Horizontal) {
         m_handle->setMaximumWidth(m_sizeRatio * this->size().width());
         m_handle->setMinimumWidth(m_sizeRatio * this->size().width());
     }
 }
 
-void ScrollBar::artificialScroll(qreal delta)
-{
+void ScrollBar::artificialScroll(qreal delta) {
     const qreal speed = 25.;
-    if(m_orientation == Qt::Vertical)
+    if (m_orientation == Qt::Vertical)
         this->move(m_handle->pos(), delta * m_handle->slideArea().height() / speed);
     else
         this->move(m_handle->pos(), delta * m_handle->slideArea().width() / speed);
 }
 
-void ScrollBar::move(QPointF handleOriginPos, qreal delta)
-{
+void ScrollBar::move(QPointF handleOriginPos, qreal delta) {
     QPointF newPos = handleOriginPos + QPointF(delta, delta);
     const QSizeF handleSize = m_handle->size();
     // new position of point of handle on the other side
     const QPointF newHandleOtherPos = newPos + QPointF(handleSize.width(), handleSize.height());
 
-    if(m_orientation == Qt::Vertical) {
+    if (m_orientation == Qt::Vertical) {
         newPos.rx() = handleOriginPos.x();    // allow only movement in vertical axis
-        if(newHandleOtherPos.y() > m_handle->slideArea().height())
+        if (newHandleOtherPos.y() > m_handle->slideArea().height())
             newPos.ry() = m_handle->slideArea().height() - handleSize.height();
-        if(newPos.y() < 0)
+        if (newPos.y() < 0)
             newPos.ry() = 0;
-    }
-
-
-    else {
+    } else {
         newPos.ry() = handleOriginPos.ry();   // allow only movement in horizontal axis
-        if(newHandleOtherPos.x() > m_handle->slideArea().width())
+        if (newHandleOtherPos.x() > m_handle->slideArea().width())
             newPos.rx() = m_handle->slideArea().width() - handleSize.width();
-        else if(newPos.x() < 0)
+        else if (newPos.x() < 0)
             newPos.rx() = 0;
     }
 
     m_handle->setPos(newPos);
 }
 
-int ScrollBar::thickness() const
-{
+int ScrollBar::thickness() const {
     return m_thickness;
 }
 
-QColor ScrollBar::color() const
-{
+QColor ScrollBar::color() const {
     return m_color;
 }
 
-QColor ScrollBar::handleColor() const
-{
+QColor ScrollBar::handleColor() const {
     return m_handleColor;
 }
 
-qreal ScrollBar::sizeRatio() const
-{
+qreal ScrollBar::sizeRatio() const {
     return m_sizeRatio;
 }
 
-void ScrollBar::setThickness(int thickness)
-{
+void ScrollBar::setThickness(int thickness) {
     if (m_thickness == thickness)
         return;
 
@@ -177,8 +161,7 @@ void ScrollBar::setThickness(int thickness)
     emit thicknessChanged(m_thickness);
 }
 
-void ScrollBar::setColor(const QColor& color)
-{
+void ScrollBar::setColor(const QColor &color) {
     if (m_color == color)
         return;
 
@@ -186,8 +169,7 @@ void ScrollBar::setColor(const QColor& color)
     emit colorChanged(m_color);
 }
 
-void ScrollBar::setHandleColor(const QColor& handleColor)
-{
+void ScrollBar::setHandleColor(const QColor &handleColor) {
     if (m_handleColor == handleColor)
         return;
 
@@ -195,8 +177,7 @@ void ScrollBar::setHandleColor(const QColor& handleColor)
     emit handleColorChanged(m_handleColor);
 }
 
-void ScrollBar::setSizeRatio(qreal sizeRation)
-{
+void ScrollBar::setSizeRatio(qreal sizeRation) {
     if (qFuzzyCompare(m_sizeRatio, sizeRation))
         return;
 
@@ -204,14 +185,12 @@ void ScrollBar::setSizeRatio(qreal sizeRation)
     emit sizeRatioChanged(m_sizeRatio);
 }
 
-void ScrollBarHandle::setSlideArea(QSize slideArea)
-{
+void ScrollBarHandle::setSlideArea(QSize slideArea) {
     m_slideArea = slideArea;
 }
 
-ScrollBarHandle::ScrollBarHandle(Qt::Orientation orientation, QGraphicsWidget* parent):
-    QGraphicsWidget(parent)
-{
+ScrollBarHandle::ScrollBarHandle(Qt::Orientation orientation, QGraphicsWidget* parent) :
+        QGraphicsWidget(parent) {
     m_orientation = orientation;
 
     connect(this, &ScrollBarHandle::colorChanged, [this] { this->update(); });
@@ -220,8 +199,7 @@ ScrollBarHandle::ScrollBarHandle(Qt::Orientation orientation, QGraphicsWidget* p
     connect(this, &ScrollBarHandle::geometryChanged, this, &ScrollBarHandle::calculateRelativePos);
 }
 
-void ScrollBarHandle::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void ScrollBarHandle::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
@@ -232,40 +210,33 @@ void ScrollBarHandle::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
     painter->restore();
 }
 
-QSize ScrollBarHandle::slideArea() const
-{
+QSize ScrollBarHandle::slideArea() const {
     return m_slideArea;
 }
 
-QColor ScrollBarHandle::color() const
-{
+QColor ScrollBarHandle::color() const {
     return m_color;
 }
 
-qreal ScrollBarHandle::relativePos() const
-{
+qreal ScrollBarHandle::relativePos() const {
     return m_relativePos;
 }
 
-void ScrollBarHandle::calculateRelativePos()
-{
+void ScrollBarHandle::calculateRelativePos() {
     m_relativePos = 0;
-    if(m_orientation == Qt::Vertical) {
-        if(qRound(this->size().height()) != m_slideArea.height())
+    if (m_orientation == Qt::Vertical) {
+        if (qRound(this->size().height()) != m_slideArea.height())
             m_relativePos = this->y() / (m_slideArea.height() - this->size().height());
-    }
-
-    else {
-        if(qRound(this->size().width()) != m_slideArea.width())
+    } else {
+        if (qRound(this->size().width()) != m_slideArea.width())
             m_relativePos = this->x() / (m_slideArea.width() - this->size().width());
     }
 
     emit this->relativePosChanged(m_relativePos);
 }
 
-void ScrollBarHandle::setColor(const QColor& color)
-{
-    if(color == m_color)
+void ScrollBarHandle::setColor(const QColor &color) {
+    if (color == m_color)
         return;
     m_color = color;
     emit colorChanged(color);

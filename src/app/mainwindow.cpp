@@ -1,22 +1,25 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "mainwindow.h"
-#include <QPushButton>
 #include <QHBoxLayout>
 
-#include <QMouseEvent>
 #include <QPainter>
-#include <QDebug>
 #include <QGraphicsAnchorLayout>
 #include <QJsonDocument>
 #include <QMessageBox>
-#include "ui/blockportview.h"
-#include "core/blocks/addblock.h"
 #include <QGraphicsScene>
 #include <app/ui/control/textedit.h>
 #include <QFileDialog>
 #include <app/ui/window/graphicsview.h>
 
-AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
-{
+AppWindow::AppWindow(QGraphicsWidget* parent) : QGraphicsWidget{parent} {
     m_blockSelection = new BlocksSelection{this};
     m_blockSelection->setMaximumWidth(195);
     m_blockSelection->setMinimumWidth(m_blockSelection->maximumWidth());
@@ -35,15 +38,15 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
     connect(m_toolbar, &ToolBar::stop, m_blockCanvas, &BlockCanvas::stopDebug);
     connect(m_blockCanvas, &BlockCanvas::debugStateChanged,
             m_toolbar, &ToolBar::setDebugIconVisiblity);
-    connect(m_blockCanvas, &BlockCanvas::error, [this](const QString& msg) {
+    connect(m_blockCanvas, &BlockCanvas::error, [this](const QString &msg) {
         m_warning->popUp(msg, 3);
     });
 
-    connect(m_schemeIO, &SchemeIO::error, [this](const QString& msg) {
+    connect(m_schemeIO, &SchemeIO::error, [this](const QString &msg) {
         m_warning->popUp(msg, 3);
     });
 
-    connect(this, &AppWindow::error, [this](const QString& msg) {
+    connect(this, &AppWindow::error, [this](const QString &msg) {
         m_warning->popUp(msg, 3);
     });
 
@@ -76,80 +79,72 @@ AppWindow::AppWindow(QGraphicsWidget* parent): QGraphicsWidget{parent}
                              layout, Qt::BottomRightCorner);
 }
 
-QString AppWindow::currentPath() const
-{
+QString AppWindow::currentPath() const {
     return m_currentPath;
 }
 
-bool AppWindow::saved() const
-{
+bool AppWindow::saved() const {
     return m_saved;
 }
 
-void AppWindow::setTitle()
-{
+void AppWindow::setTitle() {
     QString title{"%1%4%2%3"};
     title = title
             .arg(tr("Block Editor"))
             .arg(m_currentPath)
-            .arg((!m_saved && !m_currentPath.isEmpty()) ?"*" :"")
-            .arg((m_currentPath.isEmpty()) ?"" :" - ");
-    if(this->scene() != nullptr && this->scene()->views().length())
+            .arg((!m_saved && !m_currentPath.isEmpty()) ? "*" : "")
+            .arg((m_currentPath.isEmpty()) ? "" : " - ");
+    if (this->scene() != nullptr && this->scene()->views().length())
         this->scene()->views().at(0)->setWindowTitle(title);
 }
 
-void AppWindow::setCurrentPath(const QString& path)
-{
-    if(path == m_currentPath)
+void AppWindow::setCurrentPath(const QString &path) {
+    if (path == m_currentPath)
         return;
     m_currentPath = path;
     emit this->currentPathChanged(path);
 }
 
-void AppWindow::setSaved(bool saved)
-{
-    if(saved == m_saved)
+void AppWindow::setSaved(bool saved) {
+    if (saved == m_saved)
         return;
     m_saved = saved;
     emit this->savedChanged(saved);
 }
 
-void AppWindow::resizeWindow(QSize size)
-{
+void AppWindow::resizeWindow(QSize size) {
     this->resize(size);
 }
 
-bool AppWindow::handleUnsavedScheme()
-{
-    if(m_saved)
+bool AppWindow::handleUnsavedScheme() {
+    if (m_saved)
         return false;
     auto reply = QMessageBox::question(
-                     nullptr,
-                     tr("Unsaved scheme"),
-                     tr("Do you want to save scheme?"));
-    if(reply == QMessageBox::Yes)
+            nullptr,
+            tr("Unsaved scheme"),
+            tr("Do you want to save scheme?"));
+    if (reply == QMessageBox::Yes)
         this->schemeSave();
     return true;
 }
 
-void AppWindow::schemeOpen()
-{
+void AppWindow::schemeOpen() {
     this->handleUnsavedScheme();
 
     const QString filePath = QFileDialog::getOpenFileName(
-                                 nullptr,
-                                 tr("Open file"),
-                                 QString(),
-                                 QString("%1 (*.%2);;All Files (*.*)")
-                                 .arg(tr("Block schemes"))
-                                 .arg(AppWindow::s_fileFormat));
-    if(filePath.isEmpty())
+            nullptr,
+            tr("Open file"),
+            QString(),
+            QString("%1 (*.%2);;All Files (*.*)")
+                    .arg(tr("Block schemes"))
+                    .arg(AppWindow::s_fileFormat));
+    if (filePath.isEmpty())
         return;
 
     this->setCurrentPath(filePath);
     QFile file(m_currentPath);
 
-    if(!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         emit this->error(tr("File could not be open."));
         return;
     }
@@ -158,24 +153,23 @@ void AppWindow::schemeOpen()
     this->setSaved(true);
 
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-    if(doc.isNull()) {
+    if (doc.isNull()) {
         emit this->error(tr("Json parse error"));
         return;
     }
     m_schemeIO->loadFromJson(doc.object(), m_blockCanvas->container());
 }
 
-void AppWindow::schemeSave()
-{
-    if(m_currentPath.isEmpty()) {
+void AppWindow::schemeSave() {
+    if (m_currentPath.isEmpty()) {
         const QString filePath = QFileDialog::getSaveFileName(
-                                     nullptr,
-                                     tr("Save file"),
-                                     QString(),
-                                     QString("%1 (*.%2);;All Files (*.*)")
-                                     .arg(tr("Block schemes"))
-                                     .arg(AppWindow::s_fileFormat));
-        if(filePath.isEmpty())
+                nullptr,
+                tr("Save file"),
+                QString(),
+                QString("%1 (*.%2);;All Files (*.*)")
+                        .arg(tr("Block schemes"))
+                        .arg(AppWindow::s_fileFormat));
+        if (filePath.isEmpty())
             return;
         this->setCurrentPath(filePath);
     }
@@ -184,7 +178,7 @@ void AppWindow::schemeSave()
     QJsonDocument doc{m_schemeIO->exportToJson()};
     QFile file(m_currentPath);
 
-    if(!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         emit this->error(tr("File could not be open."));
         return;
     }
@@ -193,23 +187,22 @@ void AppWindow::schemeSave()
     file.write(doc.toJson());
 }
 
-void AppWindow::schemeSaveAs()
-{
+void AppWindow::schemeSaveAs() {
     const QString filePath = QFileDialog::getSaveFileName(
-                                 nullptr,
-                                 tr("Save file as"),
-                                 QString(),
-                                 QString("%1 (*.%2);;All Files (*.*)")
-                                 .arg(tr("Block schemes"))
-                                 .arg(AppWindow::s_fileFormat));
-    if(filePath.isEmpty())
+            nullptr,
+            tr("Save file as"),
+            QString(),
+            QString("%1 (*.%2);;All Files (*.*)")
+                    .arg(tr("Block schemes"))
+                    .arg(AppWindow::s_fileFormat));
+    if (filePath.isEmpty())
         return;
     this->setCurrentPath(filePath);
 
     QJsonDocument doc{m_schemeIO->exportToJson()};
     QFile file(m_currentPath);
 
-    if(!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly)) {
         emit this->error(tr("File could not be open."));
         return;
     }
@@ -218,8 +211,7 @@ void AppWindow::schemeSaveAs()
     file.write(doc.toJson());
 }
 
-void AppWindow::schemeNew()
-{
+void AppWindow::schemeNew() {
     this->handleUnsavedScheme();
 
     m_blockCanvas->clear();

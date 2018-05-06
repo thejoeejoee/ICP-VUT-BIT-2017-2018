@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #ifndef FACTORYBASE_H
 #define FACTORYBASE_H
 
@@ -12,8 +21,7 @@
  * @tparam ItemT
  */
 template<typename ItemT>
-class FactoryBase
-{
+class FactoryBase {
     private:
         static QMap<QString, std::function<ItemT*(QGraphicsWidget*)> > s_factories;
         static QList<QString> s_registeredItems;
@@ -40,7 +48,7 @@ class FactoryBase
          * @param parent parent of type
          * @return new type
          */
-        static ItemT* createNew(const QString& classId, QGraphicsWidget* parent);
+        static ItemT* createNew(const QString &classId, QGraphicsWidget* parent);
 
 };
 
@@ -52,22 +60,19 @@ QList<QString> FactoryBase<ItemT>::s_registeredItems;
 
 template<typename ItemT>
 template<typename SubItemT>
-void FactoryBase<ItemT>::registerItem()
-{
+void FactoryBase<ItemT>::registerItem() {
     FactoryBase<ItemT>::s_registeredItems.append(SubItemT::staticClassId());
     FactoryBase<ItemT>::s_factories.insert(SubItemT::staticClassId(), SubItemT::createNew);
 }
 
 template<typename ItemT>
-QList<QString> FactoryBase<ItemT>::registeredItems()
-{
+QList<QString> FactoryBase<ItemT>::registeredItems() {
     return FactoryBase<ItemT>::s_registeredItems;
 }
 
 template<typename ItemT>
-ItemT* FactoryBase<ItemT>::createNew(const QString& classId, QGraphicsWidget* parent)
-{
-    if(!FactoryBase<ItemT>::s_factories.keys().contains(classId)) {
+ItemT* FactoryBase<ItemT>::createNew(const QString &classId, QGraphicsWidget* parent) {
+    if (!FactoryBase<ItemT>::s_factories.keys().contains(classId)) {
         qWarning() << "Factoriable item" << classId << "not registered.";
         return nullptr;
     }

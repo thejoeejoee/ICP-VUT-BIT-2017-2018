@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #ifndef FACTORIABLE_H
 #define FACTORIABLE_H
 
@@ -22,8 +31,7 @@
 /**
  * @brief The Factoriable class is base class for all factoriable items.
  */
-class Factoriable
-{
+class Factoriable {
     public:
         Factoriable() = default;
 

@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -87,8 +96,20 @@ class AppWindow : public QGraphicsWidget {
         void schemeNew();
 
     signals:
+        /**
+         * On path change.
+         * @param path new path
+         */
         void currentPathChanged(const QString &path);
+        /**
+         * Set new state of schema change.
+         * @param saved new state
+         */
         void savedChanged(bool saved);
+        /**
+         * On error in window.
+         * @param msg message
+         */
         void error(const QString &msg);
 };
 

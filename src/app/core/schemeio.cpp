@@ -1,22 +1,29 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "schemeio.h"
 
 #include <QJsonArray>
 
-SchemeIO::SchemeIO(BlockManager* manager, QObject* parent): QObject (parent)
-{
+SchemeIO::SchemeIO(BlockManager* manager, QObject* parent) : QObject(parent) {
     m_manager = manager;
 }
 
-QJsonObject SchemeIO::exportToJson() const
-{
-    if(m_manager == nullptr)
+QJsonObject SchemeIO::exportToJson() const {
+    if (m_manager == nullptr)
         return QJsonObject{};
 
     QJsonObject json;
     QJsonArray blocksJsonArr;
     QJsonArray joinsJsonArr;
 
-    for(auto block: m_manager->blocks().values()) {
+    for (auto block: m_manager->blocks().values()) {
         QJsonObject blockJson = m_manager->blockToJson(block);
         // need deeper info
         blockJson["id"] = QJsonValue::fromVariant(block->id());
@@ -26,7 +33,7 @@ QJsonObject SchemeIO::exportToJson() const
         blocksJsonArr.append(blockJson);
     }
 
-    for(auto join: m_manager->joins().values()) {
+    for (auto join: m_manager->joins().values()) {
         QJsonObject joinObject;
         joinObject["fromBlock"] = QJsonValue::fromVariant(join->fromBlock());
         joinObject["fromPort"] = QJsonValue::fromVariant(join->fromPort());
@@ -42,54 +49,53 @@ QJsonObject SchemeIO::exportToJson() const
     return json;
 }
 
-QString SchemeIO::jsonValid(const QJsonObject& scheme) const
-{
+QString SchemeIO::jsonValid(const QJsonObject &scheme) const {
     QMap<Identifier, QString> blocksTypes;
-    if(scheme.keys().toSet() != QSet<QString>{"blocks", "joins"})
+    if (scheme.keys().toSet() != QSet<QString>{"blocks", "joins"})
         return tr("Scheme structure is not valid.");
 
     const QMap<QString, QSet<QJsonValue::Type> > blockExpectedTypes{
-        {"id", {QJsonValue::Double}},
-        {"x", {QJsonValue::Double}},
-        {"y", {QJsonValue::Double}},
-        {"type", {QJsonValue::String}}
+            {"id",   {QJsonValue::Double}},
+            {"x",    {QJsonValue::Double}},
+            {"y",    {QJsonValue::Double}},
+            {"type", {QJsonValue::String}}
     };
 
     const QMap<QString, QJsonValue::Type> joinExpectedTypes{
-        {"fromBlock", QJsonValue::Double},
-        {"fromPort", QJsonValue::Double},
-        {"toBlock", QJsonValue::Double},
-        {"toPort", QJsonValue::Double}
+            {"fromBlock", QJsonValue::Double},
+            {"fromPort",  QJsonValue::Double},
+            {"toBlock",   QJsonValue::Double},
+            {"toPort",    QJsonValue::Double}
     };
 
     // check blocks
-    for(auto blockJson: scheme["blocks"].toArray()) {
+    for (auto blockJson: scheme["blocks"].toArray()) {
         const QJsonObject blockObject = blockJson.toObject();
-        if(blockObject.keys().toSet() !=
-                (blockExpectedTypes.keys().toSet() | QSet<QString>{"input_values", "output_value"})) {
+        if (blockObject.keys().toSet() !=
+            (blockExpectedTypes.keys().toSet() | QSet<QString>{"input_values", "output_value"})) {
             return tr("Block structure is not valid.");
         }
 
-        for(auto key: blockExpectedTypes.keys()) {
-            if(!blockExpectedTypes[key].contains(blockObject[key].type()))
+        for (auto key: blockExpectedTypes.keys()) {
+            if (!blockExpectedTypes[key].contains(blockObject[key].type()))
                 return tr("Types in block values do not match");
         }
 
-        if(!Block::registeredItems().contains(blockObject["type"].toString()))
+        if (!Block::registeredItems().contains(blockObject["type"].toString()))
             return tr("Uknown block type.");
 
         const Identifier blockId = blockObject["id"].toVariant().toUInt();
-        if(blocksTypes.keys().contains(blockId))
+        if (blocksTypes.keys().contains(blockId))
             return tr("Multiple blocks with same id.");
 
         blocksTypes.insert(blockId, blockObject["type"].toString());
     }
 
-    for(auto joinJson: scheme["joins"].toArray()) {
+    for (auto joinJson: scheme["joins"].toArray()) {
         const QJsonObject joinObject = joinJson.toObject();
 
-        for(auto key: joinExpectedTypes.keys()) {
-            if(joinObject[key].type() != joinExpectedTypes[key])
+        for (auto key: joinExpectedTypes.keys()) {
+            if (joinObject[key].type() != joinExpectedTypes[key])
                 return tr("Types in join values do not match");
         }
 
@@ -99,31 +105,30 @@ QString SchemeIO::jsonValid(const QJsonObject& scheme) const
         fromBlock = joinObject["fromBlock"].toVariant().toUInt();
         fromPort = joinObject["fromPort"].toVariant().toUInt();
 
-        if(fromPort != 0)
+        if (fromPort != 0)
             return tr("Output port id is too large.");
-        if(!blocksTypes.keys().contains(toBlock) || !blocksTypes.keys().contains(fromBlock))
+        if (!blocksTypes.keys().contains(toBlock) || !blocksTypes.keys().contains(fromBlock))
             return tr("Invalid blocks ids in join");
-        if(Block::blockInputsCount(blocksTypes[toBlock]) <= static_cast<int>(toPort))
+        if (Block::blockInputsCount(blocksTypes[toBlock]) <= static_cast<int>(toPort))
             return tr("Input port id is too large.");
     }
 
     return "";
 }
 
-void SchemeIO::loadFromJson(QJsonObject scheme, QGraphicsWidget* parent)
-{
-    if(m_manager == nullptr)
+void SchemeIO::loadFromJson(QJsonObject scheme, QGraphicsWidget* parent) {
+    if (m_manager == nullptr)
         return;
 
     const QString errorMsg = this->jsonValid(scheme);
-    if(!errorMsg.isEmpty()) {
+    if (!errorMsg.isEmpty()) {
         emit this->error(errorMsg);
         return;
     }
 
     QMap<Identifier, Identifier> mappedBlocksIds;
 
-    for(auto blockJson: scheme["blocks"].toArray()) {
+    for (auto blockJson: scheme["blocks"].toArray()) {
         const QJsonObject blockObject = blockJson.toObject();
         Block* block = m_manager->blockFromJson(blockObject, parent);
         m_manager->addBlock(block);
@@ -137,7 +142,7 @@ void SchemeIO::loadFromJson(QJsonObject scheme, QGraphicsWidget* parent)
         block->view()->setY(blockObject["y"].toDouble());
     }
 
-    for(auto joinJson: scheme["joins"].toArray()) {
+    for (auto joinJson: scheme["joins"].toArray()) {
         const QJsonObject joinObject = joinJson.toObject();
         Identifier toBlock, toPort, fromBlock;
         toBlock = joinObject["toBlock"].toVariant().toUInt();

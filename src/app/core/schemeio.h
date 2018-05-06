@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #ifndef SCHEMEIO_H
 #define SCHEMEIO_H
 
@@ -14,7 +23,7 @@ class SchemeIO : public QObject {
     public:
         explicit SchemeIO(BlockManager* manager, QObject* parent = nullptr);
 
-        QString jsonValid(const QJsonObject& scheme) const;
+        QString jsonValid(const QJsonObject &scheme) const;
         /**
          * Exports manager into json.
          * @return serialized

@@ -1,3 +1,12 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "textedit.h"
 #include <QPainter>
 #include <QDebug>
@@ -5,10 +14,9 @@
 #include <QInputMethodEvent>
 #include <QTextDocument>
 
-TextEdit::TextEdit(QGraphicsItem* parent): TextEdit{"", parent} {}
+TextEdit::TextEdit(QGraphicsItem* parent) : TextEdit{"", parent} {}
 
-TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextItem{text, parent}
-{
+TextEdit::TextEdit(const QString &text, QGraphicsItem* parent) : QGraphicsTextItem{text, parent} {
     m_textColorAnimation = new QVariantAnimation{this};
     m_textColorAnimation->setDuration(300);
 
@@ -22,24 +30,23 @@ TextEdit::TextEdit(const QString& text, QGraphicsItem* parent): QGraphicsTextIte
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::contentChanged);
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::validate);
     connect(this->document(), &QTextDocument::contentsChanged, this, &TextEdit::removeNewLines);
-    connect(m_borderColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
+    connect(m_borderColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant &v) {
         m_currentBorderColor = v.value<QColor>();
         this->update();
         emit this->currentBorderColorChanged(m_currentBorderColor);
     });
 
-    connect(m_textColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant& v) {
+    connect(m_textColorAnimation, &QVariantAnimation::valueChanged, [this](const QVariant &v) {
         m_currentTextColor = v.value<QColor>();
         this->setDefaultTextColor(m_currentTextColor);
     });
 }
 
-void TextEdit::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void TextEdit::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(widget);
     painter->setClipRect(option->exposedRect);
 
-    if(m_drawBorders) {
+    if (m_drawBorders) {
         painter->save();
         painter->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing, false);
         painter->setRenderHint(QPainter::TextAntialiasing);
@@ -53,49 +60,41 @@ void TextEdit::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     QGraphicsTextItem::paint(painter, &option2, widget);
 }
 
-void TextEdit::setValidator(const QRegularExpression& validator)
-{
+void TextEdit::setValidator(const QRegularExpression &validator) {
     m_validator = validator;
 }
 
-QColor TextEdit::validBorderColor() const
-{
+QColor TextEdit::validBorderColor() const {
     return m_validBorderColor;
 }
 
-QColor TextEdit::invalidBorderColor() const
-{
+QColor TextEdit::invalidBorderColor() const {
     return m_invalidBorderColor;
 }
 
-QColor TextEdit::currentBorderColor() const
-{
+QColor TextEdit::currentBorderColor() const {
     return m_currentBorderColor;
 }
 
-bool TextEdit::valid() const
-{
+bool TextEdit::valid() const {
     return m_valid;
 }
 
-QColor TextEdit::textColor() const
-{
+QColor TextEdit::textColor() const {
     return m_textColor;
 }
 
-void TextEdit::removeNewLines()
-{
-    if(!m_oneLineMode)
+void TextEdit::removeNewLines() {
+    if (!m_oneLineMode)
         return;
 
     QTextDocument* document = this->document();
     QString content = document->toPlainText();
-    if(content.contains("\n"))
+    if (content.contains("\n"))
         document->setPlainText(content.replace("\n", ""));
 }
 
-void TextEdit::setValidBorderColor(QColor validBorderColor)
-{
+void TextEdit::setValidBorderColor(QColor validBorderColor) {
     if (m_validBorderColor == validBorderColor)
         return;
 
@@ -103,8 +102,7 @@ void TextEdit::setValidBorderColor(QColor validBorderColor)
     emit validBorderColorChanged(m_validBorderColor);
 }
 
-void TextEdit::setInvalidBorderColor(QColor invalidBorderColor)
-{
+void TextEdit::setInvalidBorderColor(QColor invalidBorderColor) {
     if (m_invalidBorderColor == invalidBorderColor)
         return;
 
@@ -112,14 +110,12 @@ void TextEdit::setInvalidBorderColor(QColor invalidBorderColor)
     emit invalidBorderColorChanged(m_invalidBorderColor);
 }
 
-void TextEdit::setDrawBorders(bool v)
-{
+void TextEdit::setDrawBorders(bool v) {
     m_drawBorders = v;
     this->update();
 }
 
-void TextEdit::setTextColor(QColor textColor)
-{
+void TextEdit::setTextColor(QColor textColor) {
     if (m_textColor == textColor)
         return;
 
@@ -128,18 +124,16 @@ void TextEdit::setTextColor(QColor textColor)
     emit textColorChanged(m_textColor);
 }
 
-void TextEdit::setOneLineMode(bool v)
-{
+void TextEdit::setOneLineMode(bool v) {
     m_oneLineMode = v;
 }
 
-void TextEdit::validate()
-{
+void TextEdit::validate() {
     QTextDocument* document = this->document();
 
     QRegularExpressionMatch match = m_validator.match(document->toPlainText());
 
-    if(!match.hasMatch() && m_currentBorderColor != m_invalidBorderColor) {
+    if (!match.hasMatch() && m_currentBorderColor != m_invalidBorderColor) {
         m_borderColorAnimation->setStartValue(m_currentBorderColor);
         m_borderColorAnimation->setEndValue(m_invalidBorderColor);
 
@@ -149,9 +143,7 @@ void TextEdit::validate()
         m_valid = false;
         m_borderColorAnimation->start();
         m_textColorAnimation->start();
-    }
-
-    else if(match.hasMatch() && m_currentBorderColor != m_validBorderColor){
+    } else if (match.hasMatch() && m_currentBorderColor != m_validBorderColor) {
         m_borderColorAnimation->setStartValue(m_currentBorderColor);
         m_borderColorAnimation->setEndValue(m_validBorderColor);
 

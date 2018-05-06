@@ -1,13 +1,20 @@
+/**
+ * Part of block editor project for ICP at FIT BUT 2017-2018.
+ *
+ * @package ICP-2017-2018
+ * @authors Son Hai Nguyen xnguye16@stud.fit.vutbr.cz, Josef Kolář xkolar71@stud.fit.vutbr.cz
+ * @date 06-05-2018
+ * @version 1.0
+ */
+
 #include "blockcanvas.h"
 
 #include <QPainter>
 #include <QMimeData>
 #include <QJsonDocument>
 #include <QGraphicsScene>
-#include <app/core/blockmanager.h>
 
-BlockCanvas::BlockCanvas(QGraphicsWidget* parent): ScrollArea(parent)
-{
+BlockCanvas::BlockCanvas(QGraphicsWidget* parent) : ScrollArea(parent) {
     m_blockManager = new BlockManager;
 
     this->setGrooveColor(QColor(Qt::transparent));
@@ -19,13 +26,11 @@ BlockCanvas::BlockCanvas(QGraphicsWidget* parent): ScrollArea(parent)
     connect(m_blockManager, &BlockManager::joinDeleted, this, &BlockCanvas::joinDeleted);
 }
 
-BlockCanvas::~BlockCanvas()
-{
+BlockCanvas::~BlockCanvas() {
     delete m_blockManager;
 }
 
-void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
+void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
@@ -33,7 +38,7 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->setPen(QPen{QColor{"#8c8c8c"}, 3});
     painter->setOpacity(0.7);
 
-    if(m_drawLine) {
+    if (m_drawLine) {
         QPainterPath path;
         QPointF p1 = m_portStartPoint;
         QPointF p2 = m_portEndPoint;
@@ -47,7 +52,7 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
         painter->drawPath(path);
     }
 
-    if(m_dragOver) {
+    if (m_dragOver) {
         painter->setPen(QColor(Qt::transparent));
         painter->setBrush(QColor("#efefef"));
         painter->drawRect(this->boundingRect());
@@ -58,32 +63,27 @@ void BlockCanvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->restore();
 }
 
-void BlockCanvas::dragEnterEvent(QGraphicsSceneDragDropEvent* e)
-{
-    if(e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
+void BlockCanvas::dragEnterEvent(QGraphicsSceneDragDropEvent* e) {
+    if (e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
         m_dragOver = true;
         e->setAccepted(true);
         this->update();
-    }
-
-    else
+    } else
         e->setAccepted(false);
 }
 
-void BlockCanvas::dragLeaveEvent(QGraphicsSceneDragDropEvent* e)
-{
+void BlockCanvas::dragLeaveEvent(QGraphicsSceneDragDropEvent* e) {
     Q_UNUSED(e);
     m_dragOver = false;
     this->update();
 }
 
-void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
-{
-    if(m_disableDrop)
+void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e) {
+    if (m_disableDrop)
         return;
 
     m_dragOver = false;
-    if(e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
+    if (e->mimeData()->hasFormat(BlockManager::blockMimeType())) {
         QByteArray rawData{e->mimeData()->data(BlockManager::blockMimeType())};
         QDataStream data{&rawData, QIODevice::ReadOnly};
         QPoint hotspot;
@@ -111,11 +111,10 @@ void BlockCanvas::dropEvent(QGraphicsSceneDragDropEvent* e)
     this->update();
 }
 
-void BlockCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)
-{
+void BlockCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e) {
     BlockPortView* portView = this->portViewAtPos(e->pos());
 
-    if(portView == nullptr) {
+    if (portView == nullptr) {
         QGraphicsWidget::mousePressEvent(e);
         return;
     }
@@ -123,23 +122,21 @@ void BlockCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)
     this->dishighlightPorts(portView->portData()->type());
     m_portOrigStartPoint = e->pos();
     m_portStartPoint = portView->mapToItem(
-                           this, QPointF(0, portView->size().height() / 2.));
+            this, QPointF(0, portView->size().height() / 2.));
     m_drawLine = true;
 }
 
-void BlockCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
-{
+void BlockCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e) {
     m_portEndPoint = e->pos();
     this->update();
     QGraphicsWidget::mouseMoveEvent(e);
 }
 
-void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
-{
+void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e) {
     BlockPortView* toPortView = this->portViewAtPos(e->pos());
 
     this->restoreHighlightPorts();
-    if(!m_drawLine || toPortView == nullptr) {
+    if (!m_drawLine || toPortView == nullptr) {
         m_drawLine = false;
         m_portStartPoint = QPointF(-1, -1);;
         this->update();
@@ -151,7 +148,7 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     m_portStartPoint = QPointF(-1, -1);;
 
     // check if it is relesed over input port
-    if(toPortView->portData()->isOutput()) {
+    if (toPortView->portData()->isOutput()) {
         this->update();
         return;
     }
@@ -161,7 +158,7 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     Block* toBlock = m_blockManager->block(toPortView->portData()->blockId());
     PortIdentifier toPortId = toBlock->inputPorts().indexOf(toPortView->portData());
 
-    if(outPortView->portData()->type() != toPortView->portData()->type()) {
+    if (outPortView->portData()->type() != toPortView->portData()->type()) {
         this->update();
         emit this->error(tr("Ports types are not the same."));
         return;
@@ -175,40 +172,37 @@ void BlockCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     this->update();
 }
 
-BlockPortView* BlockCanvas::portViewAtPos(QPointF pos) const
-{
+BlockPortView* BlockCanvas::portViewAtPos(QPointF pos) const {
     QList<BlockPortView*> portViews;
-    for(auto singlePortView: this->scene()->items(pos + this->pos())) {
+    for (auto singlePortView: this->scene()->items(pos + this->pos())) {
         BlockPortView* castedPortView = dynamic_cast<BlockPortView*>(singlePortView);
-        if(castedPortView != nullptr)
+        if (castedPortView != nullptr)
             portViews.append(castedPortView);
     }
 
-    if(!portViews.length())
+    if (!portViews.length())
         return nullptr;
     return portViews.at(0);
 }
 
-bool BlockCanvas::schemeValidity() const
-{
+bool BlockCanvas::schemeValidity() const {
     bool valid = true;
-    for(auto block: m_blockManager->blocks().values())
+    for (auto block: m_blockManager->blocks().values())
         valid = valid && block->validInputs();
 
     return valid;
 }
 
-bool BlockCanvas::cycled() const
-{
+bool BlockCanvas::cycled() const {
     QSet<Identifier> expansion, toBeExpanded, endBlocks, passed, notPassed;
     notPassed = m_blockManager->blocks().keys().toSet();
 
-    for(auto block: m_blockManager->blocks().values()) {
-        if(!block->outputPort()->isConnected())
+    for (auto block: m_blockManager->blocks().values()) {
+        if (!block->outputPort()->isConnected())
             endBlocks.insert(block->id());
     }
 
-    while(!notPassed.isEmpty()) {
+    while (!notPassed.isEmpty()) {
         Identifier blockId = notPassed.toList().at(0);
         notPassed.remove(blockId);
         bool expasionEnded = false;
@@ -219,42 +213,40 @@ bool BlockCanvas::cycled() const
 
         do {
             notPassed -= expansion;
-            if(!(expansion & passed).isEmpty())
+            if (!(expansion & passed).isEmpty())
                 return true;
-            if((expansion - endBlocks).isEmpty()) {
+            if ((expansion - endBlocks).isEmpty()) {
                 expasionEnded = true;
                 break;
             }
             passed |= expansion;
 
             // expand
-            for(Identifier id: expansion)
+            for (Identifier id: expansion)
                 toBeExpanded |= m_blockManager->blockBlocksOutputs(id);
             expansion = toBeExpanded;
             toBeExpanded.clear();
 
-        } while(!expasionEnded);
+        } while (!expasionEnded);
     }
 
     return false;
 }
 
-BlockManager*BlockCanvas::manager() const
-{
+BlockManager* BlockCanvas::manager() const {
     return m_blockManager;
 }
 
-QList<Identifier> BlockCanvas::blockComputeOrder()
-{
+QList<Identifier> BlockCanvas::blockComputeOrder() {
     QList<Identifier> computedBlocks;
-    while(computedBlocks.size() < m_blockManager->blocks().values().length()) {
-        for(auto block: m_blockManager->blocks().values()) {
-            if(computedBlocks.contains(block->id()))
+    while (computedBlocks.size() < m_blockManager->blocks().values().length()) {
+        for (auto block: m_blockManager->blocks().values()) {
+            if (computedBlocks.contains(block->id()))
                 continue;
             const QSet<Identifier> blockOuts = m_blockManager->blockBlocksInputs(block->id());
             bool blockEvaluable = blockOuts.isEmpty() ||
                                   (blockOuts - computedBlocks.toSet()).isEmpty();
-            if(blockEvaluable)
+            if (blockEvaluable)
                 computedBlocks.append(block->id());
         }
     }
@@ -262,78 +254,73 @@ QList<Identifier> BlockCanvas::blockComputeOrder()
     return computedBlocks;
 }
 
-void BlockCanvas::evaluateBlock(Identifier blockId)
-{
+void BlockCanvas::evaluateBlock(Identifier blockId) {
     Block* block = m_blockManager->block(blockId);
     MappedDataValues res = block->evaluate(block->view()->values());
     QList<QPair<Identifier, Identifier> > blocksTopropagate =
             m_blockManager->blockOutputs(block->id());
 
     block->outputPort()->setValue(res);
-    for(auto outData: blocksTopropagate) {
+    for (auto outData: blocksTopropagate) {
         m_blockManager->blocks()[outData.first]->inputPorts()
                 .at(static_cast<int>(outData.second))->setValue(res);
     }
 }
 
-void BlockCanvas::restoreHighlightPorts()
-{
-    for(auto block: m_blockManager->blocks()) {
-        for(auto port: block->inputPorts()) {
-            if(!port->isOutput() && !port->isConnected())
+void BlockCanvas::restoreHighlightPorts() {
+    for (auto block: m_blockManager->blocks()) {
+        for (auto port: block->inputPorts()) {
+            if (!port->isOutput() && !port->isConnected())
                 port->view()->animateShow();
         }
     }
 }
 
-void BlockCanvas::dishighlightPorts(Type::TypeE type)
-{
-    for(auto block: m_blockManager->blocks()) {
-        for(auto port: block->inputPorts()) {
-            if(!port->isOutput() && !port->isConnected() && port->type() != type)
+void BlockCanvas::dishighlightPorts(Type::TypeE type) {
+    for (auto block: m_blockManager->blocks()) {
+        for (auto port: block->inputPorts()) {
+            if (!port->isOutput() && !port->isConnected() && port->type() != type)
                 port->view()->animatePartialHide(0.3);
         }
     }
 }
 
-void BlockCanvas::evaluate()
-{
+void BlockCanvas::evaluate() {
     // check if ports are valid
-    if(this->cycled()) {
+    if (this->cycled()) {
         emit this->error(tr("Scheme has cycle."));
         return;
     }
 
-    if(!this->schemeValidity()) {
+    if (!this->schemeValidity()) {
         emit this->error(tr("Scheme has invalid inputs."));
         return;
     }
 
     // compute available blocks
-    for(Identifier blockId: this->blockComputeOrder())
+    for (Identifier blockId: this->blockComputeOrder())
         this->evaluateBlock(blockId);
 }
 
-void BlockCanvas::debug()
-{
+void BlockCanvas::debug() {
     // check if ports are valid
-    if(!this->schemeValidity()) {
+    if (!this->schemeValidity()) {
         emit this->error(tr("Scheme has invalid inputs."));
         return;
     }
 
-    if(this->cycled()) {
+    if (this->cycled()) {
         emit this->error(tr("Scheme has cycle."));
         return;
     }
 
     QList<Identifier> computeOrder = this->blockComputeOrder();
-    if(m_debugIteration >= computeOrder.length()) {
+    if (m_debugIteration >= computeOrder.length()) {
         this->stopDebug();
         return;
     }
 
-    if(m_debugIteration == 0)
+    if (m_debugIteration == 0)
         this->scene()->clearSelection();
     m_blockManager->setDisableDelete(true);
     this->setDisableDrop(true);
@@ -341,7 +328,7 @@ void BlockCanvas::debug()
     Block* block = m_blockManager->block(computeOrder.at(m_debugIteration));
     block->view()->setSelected(true);
 
-    if(m_debugIteration > 0)
+    if (m_debugIteration > 0)
         m_blockManager->block(computeOrder.at(m_debugIteration - 1))->view()->setSelected(false);
     this->evaluateBlock(block->id());
 
@@ -349,8 +336,7 @@ void BlockCanvas::debug()
     emit this->debugStateChanged(true);
 }
 
-void BlockCanvas::stopDebug()
-{
+void BlockCanvas::stopDebug() {
     m_debugIteration = 0;
     m_blockManager->setDisableDelete(false);
     this->scene()->clearSelection();
@@ -358,14 +344,12 @@ void BlockCanvas::stopDebug()
     emit this->debugStateChanged(false);
 }
 
-void BlockCanvas::setDisableDrop(bool v)
-{
+void BlockCanvas::setDisableDrop(bool v) {
     m_disableDrop = v;
 }
 
-void BlockCanvas::clear()
-{
+void BlockCanvas::clear() {
     QList<Identifier> blocks = m_blockManager->blocks().keys();
-    for(auto blockId: blocks)
+    for (auto blockId: blocks)
         m_blockManager->deleteBlock(blockId);
 }

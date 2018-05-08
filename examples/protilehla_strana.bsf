@@ -1,0 +1,72 @@
+{
+    "blocks": [
+        {
+            "id": 23,
+            "input_values": [
+                3,
+                4
+            ],
+            "output_value": [
+                3,
+                4
+            ],
+            "type": "vect_init_block",
+            "x": 271,
+            "y": 314
+        },
+        {
+            "id": 24,
+            "input_values": [
+                [
+                    3,
+                    4
+                ]
+            ],
+            "output_value": 5,
+            "type": "vect_mag_block",
+            "x": 628,
+            "y": 340
+        },
+        {
+            "id": 26,
+            "input_values": [
+                0.6435
+            ],
+            "output_value": 0.599999,
+            "type": "sin_block",
+            "x": 259,
+            "y": 122
+        },
+        {
+            "id": 27,
+            "input_values": [
+                0.599999,
+                5
+            ],
+            "output_value": 2.99999,
+            "type": "mul_block",
+            "x": 884,
+            "y": 215
+        }
+    ],
+    "joins": [
+        {
+            "fromBlock": 23,
+            "fromPort": 0,
+            "toBlock": 24,
+            "toPort": 0
+        },
+        {
+            "fromBlock": 24,
+            "fromPort": 0,
+            "toBlock": 27,
+            "toPort": 1
+        },
+        {
+            "fromBlock": 26,
+            "fromPort": 0,
+            "toBlock": 27,
+            "toPort": 0
+        }
+    ]
+}

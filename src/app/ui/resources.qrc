@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/image/add_symbol.svg</file>
+        <file>res/image/cos_symbol.svg</file>
+        <file>res/image/mul_symbol.svg</file>
+        <file>res/image/play_icon.svg</file>
+        <file>res/image/play_iter_icon.svg</file>
+        <file>res/image/sin_symbol.svg</file>
+        <file>res/image/stop_icon.svg</file>
+        <file>res/image/sub_symbol.svg</file>
+        <file>res/font/Montserrat-Light.ttf</file>
+        <file>res/font/Montserrat-Medium.ttf</file>
+        <file>res/font/Roboto-Light.ttf</file>
+        <file>res/image/bug_icon.svg</file>
+        <file>res/image/warning_icon.svg</file>
+        <file>res/image/vect_mag_symbol.svg</file>
+        <file>res/image/vectoriaze_symbol.svg</file>
+    </qresource>
+</RCC>

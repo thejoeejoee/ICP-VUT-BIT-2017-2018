@@ -2,6 +2,7 @@
 Aplikace slouží jako editor blokových schémat, kde každý blok obsahuje vstupní porty s definovaným typem a výstupní port s typem.
 Vstupní porty jdou následně připojit do výstupních portů jiných bloků, samozřejmě dle shodujícího se typu.
 Do každého vstupního portu lze buď připojit jiný port, nebo přímo zapsat vstupní hodnotu. 
+![Screenshot](./screenshot.png)
 
 ## Instalace
 Po rozbalení archivu stačí zavolat `make` pro sestavení, respektive `make run` poté pro spuštění.
